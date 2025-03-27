@@ -1,0 +1,203 @@
+body {
+    font-family: 'Arial', sans-serif;
+    color: #FFFF99;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-size: cover;
+    overflow: hidden;
+    background: url('../images/fondo_carga.png') no-repeat center 55%/cover;
+}
+
+.profile-container {
+    background-color: #19753E;
+    width: 85%;
+    height: 95%;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    border-radius: 14vh;
+    border: 1vh solid #FFFF99;
+}
+
+.profile-header {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 90%;
+    height: 40%;
+    background-color: #166937;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+    border-radius: 12vh;
+    margin: 0 auto;
+    margin-top: 4vh;
+}
+
+.avatar-logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 22%;
+}
+
+.avatar-logo {
+    position: relative;
+    width: 27vh;
+    height: 27vh;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 0.5vh solid rgba(0, 0, 0, 0.5); 
+    border: 1vh solid #FFFF99;
+    margin-left: 3vw;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.avatar-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.edit-icon {
+    position: absolute;
+    transform: translate(106%, 67%);
+    background-color: #FFFF99;
+    border-radius: 50%;
+    z-index: 10;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.edit-icon img {
+    width: 10vh;
+    height: 10vh;
+    border-radius: 50%;
+    opacity: 0.9;  
+    border: 0.5vh solid #FFFF99;
+}
+
+.edit-icon:active {
+    transform: translate(106%, 67%) scale(0.9); 
+    background-color: #dede69; 
+}
+
+.edit-icon:active img {
+    opacity: 1; 
+    border: 0.5vh solid #dede69; 
+}
+
+.user-info-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    height: 100%;
+    width: 35%;
+}
+
+.user-info-container > * {
+    margin: 0;
+    padding: 0;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    height: 20vh;
+    width: 25vw;
+    margin-left: 3vw;
+    color: #FFFF99;
+    gap: 2vw;
+}
+
+.username {
+    text-align: left;
+    font-size: 4vw;
+    height: auto;
+}
+
+.id {
+    text-align: left;
+    font-size: 4vw;
+    height: auto;
+    margin-left: 5vw;
+}
+
+.more-user-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    height: 100%;
+    width: 3%;
+    gap: 2vh;
+    padding: 1.5vh;
+    border-radius: 12vh;
+}
+
+.medal-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    height: 100%;
+    width: 12%;
+    font-size: 0.7rem;
+    font-weight: bold;
+    color: #FFFF99;
+}
+
+.medal-logo {
+    width: 20vh;
+    height: 20vh;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 0.7vh solid #FFFF99;
+    justify-content: center;
+    align-items: column;
+}
+
+.medal-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 75%;
+    overflow: scroll;
+}
+
+.xp-level {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #2a2e37;
+    border: 4px solid #3abef9;
+    color: white;
+    font-weight: bold;
+    height: 8vh;
+    width: 8vh;
+    border-radius: 50%;
+    font-size: 2vw;
+    margin-top: 8vh;
+}
+
+.stats-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 2vh;
+    margin-left: 5vw;
+    width: 35%;
+}

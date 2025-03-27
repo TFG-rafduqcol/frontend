@@ -1,0 +1,80 @@
+.overlay {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.2); 
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; 
+}
+
+#modalContainer {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80vw;
+    max-width: 300px;
+    height: 80vh;
+    max-height: 80px;
+    background: rgba(25, 117, 62, 0.1);
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    border: 2px solid #FFFF99;
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1001;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 20px;
+    color: #FFFF99;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+
+}
+
+.close-btn:active {
+    transform: scale(1.4); 
+    
+}
+
+.icons {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+}
+
+.icons i {
+    font-size: 26px;
+    color: #FFFF99;
+    
+}
+
+
+.settings-icon {
+    color: #FFFF99;
+    font-size: 2.5rem; 
+    position: absolute;
+    bottom: 2vh;
+    right: 2vw;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+
+}
+
+.settings-icon:active {
+    transform: scale(1.1); 
+}
+

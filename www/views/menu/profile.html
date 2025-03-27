@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="../../css/profile.css">
+    <link rel="stylesheet" href="../../css/achievement.css">
+    <link rel="stylesheet" href="../../css/home.css">
+    <link rel="icon" type="image/x-icon" href="../../images/logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="../../js/menu/profile.js" defer></script>
+</head>
+<body>
+    <a href="index.html" class="home-icon-container">
+        <i class="fa-solid fa-house home-icon"></i>
+    </a>
+    
+    <div class="profile-container">
+        <div class="profile-header">
+            <div class="avatar-logo-container">
+                <div class="avatar-logo">
+                    <img src="" alt="Avatar" id="avatar">
+                </div>
+                <a href="avatarCollection.html" class="edit-icon">
+                    <img src="../../images/pencil.png" alt="Edit">
+                </a>
+            </div>
+            
+            <div class="user-info-container">
+                <div class="user-info">
+                    <div class="xp-level" id="level">0</div>
+                    <h1 class="username" id="username"></h1>     
+                </div>
+                <h1 class="id" id="id"></h1>           
+            </div>
+            <div class="more-user-info">
+                <div class="medal-container">
+                    <div class="medal-logo">
+                        <img src="" id="range_url" alt="Medal">
+                    </div>
+                    <h1 class="range" id="range"></h1>
+                </div>                               
+            </div>
+            <div class="stats-container">
+                <ul> 
+                    <strong>Partida jugadas:</strong> 32
+                    <strong>Ronda máxima:</strong> 120
+                </ul>
+            </div>
+
+        </div>
+            <div class="achievement">
+                <h2 class="achievement-title">Título del Logro</h2>
+                <p class="achievement-description">
+                Esta es la descripción del logro.
+                </p>
+                <div class="progress-container">
+                    <div class="achievement-progress">
+                        <div class="progress-bar" style="width: 60%;"></div>
+                    </div>
+                    <div class="achievement-stars">
+                        <span class="star">&#9733;</span>
+                        <span class="star">&#9733;</span>
+                        <span class="star">&#9733;</span>
+                    </div>
+                  </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

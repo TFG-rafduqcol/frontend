@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="../../css/social.css">
+    <link rel="stylesheet" href="../../css/home.css">
+    <link rel="icon" type="image/x-icon" href="../../images/logo.png">
+
+    <title data-i18n="friends_title">Friends List</title>
+</head>
+<body>
+    <a href="index.html" class="home-icon-container">
+        <i class="fa-solid fa-house home-icon"></i>
+    </a>
+    
+    <div class="tabs-container">
+        <div class="tab active" data-target="find-user" data-i18n="find_user">Find a user</div>
+        <div class="tab" data-target="friends-list" data-i18n="your_friends">Your friends</div>
+        <div class="tab" data-target="requests" data-i18n="requests">Requests</div>
+    </div>
+
+    <div class="container" id="find-user">
+        <div class="search-container">
+            <input type="text" id="usersearch" placeholder="Enter username or ID" class="search-input" data-i18n="search_placeholder">
+            <button id="searchButton" class="search-btn">
+                <i class="fa-solid fa-search"></i>
+            </button>
+        </div>
+        
+        <div id="searchResult" class="result"></div>
+    </div>
+    
+    <div class="container hidden" id="friends-list">  
+        <h2 data-i18n="your_friends_header">Your Friends</h2>
+        <p data-i18n="no_friends">List of friends will appear here.</p>
+    </div>
+    
+    <div class="container hidden" id="requests">
+        <h2 data-i18n="friend_requests_header">Friend Requests</h2>
+        <p data-i18n="no_requests">Friend requests will appear here.</p>
+    </div>
+
+    <div class="language-selector">
+        <button class="language-button" onclick="changeLanguage('en')" title="English" style="background-image: url('https://flagcdn.com/w40/gb.png');"></button>
+        <button class="language-button" onclick="changeLanguage('es')" title="Español" style="background-image: url('https://flagcdn.com/w40/es.png');"></button>
+    </div>
+
+    <script src="../../js/i18n.js" defer></script>
+    <script src="../../js/config.js" defer></script>
+    <script src="../../js/menu/social.js" defer></script> 
+
+</body>
+</html>

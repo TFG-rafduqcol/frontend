@@ -1,0 +1,125 @@
+.title, .end_register_title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    background: transparent;
+    border: 0.2rem solid #FFFF99;
+    color: #FFFF99;
+    padding: 1rem;
+    border-radius: 1rem;
+    display: inline-block;
+}
+
+.logo {
+    display: block;
+    width: 4.5rem;
+    height: 4.5rem;
+    margin: -2rem auto 0 auto;
+    border: 0.2rem solid #FFFF99;
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+}
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    max-width: 300px;
+    margin: 2rem auto;
+}
+
+.register-form input {
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 0.2rem solid #FFFF99;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    background-color: #19753E;
+    color: #FFFF99;
+}
+
+input:focus {
+    outline: none;
+    box-shadow: 0 0 10px #FFFF99; 
+    background-color: #1c8546; 
+    transition: all 0.3s ease-in-out;
+}
+
+.register-form input:not(:placeholder-shown) {
+    background-color: #19753E !important;
+    color: #FFFF99 !important; 
+}
+
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+}
+
+.button-back,
+.button-next,
+.button-save, 
+.button-go {
+    background: #19753E;
+    color: #FFFF99;
+    border: 0.2rem solid #FFFF99;
+    border-radius: 1rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+
+}
+
+.button-next {
+    width: auto;
+    text-align: right;  
+}
+
+.button-back {
+    width: auto;
+    text-align: left;
+}
+
+.button-save {
+    width: auto;
+    text-align: left;
+}
+.button-go {
+    width: auto;
+    text-align: center;
+}
+
+.button-back:active,
+.button-next:active,
+.button-save:active,
+.button-go:active {
+    animation: pulse 0.3s ease-in-out;
+}
+
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 5px #FFFF99;
+        background: #19753E;
+    }
+    50% {
+        transform: scale(0.95);
+        box-shadow: 0 0 15px #FFFF99;
+        background: #1faa50;
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 5px #FFFF99;
+        background: #19753E;
+    }
+}
+
+::placeholder {
+    color: #FFFF99;
+    font-style: italic; 
+    opacity: 0.7; 
+    font-size: 0.9rem;
+}

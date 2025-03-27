@@ -1,0 +1,96 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: url('../images/fondo_carga.png') no-repeat center 55%/cover;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+}
+
+.container {
+    width: 100%;
+    color: white;
+}
+
+.title {
+    font-size: 3rem;
+    font-weight: bold;
+    background: transparent;
+    border: 0.2rem solid #FFFF99;
+    color: #FFFF99;
+    padding: 1rem;
+    border-radius: 1rem;
+    display: inline-block;
+}
+
+.title img {
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+.logo {
+    display: block;
+    width: 7rem;
+    height: 7rem;
+    margin: -3rem auto 0 auto;
+    border: 0.2rem solid #FFFF99;
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+}
+
+.button {
+    display: block;
+    padding: 0.5rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    background: #19753E;
+    color: #FFFF99;
+    border: 0.2rem solid #FFFF99;
+    border-radius: 1rem;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.button-large {
+    width: 25%;
+    margin: 1vh auto;
+}
+
+.button-small {
+    width: 20%;
+    margin: 2vh auto;
+}
+
+
+.button-large:active, .button-small:active {
+    animation: pulse 0.3s ease-in-out;
+}
+
+
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 5px #FFFF99;
+        background: #19753E;
+    }
+    50% {
+        transform: scale(0.95);
+        box-shadow: 0 0 12px #FFFF99;
+        background: #1faa50;
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 5px #FFFF99;
+        background: #19753E;
+    }
+}
+
+

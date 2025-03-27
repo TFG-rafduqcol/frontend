@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../../css/menu.css">
+    <link rel="stylesheet" href="../../css/modal.css">
+    <link rel="icon" type="image/x-icon" href="../../images/logo.png">
+    <title>Game Menu</title>
+</head>
+
+<body>
+    
+    <div class="top-bar">
+        <div class="xp-bar-container">
+            <div class="xp-level" id="level">0</div>
+            <div class="xp-progress">
+                <div class="xp-fill" id="xp-fill"></div>
+                <div class="xp-text" id="experience">1 /2000</div>
+            </div>
+        </div>
+        <div class="gold-bar-container">
+            <i class="fa-solid fa-coins"></i>
+            <div class="gold-container">
+                <span id="gold">0</span>
+            </div>
+        </div>
+        <div class="gem-bar-container">
+            <i class="fa-solid fa-gem"></i>
+            <div class="gems-container">
+                <span id="gems">0</span>
+            </div>
+        </div>
+        </div>
+    </div>
+    
+    <div class="avatar-container">
+        <a href="profile.html"> 
+            <div class="avatar-logo">
+                <img src="" alt="Avatar" id="avatar">
+            </div>
+        </a>
+        <div class="avatar-info">
+            <div class="username" id="username"></div>
+            <div class="profile-icons">
+                <button class="button-profile" onclick="window.location.href = 'social.html'">
+                    <i class="fa-solid fa-users"></i>
+                </button>
+                <i class="fa-solid fa-chart-line"></i>
+                <button class="button-profile" onclick="window.location.href = 'profile_settings.html'">
+                    <i class="fa-solid fa-user-edit"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="new-game">New Game</div>
+
+    <div class="medal-container">
+        <div class="medal-logo">
+            <img src="" id="range" alt="Medal">
+        </div>
+    </div>
+
+    <div class="bottom-icons">
+        <i class="fa-solid fa-trophy"></i>  
+        <i class="fa-solid fa-shop"></i>  
+        <i class="fa-solid fa-book"></i>  
+    </div>
+    <i class="fa-solid fa-gear settings-icon" onclick="openModal()"></i>
+    <div id="modal-placeholder"></div>
+</body>
+
+
+<script src="../../js/modals.js"></script>
+<script src="../../js/menu/index.js"></script>
+<script src="../../js/i18n.js"></script>
+</html>

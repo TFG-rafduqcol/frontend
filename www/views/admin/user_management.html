@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User List</title>
+  <style>
+    html, body {
+        height: 100%; 
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #ebf9f0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        text-align: center;
+    }
+
+    .navbar {
+        width: 100%;
+        background-color: #2B8750;
+        padding: 10px 0;
+        text-align: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+    }
+
+    .navbar a {
+        color: white;
+        text-decoration: none;
+        padding: 14px 20px;
+        margin: 0 10px;
+        font-size: 18px;
+        display: inline-block;
+        transition: background-color 0.3s ease;
+    }
+
+    .navbar a:hover {
+        background-color: #b1e6c6;
+        border-radius: 6vh;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+        margin-top: 70px;
+    }
+
+    table {
+        width: 80%;
+        margin: 20px 0;
+        border-collapse: collapse;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    th, td {
+        padding: 12px;
+        text-align: center;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #2B8750;
+        color: white;
+    }
+
+    tr:nth-child(even) {
+        background-color: #b1e6c6 ;
+    }
+
+    tr:hover {
+        background-color: #ddd;
+    }
+
+    button { 
+        padding: 10px 15px;
+        cursor: pointer;
+        background-color: #ebf9f0;
+        border-radius: 3vh;
+        -webkit-tap-highlight-color: transparent;
+
+    }
+
+    .deleteBtn {
+        background-color: #9B111E; 
+        color: white; 
+        transition: background-color 0.3s ease; 
+        border-color: white;
+        border-radius: 6vh;
+        -webkit-tap-highlight-color: transparent;
+
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <a href="./index.html" data-i18n="home">Home</a>
+    <a href="#users" data-i18n="users">Create accounts</a>
+    <a href="#settings" data-i18n="settings">Settings</a>
+  </div>
+
+  <h1 data-i18n="users-title">Users list</h1>
+  
+  <table id="userTable">
+      <thead>
+      <tr>
+          <th>ID</th>
+          <th data-i18n="user-title">Usuario</th>
+          <th data-i18n="isAdmin-title">Admin</th>
+          <th>Email</th>
+          <th data-i18n="action-title">Acciones</th>
+      </tr>
+      </thead>
+      <tbody></tbody>
+  </table>
+
+  <div>
+      <button id="prevBtn" data-i18n="previous-page">Anterior</button>
+      <span id="pageInfo"></span>
+      <button id="nextBtn" data-i18n="next-page">Siguiente</button>
+  </div>
+
+  <script src="../../js/config.js" defer></script>
+  <script src="../../js/admin/user_management.js" defer></script>
+
+</body>
+</html>

@@ -1,0 +1,202 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: url('../images/fondo_carga.png') no-repeat center 55%/cover;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+    padding-bottom: 30vh;
+
+
+}
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    height: 100vh; 
+    width: 100%; 
+    flex-direction: column; 
+    margin-top: 6vh;
+}
+.avatar-logo-container {
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 22%;
+}
+
+.avatar-logo {
+    position: relative;
+    width: auto;
+    height: auto;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 0.5vh solid rgba(0, 0, 0, 0.5); 
+    border: 1vh solid #FFFF99;
+    margin-left: 3vw;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.avatar {
+    display: block;
+    width: 7rem;
+    height: 7rem;
+    margin: auto;
+    margin-top: 18vh;
+    border: 0.2rem solid #FFFF99;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+}
+
+.edit-icon {
+    position: absolute;
+    transform: translate(36%, -137%);
+    background-color: #FFFF99;
+    border-radius: 50%;
+    z-index: 10;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.edit-icon img {
+    width: 10vh;
+    height: 10vh;
+    border-radius: 50%;
+    opacity: 0.9;  
+    border: 0.5vh solid #FFFF99;
+}
+
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    box-sizing: border-box;
+
+}
+
+.register-form input {
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 0.2rem solid #FFFF99;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    background-color: #19753E;
+    color: #FFFF99;
+}
+
+input:focus {
+    outline: none;
+    box-shadow: 0 0 10px #FFFF99; 
+    background-color: #1c8546; 
+    transition: all 0.3s ease-in-out;
+}
+
+.register-form input:not(:placeholder-shown) {
+    background-color: #19753E !important;
+    color: #FFFF99 !important; 
+}
+
+.button-container {
+    text-align: right;
+}
+
+.button-save {
+    background: #19753E;
+    color: #FFFF99;
+    border: 0.2rem solid #FFFF99;
+    border-radius: 1rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+
+}
+
+.button-save:active {
+    animation: pulse 0.3s ease-in-out;
+}
+
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 5px #FFFF99;
+        background: #19753E;
+    }
+    50% {
+        transform: scale(0.95);
+        box-shadow: 0 0 15px #FFFF99;
+        background: #1faa50;
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 5px #FFFF99;
+        background: #19753E;
+    }
+}
+
+::placeholder {
+    color: #FFFF99;
+    font-style: italic; 
+    opacity: 0.7; 
+    font-size: 0.9rem;
+}
+
+
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1); 
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%);
+    border: 2px solid #FFFF99;
+    width: 30vw; 
+    height: auto;
+    z-index: 1000; 
+
+}
+
+.modal-content {
+    color: #FFFF99;
+    background: rgba(25, 117, 62);
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+
+.button-confirm, .button-cancel {
+    padding: 10px 20px;
+    margin: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.button-confirm {
+    background-color: green;
+    color: white;
+}
+
+.button-cancel {
+    background-color: #9b111e;
+    color: white;
+}

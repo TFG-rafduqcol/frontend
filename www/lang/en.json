@@ -1,0 +1,60 @@
+{
+    "title": "Aztec Guardians",
+    "login": "Log-in",
+    "register": "Register",
+    "login_title": "Login",
+    "enter_account_placeholder": "Enter your account",
+    "enter_email_placeholder": "Enter your email...",
+    "enter_password": "Enter your password...",
+    "back": "< Back",
+    "go": "Go!",
+    "register_title": "Register",
+    "create_account": "Create your account",
+    "first_name_placeholder": "Start with your first name...",
+    "last_name_placeholder": "Now your last name...",
+    "email_placeholder": "Drop your email here...",
+    "next": "Next >",
+    "end_register_title": "End your register",
+    "firstname_placeholder": "First Name",
+    "lastname_placeholder": "Last Name",
+    "username_placeholder": "Enter your warrior name...",
+    "password_placeholder": "Create your secret key...",
+    "enter_password_placeholder": "Enter your secret key...",
+    "new_password_placeholder": "New secret key or keep in blank...",
+    "confirm_password_placeholder": "Re-enter your secret key...",
+    "save": "Save",
+    "confirm_modal_message": "Are you sure you want to change your data?",
+    "yes_save": "Yes, Save",
+    "cancel": "Cancel", 
+
+    
+
+    "find_user": "Find User",
+    "your_friends": "Your Friends",
+    "requests": "Friend Requests",
+    "search_placeholder": "Enter username or ID...",
+    "addFriend": "Add Friend",
+    "pending": "Pending",
+    "accept": "Accept",
+    "reject": "Reject",
+    "removeFriend": "Remove Friend",
+    "yourself": "Yourself",
+    "rejected": "Rejected",
+    "noDataFound": "User not found.",
+    "noFriends": "You have no friends yet.",
+    "searchUser": "User not found with this username or ID.",
+    "errorSession": "Error in the request. Verify your session.",
+    "enterUsernameOrId": "Please enter a user ID or username.",
+
+
+    "email_placeholder_error": "Please enter a valid email address.",
+
+
+
+    "users-title": "Users",
+    "user-title": "User",
+    "previous-page": "Previous",
+    "next-page": "Next ",
+    "action-title": "Action"
+    
+}

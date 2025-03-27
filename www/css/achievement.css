@@ -1,0 +1,56 @@
+.achievement {
+    border-radius: 10px;
+    padding: 1rem;
+    width: 80%;
+    background-color: #19753E;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    margin: 1rem auto;
+  }
+  
+  .achievement-title {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    text-align: left;
+    margin-left: 2vw;
+  }
+  
+  .achievement-description {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    color: #FFFF99;
+  }
+  .progress-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%; 
+    position: relative;
+}
+
+.achievement-progress {
+    width: 50%; 
+    background-color: #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    height: 1rem;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: #4caf50;
+    transition: width 0.3s ease;
+}
+
+.achievement-stars {
+    position: absolute;
+    right: 6vw; 
+    display: flex;
+    align-items: center;
+    margin-bottom: 1vh;
+}
+
+.star {
+    color: gold;
+    font-size: 1.5rem;
+    margin-left: 0.2rem;
+}

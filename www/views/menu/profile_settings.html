@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="../../images/logo.png">
+    <link rel="stylesheet" href="../../css/profile_settings.css">
+    <link rel="stylesheet" href="../../css/home.css">
+    <title>Profile Settings</title>
+</head>
+<body>
+    <a href="index.html" class="home-icon-container">
+        <i class="fa-solid fa-house home-icon"></i>
+    </a>
+    <div class="container">
+        <div class="avatar-logo-container">
+            <img src="" id="avatar" alt="Avatar" class="avatar">
+            <a href="avatarCollection.html" class="edit-icon">
+            <img src="../../images/pencil.png" alt="Edit">
+            </a>
+        </div>
+        <form class="register-form">
+            <input type="text" id="firstname" name="firstname" value="" required data-i18n="first_name_placeholder" maxlength="50">
+            <input type="text" id="lastname" name="lastname" value="" required data-i18n="last_name_placeholder"  maxlength="50">
+            <input type="text" id="username" name="username" value="" required data-i18n="username_placeholder" maxlength="10">
+            <input type="email" id="email" name="email" value="" required data-i18n="email_placeholder">
+            <input type="password" id="password" name="password" value="" required data-i18n="new_password_placeholder">
+            <input type="password" id="confirm-password" name="confirm-password" value="" required data-i18n="confirm_password_placeholder">
+            <div class="button-container">
+                <button type="button" class="button-save" data-i18n="save">Save</button>
+            </div>       
+        </form>
+    </div>
+
+    <div id="confirm-modal" class="modal">
+        <div class="modal-content">
+            <p data-i18n="confirm-modal-message">Are you sure you want to change your data?</p>
+            <button id="confirm-button" class="button-confirm" data-i18n="yes_save">Yes, Save</button>
+            <button id="cancel-button" class="button-cancel" data-i18n="cancel">Cancel</button>
+        </div>
+    </div>
+
+    <script src="../../js/menu/profile_settings.js" defer></script>
+    <script src="../../js/config.js" defer></script>
+    <script src="../../js/i18n.js" defer></script>
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="../../images/logo.png">
+    <link rel="stylesheet" href="../../css/index.css">
+    <link rel="stylesheet" href="../../css/register.css">
+    <link rel="stylesheet" href="../../css/modal.css">
+
+
+    <title data-i18n="register_title">Register</title>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title" data-i18n="create_account">Create your account</h1>
+        <img src="../../images/logo.png" alt="Game Icon" class="logo">
+        <form class="register-form">
+            <input type="text" id="first-name" name="first-name data-i18n" data-i18n="first_name_placeholder" required >
+            <input type="text" id="last-name" name="last-name" data-i18n="last_name_placeholder" required >
+            <input type="email" id="email" name="email" data-i18n="email_placeholder" required >
+            <div class="button-group">
+                <a href="../index.html" class="button-back" data-i18n="back">&lt; Back</a>
+                <button type="button" class="button-next" data-i18n="next">Next &gt;</button>
+            </div>       
+        </form>
+    </div>
+    <i class="fa-solid fa-gear settings-icon" onclick="openModal()"></i>
+    <div id="modal-placeholder"></div>
+
+    <script src="../../js/modals.js"></script>
+    <script src="../../js/config.js"></script>
+    <script src="../../js/auth/register.js" defer></script>
+    <script src="../../js/i18n.js" defer></script>  
+</body>
+</html>

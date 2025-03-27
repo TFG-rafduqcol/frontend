@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Upload</title>
+</head>
+<body>
+    <h1>Upload Image to AWS S3</h1>
+
+    <!-- Formulario para subir imágenes -->
+    <form id="uploadForm" enctype="multipart/form-data">
+        <label for="image">Choose an image:</label>
+        <input type="file" id="image" name="image" accept="image/*" required><br><br>
+
+        <button type="submit">Upload Image</button>
+    </form>
+
+    <div id="responseMessage"></div>
+
+    <script>
+        // Manejo del formulario de subida
+        const form = document.getElementById('uploadForm');
+
+        form.addEventListener('submit', async function(event) {
+            event.preventDefault();  // Evitar que el formulario se envíe de forma tradicional
+
+            const formData = new FormData(form);  // Crear un objeto FormData con los datos del formulario
+            const serverUrl = "http://192.168.100.7:3000";
+
+            try {
+                const response = await fetch(`${serverUrl}/api/images/upload`, {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('responseMessage').innerHTML = `Image uploaded successfully! <br> URL: <a href="${data.url}" target="_blank">${data.url}</a>`;
+                } else {
+                    document.getElementById('responseMessage').innerHTML = `Error: ${data.message}`;
+                }
+            } catch (error) {
+                console.error('Error uploading image:', error);
+                document.getElementById('responseMessage').innerHTML = 'An error occurred while uploading the image.';
+            }
+        });
+    </script>
+</body>
+</html>
