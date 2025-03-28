@@ -291,6 +291,9 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       card.appendChild(actionBtn);
     }
+    document.getElementById(targetId).appendChild(card);
+    applyTranslations(translations, lang);
+
     return card;
   };
 
