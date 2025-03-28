@@ -92,7 +92,49 @@
         -webkit-tap-highlight-color: transparent;
 
     }
+    .modal {
+    display: none;
+    position: fixed;
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%);
+    border: 2px solid white;
+    width: 30vw; 
+    height: auto;
+    z-index: 1000; 
+
+    }
+
+    .modal-content {
+        color: white;
+        background: #2B8750;
+        padding: 20px;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+
+    .button-confirm, .button-cancel {
+        padding: 10px 20px;
+        margin: 10px;
+        border: none;
+        cursor: pointer;
+        border-color: white;
+        border-width: 2px;
+    }
+
+    .button-confirm {
+        background-color: green;
+        color: white;
+    }
+
+    .button-cancel {
+        background-color: #9b111e;
+        color: white;
+    }
   </style>
+
+
 </head>
 <body>
 
@@ -122,6 +164,14 @@
       <span id="pageInfo"></span>
       <button id="nextBtn" data-i18n="next-page">Siguiente</button>
   </div>
+
+<div id="confirm-modal" class="modal">
+    <div class="modal-content">
+        <p data-i18n="confirm-modal-message">Are you sure you want to delete this user?</p>
+        <button id="confirm-button" class="button-confirm" data-i18n="yes_save">Yes</button>
+        <button id="cancel-button" class="button-cancel" data-i18n="cancel">Cancel</button>
+    </div>
+</div>
 
   <script src="../../js/config.js" defer></script>
   <script src="../../js/admin/user_management.js" defer></script>
