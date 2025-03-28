@@ -73,10 +73,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 })
                 .then(data => {
                     if (data && data.token) {
-                        console.log(data);
                         localStorage.setItem("token", data.token);
                         localStorage.setItem("user", JSON.stringify(data.user));
-                        console.log(data.user.isAdmin);
                         if (data.user.isAdmin) {
                             window.location = "../admin/index.html";
                         } else {

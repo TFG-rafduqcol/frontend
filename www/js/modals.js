@@ -47,7 +47,7 @@ function closeModal() {
 }
 
 function logout() {
-    localStorage.removeItem('token'); 
+    localStorage.clear();
     window.location.href = 'http://127.0.0.1:8000/www/views/auth/login'; 
 }
 document.addEventListener('DOMContentLoaded', () => {

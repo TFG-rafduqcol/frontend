@@ -5,12 +5,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const lastName = document.getElementById("last-name");
     const username = document.getElementById("username");
     const email = document.getElementById("email");
-    const role = document.getElementById("role");
     const password = document.getElementById("password");
     const confirmPassword = document.getElementById("confirm-password");
 
+    const confirmModal = document.getElementById('confirm-modal');
+    const confirmButton = document.getElementById('confirm-button');
+    const cancelButton = document.getElementById('cancel-button');
+    
     document.querySelector(".button-create").addEventListener("click", function () {
-        console.log("hola")
     
         let valid = true;
 
@@ -81,62 +83,75 @@ document.addEventListener("DOMContentLoaded", function () {
             setError(confirmPassword, "Passwords do not match!");
             valid = false;
         }
-        console.log(role.value.trim())
-        console.log(role.value.trim() == "admin")
-
-        const parsed_role = role.value.trim() == "admin" ? 1 : 0;
-        console.log(parsed_role)
-
+    
         if (valid) {
-
-            let formData = {
-                firstName: firstName.value.trim(),
-                lastName: lastName.value.trim(),
-                email: email.value.trim(),
-                username: username.value.trim(),
-                password: password.value.trim(),
-                role: parsed_role
-            };
-            const token = localStorage.getItem('token');
-            fetch(`${serverUrl}/api/admin/register`, {
-                method: "POST",
-                headers: {
-                    'Authorization': `Bearer ${token}`,  
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            })
-            .then(response => {
-                if (!response.ok) {
-                    return response.json().then(errorData => {
-                        return Promise.reject(errorData);
-                    });
-                }
-                return response.json();  
-            })
-            .then(data => {
-                if (data.error) {
-                    if (data.error === "EmailDuplicate") {
-                        alert(`Registration failed: ${data.message}`);
-                    } else {
-                        alert(`Registration failed: ${data.error} - ${data.message}`);
-                    }
-                } else {
-                    console.log("Success:", data);
-                    
-                }
-            })
-            .catch(error => {
-                console.error("Error caught in catch block:", error);
-                alert("There was an error registering the user: " + (error.message || error));
-            });
+            confirmModal.style.display = 'block';
         }
     });
 
-    function isPasswordSecure(password) {
-        const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
-        return passwordPattern.test(password);
+    confirmButton.addEventListener('click', async function () {
+        createAccount();
+        confirmModal.style.display = 'none';
+        window.location.href = "index.html";
+    });
+
+    cancelButton.addEventListener('click', function() {
+        confirmModal.style.display = 'none';
+    });
+
+
+    function createAccount() {
+        const parsed_role = role.value.trim() == "admin" ? true : false;
+        let formData = {
+            firstName: firstName.value.trim(),
+            lastName: lastName.value.trim(),
+            email: email.value.trim(),
+            username: username.value.trim(),
+            password: password.value.trim(),
+            role: parsed_role  
+        };
+    
+        const token = localStorage.getItem('token'); 
+    
+        fetch(`${serverUrl}/api/admin/register`, {
+            method: "POST",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(errorData => {
+                    return Promise.reject(errorData);  
+                });
+            }
+            return response.json();  
+        })
+        .then(data => {
+            if (data.error) {
+                if (data.error === "EmailDuplicate") {
+                    alert(`Registration failed: ${data.message}`);
+                } else {
+                    alert(`Registration failed: ${data.error} - ${data.message}`);
+                }
+            } else {
+                console.log("Success:", data);
+            }
+        })
+        .catch(error => {
+            console.error("Error caught in catch block:", error);
+            alert("There was an error registering the user: " + (error.message || error));  
+        });
     }
 
-
 });
+
+function isPasswordSecure(password) {
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    return passwordPattern.test(password);
+}
+ 
+  
+

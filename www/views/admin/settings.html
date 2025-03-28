@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configuración de Perfil</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #ebf9f0;
+      text-align: center;
+    }
+    button { 
+        padding: 10px 15px;
+        cursor: pointer;
+        background-color: #ebf9f0;
+        border-radius: 3vh;
+        -webkit-tap-highlight-color: transparent;
+    }
+    .navbar {
+        width: 100%;
+        background-color: #2B8750;
+        padding: 10px 0;
+        text-align: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+    }
+
+    .navbar a {
+        color: white;
+        text-decoration: none;
+        padding: 14px 20px;
+        margin: 0 10px;
+        font-size: 18px;
+        display: inline-block;
+        transition: background-color 0.3s ease;
+    }
+
+    .navbar a:hover {
+        background-color: #b1e6c6;
+        border-radius: 6vh;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .form-container {
+        width: 60%;
+        margin: 100px auto 20px;
+        padding: 20px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-container input, .form-container select {
+        width: 80%;
+        padding: 12px;
+        margin: 10px 0;
+        border-radius: 6px;
+        border: 1px solid #000;
+        font-size: 16px;
+    }
+    .form-container select {
+        width: 84%;
+    }
+    .form-container button {
+        width: 30%;
+        padding: 8px;
+        background-color: #2B8750;
+        color: white;
+        font-size: 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .form-container button:hover {
+        background-color: #2980b9;
+    }
+
+    .form-container label {
+        font-size: 16px;
+        color: #333;
+        display: block;
+        margin-bottom: 8px;
+        text-align: left;
+    }
+    ::placeholder {
+        color: var(--placeholder-color, #888);
+        opacity: 1; 
+        transition: none;
+    }
+    .button-logout {
+        background-color: #9B111E !important;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <a href="./index.html" data-i18n="home">Home</a>
+    <a href="./user_management.html" data-i18n="users">Users list</a>
+    <a href="./create_account.html" data-i18n="settings">Create account</a>
+  </div>
+
+  <div class="form-container">
+    <h1 class="title" data-i18n="settings_title">Settings</h1>
+    <form id="settings-form">
+        <input type="text" id="firstname" name="firstname" value="" required data-i18n="first_name_placeholder" maxlength="50">
+        <input type="text" id="lastname" name="lastname" value="" required data-i18n="last_name_placeholder"  maxlength="50">
+        <input type="email" id="email" name="email" value="" required data-i18n="email_placeholder">
+        <input type="text" id="username" name="username" value="" required data-i18n="username_placeholder" maxlength="10">
+        <input type="password" id="password" name="password" placeholder="New Password (Optional)">
+        <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm New Password">
+        <div class="button-container">
+            <button type="button" id="save-button" class="button-create" data-i18n="save_changes">Save Changes</button>
+            <button type="button" id="logout" class="button-logout" data-i18n="logout">Log Out</button>
+        </div>
+
+    </form>
+  </div>
+  <script src="../../js/config.js"></script>
+
+  <script src="../../js/admin/settings.js"></script>
+
+</body>
+</html>
