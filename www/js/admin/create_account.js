@@ -82,8 +82,9 @@ document.addEventListener("DOMContentLoaded", function () {
             valid = false;
         }
         console.log(role.value.trim())
+        console.log(role.value.trim() == "admin")
 
-        const parsed_role = role.value.trim() == "admin" ? true : false;
+        const parsed_role = role.value.trim() == "admin" ? 1 : 0;
         console.log(parsed_role)
 
         if (valid) {
@@ -96,11 +97,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 password: password.value.trim(),
                 role: parsed_role
             };
-
-            fetch(`${serverUrl}/api/auth/register`, {
+            const token = localStorage.getItem('token');
+            fetch(`${serverUrl}/api/admin/register`, {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    'Authorization': `Bearer ${token}`,  
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(formData)
             })
