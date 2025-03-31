@@ -249,6 +249,11 @@ body {
     margin-left: 1vw;
 }
 
+.username:active {
+    transform: scale(1.2); /* Aumenta un 20% su tamaño */
+}
+
+
 .range-info {
     display: flex;
     justify-content: flex-start;

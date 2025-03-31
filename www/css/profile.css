@@ -117,13 +117,14 @@ body {
 
 .username {
     text-align: left;
-    font-size: 4vw;
+    font-size: 2vw;
+    margin-top: 10vh;
     height: auto;
 }
 
 .id {
     text-align: left;
-    font-size: 4vw;
+    font-size: 3.5vw;
     height: auto;
     margin-left: 5vw;
 }
@@ -144,7 +145,6 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    align-items: center;
     height: 100%;
     width: 12%;
     font-size: 0.7rem;

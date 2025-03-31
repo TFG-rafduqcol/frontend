@@ -1,0 +1,36 @@
+const url = serverUrl + "/api/admin/isAdmin";
+const token = localStorage.getItem("token");
+
+async function checkAdminStatus() {
+    try {
+        const response = await fetch(url, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}` 
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error("Error en la petición: " + response.status);
+        }
+
+        const data = await response.json();
+        return data.isAdmin; 
+    } catch (error) {
+        console.error("Error verificando estado de admin:", error);
+        return false;
+    }
+}
+
+checkAdminStatus().then(isAdmin => {
+    if (isAdmin) {
+        console.log("El usuario es admin.");
+        document.body.style.display = "block";
+
+    } else {
+        console.log("El usuario NO es admin.");
+        alert("You are not authorized to access this page.");
+        window.location.href = "http://127.0.0.1:8000/www/views/index.html";
+    }
+});

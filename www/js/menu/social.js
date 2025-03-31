@@ -186,6 +186,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const username = document.createElement("div");
     username.classList.add("username");
     username.textContent = `${user.username}`;
+    username.addEventListener("click", () => {
+      window.location.href = `../../views/menu/visitProfile.html?id=${user.id}`;
+    });
 
     userInfo.appendChild(xpLevel);
     userInfo.appendChild(username);
