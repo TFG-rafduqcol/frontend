@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let confirmPassword = document.getElementById("confirm-password");
 
     document.querySelector(".button-save").addEventListener("click", function () {
+        console.log("hola");
         let valid = true;
 
         [username, password, confirmPassword].forEach(input => {
