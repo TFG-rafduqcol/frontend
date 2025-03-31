@@ -8,6 +8,8 @@ body {
     background-size: cover;
     overflow: hidden;
     background: url('../images/fondo_carga.png') no-repeat center 55%/cover;
+    display: none;
+
 }
 
 .profile-container {

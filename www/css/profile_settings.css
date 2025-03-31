@@ -10,8 +10,7 @@ body {
     font-family: 'Roboto', sans-serif;
     text-align: center;
     padding-bottom: 30vh;
-
-
+    display: none;
 }
 .container {
     display: flex;

@@ -6,10 +6,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="../../css/social.css">
     <link rel="stylesheet" href="../../css/home.css">
+    <link rel="stylesheet" href="../../css/modal.css">
     <link rel="icon" type="image/x-icon" href="../../images/logo.png">
-
     <title data-i18n="friends_title">Friends List</title>
 </head>
+
 <body>
     <a href="index.html" class="home-icon-container">
         <i class="fa-solid fa-house home-icon"></i>
@@ -46,10 +47,12 @@
         <button class="language-button" onclick="changeLanguage('en')" title="English" style="background-image: url('https://flagcdn.com/w40/gb.png');"></button>
         <button class="language-button" onclick="changeLanguage('es')" title="Español" style="background-image: url('https://flagcdn.com/w40/es.png');"></button>
     </div>
-
-    <script src="../../js/utils/i18n.js" defer></script>
-    <script src="../../js/utils/config.js" defer></script>
-    <script src="../../js/menu/social.js" defer></script> 
-
+    <div id="modal-placeholder"></div>
 </body>
+
+<script src="../../js/utils/modals.js"></script>
+<script src="../../js/utils/i18n.js"></script>
+<script src="../../js/utils/config.js"></script>
+<script src="../../js/menu/social.js"></script> 
+<script src="../../js/utils/player_auth.js"></script>
 </html>
