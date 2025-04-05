@@ -94,35 +94,114 @@ function placeTower(event) {
     }
 }
 
+
+
+let towerMenuVisible = false; // Para saber si el menú está visible
+
+// Mostrar el menú de la torre
 function showTowerMenu(zone) {
     const menu = document.getElementById('towerMenu');
 
-    // Calcular posición del menú
-    const menuLeft = zone.x * scale + offsetX + zone.width * scale / 2 - menu.offsetWidth / 2;
-    const menuTop = zone.y * scale + offsetY + zone.height * scale / 2 - menu.offsetHeight / 2;
+    // Calcular las posiciones de la zona dentro del canvas
+    const zoneX = zone.x * scale + offsetX;
+    const zoneY = zone.y * scale + offsetY;
 
+    // Calcular la posición en la pantalla del menú
+    const menuLeft = zoneX + (zone.width * scale / 2) - (menu.offsetWidth / 2);
+    const menuTop = zoneY + (zone.height * scale / 2) - (menu.offsetHeight / 2);
+
+    // Mostrar el menú
     menu.style.left = `${menuLeft}px`;
     menu.style.top = `${menuTop}px`;
     menu.style.display = 'block';
-    menu.style.zIndex = '1000'; 
+    menu.style.zIndex = '1000';
+
+    towerMenuVisible = true; // El menú ahora está visible
 
     console.log(`Menú de torres mostrado en: (${menuLeft}px, ${menuTop}px)`);
-    const towerOptions = document.querySelectorAll('.towerOption');
-
-    // Esperar al próximo frame para asegurarse de que se renderizaron y tienen dimensiones
-    requestAnimationFrame(() => {
-        towerOptions.forEach((option, index) => {
-            
-            option.style.display = 'block';
-
-        });
-    });
 }
 
+// Ocultar el menú si se hace clic fuera
+function hideTowerMenuIfClickedOutside(event) {
+    const menu = document.getElementById('towerMenu');
+    const towerMenuRect = menu.getBoundingClientRect();
+    const towerOptions = document.querySelectorAll('.towerOption');
 
+    // Verificar si el clic no fue dentro del menú ni en sus opciones
+    const isInsideMenu = event.clientX >= towerMenuRect.left &&
+                         event.clientX <= towerMenuRect.right &&
+                         event.clientY >= towerMenuRect.top &&
+                         event.clientY <= towerMenuRect.bottom;
+
+    const isInsideOption = Array.from(towerOptions).some(option => option.contains(event.target));
+
+    if (!isInsideMenu && !isInsideOption) {
+        menu.style.display = 'none';
+        towerMenuVisible = false; // El menú ya no está visible
+    }
+
+    // Las opciones tmp son visibles
+
+    
+}
+
+// Ocultar el menú si se arrastra o se hace zoom
+function hideTowerMenuIfDraggedOrZoomed() {
+    if (towerMenuVisible) {
+        const menu = document.getElementById('towerMenu');
+        menu.style.display = 'none';
+        towerMenuVisible = false; // El menú ya no está visible
+    }
+}
+
+// Detectar si el usuario está arrastrando
+canvas.addEventListener('touchmove', () => {
+    hideTowerMenuIfDraggedOrZoomed();
+});
+
+canvas.addEventListener('mousemove', () => {
+    hideTowerMenuIfDraggedOrZoomed();
+});
+
+// Detectar si se hace zoom
+canvas.addEventListener('touchmove', (event) => {
+    if (event.touches.length === 2) {
+        hideTowerMenuIfDraggedOrZoomed();
+    }
+});
+
+// Escuchar clics en el documento para cerrar el menú
+document.addEventListener('click', hideTowerMenuIfClickedOutside);
+
+
+
+
+
+
+
+// Función de colocación de torre, como la tenías previamente
+function placeTower(event) {
+    const rect = canvas.getBoundingClientRect();
+    const clickX = event.clientX - rect.left;
+    const clickY = event.clientY - rect.top;
+
+    const zone = isInsideZone(clickX, clickY);
+
+    if (zone) {
+        zone.occupied = true;
+        showTowerMenu(zone);
+        
+        // Detener la propagación del clic para evitar que se oculte el menú inmediatamente
+        event.stopPropagation();
+    }
+}
 
 // Evento de clic en el canvas
 canvas.addEventListener("click", placeTower);
+
+// Evento de clic en cualquier parte del documento para ocultar el menú si se hace fuera de él
+document.addEventListener('click', hideTowerMenuIfClickedOutside);
+
 
 
 
