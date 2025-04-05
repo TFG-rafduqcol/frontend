@@ -94,46 +94,37 @@ function placeTower(event) {
     }
 }
 
-  function showTowerMenu(zone) {
-            console.log(zone); // Verificamos la zona
+function showTowerMenu(zone) {
+    const menu = document.getElementById('towerMenu');
 
-          
+    // Calcular posición del menú
+    const menuLeft = zone.x * scale + offsetX + zone.width * scale / 2 - menu.offsetWidth / 2;
+    const menuTop = zone.y * scale + offsetY + zone.height * scale / 2 - menu.offsetHeight / 2;
 
-            // Mostrar el menú de torres
-            const menu = document.getElementById('towerMenu');
-            menu.style.display = 'block';
-            menu.style.position = 'absolute';
-            menu.style.left = `${zone.x * scale + offsetX + zone.width * scale / 2 - menu.offsetWidth / 2}px`;
-            menu.style.top = `${zone.y * scale + offsetY + zone.height * scale / 2 - menu.offsetHeight / 2}px`;
-            console.log(menu.style.left, menu.style.top); // Verificamos la posición del menú
-            menu.style.zIndex = '1000'; // Asegurarnos de que el menú esté por encima
+    menu.style.left = `${menuLeft}px`;
+    menu.style.top = `${menuTop}px`;
+    menu.style.display = 'block';
+    menu.style.zIndex = '1000'; 
+
+    console.log(`Menú de torres mostrado en: (${menuLeft}px, ${menuTop}px)`);
+    const towerOptions = document.querySelectorAll('.towerOption');
+
+    // Esperar al próximo frame para asegurarse de que se renderizaron y tienen dimensiones
+    requestAnimationFrame(() => {
+        towerOptions.forEach((option, index) => {
             
+            option.style.display = 'block';
 
-            // Calcular las posiciones circulares para las opciones de las torres
-            const radius = 60; // Radio del círculo alrededor del punto
-            const angleStep = 2 * Math.PI / 3; // 3 torres, distribuir 360° entre ellas
-
-            const towerOptions = document.querySelectorAll('.towerOption');
-            towerOptions.forEach((option, index) => {
-
-                // Poner cada opción encima del menu: 
-
-                option.style.position = 'absolute';
-                option.style.display = 'block';
-                option.style.left = `${zone.x * scale + offsetX + zone.width * scale / 2 - menu.offsetWidth / 2}px`;
-                option.style.top = `${zone.y * scale + offsetY + zone.height * scale / 2 - menu.offsetHeight / 2}px`;
-                option.style.zIndex = '1001'; // Asegurarnos de que el menú esté por encima
-
-                console.log(option.style.left, option.style.top); // Verificamos la posición de las opciones
-                
-
-            });
-        }
+        });
+    });
+}
 
 
 
 // Evento de clic en el canvas
 canvas.addEventListener("click", placeTower);
+
+
 
 
 // Evento de arrastre táctil (touch)

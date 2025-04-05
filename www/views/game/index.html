@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mapa Tower Defense</title>
     <style>
-      body {
+body {
     margin: 0;
     padding: 0;
     background-color: #f0f0f0;
@@ -26,30 +26,60 @@
 }
 
 #towerMenu {
-    position: absolute;
     display: none;
-    background-color: rgba(0, 0, 0, 0.7);
-    border-radius: 10px;
     padding: 10px;
     z-index: 1000;
     transition: 0.3s ease;
+    border: 3px solid rgba(255, 255, 255, 0.7);
+    border-radius: 50%;
+    height: 10vh;
+    width: 10vh; /* Tamaño del menú de torres */
+
 }
 
 .towerOption {
-    position: absolute;
     background-size: cover;
-    width: 40px;  /* Tamaño de la torre */
-    height: 40px;  /* Tamaño de la torre */
+    width: 8vh;  /* Tamaño de la torre */
+    height: 8vh;  /* Tamaño de la torre */
     border-radius: 50%;  /* Hacer la imagen circular */
-    cursor: pointer;
-    z-index: 1001;
-
 }
+
+#towerOption1, #towerOption2, #towerOption3, #towerOption4 {
+    display: block;
+    position: absolute;
+    transform: translate(-50%, -50%);
+}
+
+#towerOption1 {
+    left: 2vh;
+    top: 1vh;
+}
+
+#towerOption2 {
+    left: 12vh;
+    top: 1vh;
+}
+
+#towerOption3 {
+    left: 2vh;
+    top: 12vh;
+}
+
+
+#towerOption4 {
+    left: 12vh;
+    top: 12vh;
+}
+
+
 
 .towerOption img {
     width: 100%; /* Hace que la imagen se ajuste al tamaño del div */
     height: 100%; /* Hace que la imagen se ajuste al tamaño del div */
     object-fit: cover; /* Asegura que la imagen se ajuste correctamente sin deformarse */
+    border-radius: 50%;
+    border: 3px solid rgba(255, 255, 255, 0.7);
+
 }
 
 .towerOption:hover {
@@ -72,6 +102,9 @@
             </div>
             <div class="towerOption" id="towerOption3">
                 <img src="../../images/avatars/avatar_1.jpeg" alt="Torre 3">
+            </div>
+            <div class="towerOption" id="towerOption4">
+                <img src="../../images/avatars/avatar_1.jpeg" alt="Torre 4">
             </div>
         </div>
         
