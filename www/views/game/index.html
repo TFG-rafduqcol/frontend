@@ -85,12 +85,24 @@ body {
     -webkit-tap-highlight-color: transparent;
 }
 
+.previewContainer {
+    position: absolute;
+    display: none; /* Oculto por defecto */
+    border-radius: 50%; /* Para que la previsualización tenga forma circular */
+    border: 2px solid rgba(255, 0, 0, 0.5);
+    background-color: rgba(255, 0, 0, 0.2);
+    pointer-events: none; /* Para que no interfiera con el clic en el canvas */
+}
+
+
 
     </style>
 </head>
 <body>
     <div id="gameCanvasContainer">
         <canvas id="gameCanvas"></canvas>
+                    <div  class= "previewContainer" id="previewContainer"></div>
+
         <div id="towerMenu" style="display: none; position: absolute;">
             <div class="towerOption" id="towerOption1">
                 <img src="../../images/avatars/avatar_1.jpeg" alt="Torre 1">
@@ -105,6 +117,7 @@ body {
                 <img src="../../images/avatars/avatar_1.jpeg" alt="Torre 4">
             </div>
         </div>
+
         
     </div>
 

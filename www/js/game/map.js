@@ -24,6 +24,15 @@ const towerZones = [
     { x: 870, y: 70, width: 50, height: 50, occupied: false },
 ];
 
+
+const towerProperties = {
+    canon: { cost: 100, damage: 10, fire_rate: 3, range: 40, projectile_type: 'bullet' },
+    magic: { cost: 125,  damage: 12, fire_rate: 2.5, range: 50, projectile_type: 'magic_ball' },
+    mortar: { cost: 150,  damage: 15, fire_rate: 4, range: 60, projectile_type: 'bomb' },
+    archer: { cost: 120,  damage: 15, fire_rate: 4, range: 60, projectile_type: 'arrow' },
+};
+
+
 // Ajustar el tamaño del canvas al tamaño de la pantalla
 function resizeCanvas() {
     canvas.width = window.innerWidth;
@@ -96,36 +105,64 @@ function placeTower(event) {
 
 
 
-let towerMenuVisible = false; // Para saber si el menú está visible
+let towerMenuVisible = false; 
 
 // Mostrar el menú de la torre
 function showTowerMenu(zone) {
     const menu = document.getElementById('towerMenu');
 
-    console.log(`Zona clicada: (${zone.x}, ${zone.y})`);
-
-    // Calcular el centro de la zona en coordenadas del canvas
-    const zoneCenterX = zone.x * scale + offsetX;
-    const zoneTopY = zone.y * scale + offsetY;
+    const zoneCenterX = (zone.x + zone.width / 2) * scale + offsetX;
+    const zoneCenterY = (zone.y + zone.height / 2) * scale + offsetY;
 
     const menuWidth = menu.offsetWidth;
     const menuHeight = menu.offsetHeight;
 
-    // Calcular la posición del menú para que esté centrado encima de la zona clicada
-    const menuLeft = zoneCenterX - (menuWidth / 2) - (window.innerHeight * 0.03); // Mover 5% más a la izquierda
-    const menuTop = zoneTopY - menuHeight - (window.innerHeight * 0.04); // Moverlo 5% más arriba
+    const menuLeft = zoneCenterX - menuWidth / 2; 
+    const menuTop = zoneCenterY - menuHeight / 2;
 
-    // Mostrar el menú en la posición calculada
     menu.style.left = `${menuLeft}px`;
     menu.style.top = `${menuTop}px`;
+    menu.style.transform = 'translate(-50%, -50%)';
+
     menu.style.display = 'block';
     menu.style.position = 'absolute';
     menu.style.zIndex = '1000';
 
     towerMenuVisible = true;
 
-    console.log(`Menú de torres mostrado en: (${menuLeft}px, ${menuTop}px)`);
+    document.querySelectorAll('.towerOption').forEach((option, index) => {
+        option.addEventListener('click', () => {
+            const towerNames = ['canon', 'magic', 'mortar', 'archer'];
+            selectedTower = towerNames[index];
+
+            previewTowerArea(menuLeft, menuTop, towerProperties[selectedTower].range);
+        });
+    });
 }
+
+function previewTowerArea(menuLeft, menuTop, range) {
+    let previewDiv = document.getElementById('previewContainer');  
+
+    if (!previewDiv) {
+        console.error('No se encontró el div de previsualización.');
+        return;
+    }
+
+    const previewZoneLeft = menuLeft 
+    const previewZoneTop = menuTop 
+
+    console.log(`Posición de previsualización: ${previewZoneLeft}, ${previewZoneTop}`); 
+
+    previewDiv.style.left = `${previewZoneLeft}px`;
+    previewDiv.style.top = `${previewZoneTop}px`;
+    previewDiv.style.transform = 'translate(-50%, -50%)';
+    previewDiv.style.width = `${range * 2}px`; 
+    previewDiv.style.height = `${range * 2}px`; 
+    previewDiv.style.display = 'block'; 
+    previewDiv.style.position = 'absolute';
+    previewDiv.style.zIndex = '1001';
+}
+
 
 
 // Ocultar el menú si se hace clic fuera
