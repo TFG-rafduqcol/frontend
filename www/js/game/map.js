@@ -89,7 +89,7 @@ function placeTower(event) {
     const zone = isInsideZone(clickX, clickY);
 
     if (zone) {
-        zone.occupied = true;
+        //zone.occupied = true;
         showTowerMenu(zone);
     }
 }
@@ -102,24 +102,31 @@ let towerMenuVisible = false; // Para saber si el menú está visible
 function showTowerMenu(zone) {
     const menu = document.getElementById('towerMenu');
 
-    // Calcular las posiciones de la zona dentro del canvas
-    const zoneX = zone.x * scale + offsetX;
-    const zoneY = zone.y * scale + offsetY;
+    console.log(`Zona clicada: (${zone.x}, ${zone.y})`);
 
-    // Calcular la posición en la pantalla del menú
-    const menuLeft = zoneX + (zone.width * scale / 2) - (menu.offsetWidth / 2);
-    const menuTop = zoneY + (zone.height * scale / 2) - (menu.offsetHeight / 2);
+    // Calcular el centro de la zona en coordenadas del canvas
+    const zoneCenterX = zone.x * scale + offsetX;
+    const zoneTopY = zone.y * scale + offsetY;
 
-    // Mostrar el menú
+    const menuWidth = menu.offsetWidth;
+    const menuHeight = menu.offsetHeight;
+
+    // Calcular la posición del menú para que esté centrado encima de la zona clicada
+    const menuLeft = zoneCenterX - (menuWidth / 2) - (window.innerHeight * 0.03); // Mover 5% más a la izquierda
+    const menuTop = zoneTopY - menuHeight - (window.innerHeight * 0.04); // Moverlo 5% más arriba
+
+    // Mostrar el menú en la posición calculada
     menu.style.left = `${menuLeft}px`;
     menu.style.top = `${menuTop}px`;
     menu.style.display = 'block';
+    menu.style.position = 'absolute';
     menu.style.zIndex = '1000';
 
-    towerMenuVisible = true; // El menú ahora está visible
+    towerMenuVisible = true;
 
     console.log(`Menú de torres mostrado en: (${menuLeft}px, ${menuTop}px)`);
 }
+
 
 // Ocultar el menú si se hace clic fuera
 function hideTowerMenuIfClickedOutside(event) {
@@ -188,7 +195,7 @@ function placeTower(event) {
     const zone = isInsideZone(clickX, clickY);
 
     if (zone) {
-        zone.occupied = true;
+        //zone.occupied = true;
         showTowerMenu(zone);
         
         // Detener la propagación del clic para evitar que se oculte el menú inmediatamente
