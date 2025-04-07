@@ -1,5 +1,6 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
+const params = new URLSearchParams(window.location.search);
 
 const mapImage = new Image();
 mapImage.src = '../../images/MapaAzteka.png';
@@ -26,11 +27,20 @@ const towerZones = [
 
 
 const towerProperties = {
-    canon: { cost: 100, damage: 10, fire_rate: 3, range: 40, projectile_type: 'bullet' },
-    magic: { cost: 125,  damage: 12, fire_rate: 2.5, range: 50, projectile_type: 'magic_ball' },
-    mortar: { cost: 150,  damage: 15, fire_rate: 4, range: 60, projectile_type: 'bomb' },
-    archer: { cost: 120,  damage: 15, fire_rate: 4, range: 60, projectile_type: 'arrow' },
+    stoneCannon: { cost: 100, damage: 10, fire_rate: 3, range: 40, projectile_type: 'stone' },
+    ironCannon: { cost: 125,  damage: 12, fire_rate: 2.5, range: 50, projectile_type: 'iron' },
+    inferno: { cost: 150,  damage: 15, fire_rate: 4, range: 60, projectile_type: 'fire' },
+    mortar: { cost: 120,  damage: 15, fire_rate: 4, range: 70, projectile_type: 'rock' },
 };
+
+const towerStyles = [ 
+    { towerBaseWidth: '60%', towerBaseTop: 0, towerBaseLet: '23%', frontAndBackLeft: '1%', backHeight: '11%', frontHeight: '13%', backBottom: '0%', frontBottom: '1%' },
+    { towerBaseWidth: '60%' ,towerBaseTop: 0, towerBaseLet: '23%', frontAndBackLeft: '0%',backHeight: '14%', frontHeight: '20%', backBottom: '5%', frontBottom: '10%' },
+    { towerBaseWidth: '60%' ,towerBaseTop: 0, towerBaseLet: '23%', frontAndBackLeft: '0%',backHeight: '13%', frontHeight: '22%', backBottom: '4%', frontBottom: '12%' },
+    { towerBaseWidth: '56%' ,towerBaseTop: '10%', towerBaseLet: '26%',frontAndBackLeft: '4%',backHeight: '14%', frontHeight: '15%', backBottom: '0%', frontBottom: '0%' },
+
+]
+
 
 
 // Ajustar el tamaño del canvas al tamaño de la pantalla
@@ -62,13 +72,30 @@ function drawMap() {
 
 // Dibujar las zonas clicables
 function drawZones() {
-    ctx.fillStyle = "rgba(0, 255, 0, 0)"; // Verde semitransparente
-    towerZones.forEach(zone => {
-        // Dibujar las zonas teniendo en cuenta el desplazamiento y el zoom
-        ctx.fillRect(zone.x * scale + offsetX, zone.y * scale + offsetY, zone.width * scale, zone.height * scale);
+    ctx.fillStyle = "rgba(0, 255, 0, 0.2)"; // Verde semitransparente (ligeramente visible)
+    ctx.font = "16px Arial";
+    ctx.fillStyle = "rgba(0, 255, 0, 0.2)"; // Color para las zonas
+
+    towerZones.forEach((zone, index) => {
+        zone.id = index + 1; // Asignamos un ID a cada zona (1 al 7)
+        const zoneX = zone.x * scale + offsetX;
+        const zoneY = zone.y * scale + offsetY;
+        const zoneW = zone.width * scale;
+        const zoneH = zone.height * scale;
+
+        // Dibujar la zona
+        ctx.fillRect(zoneX, zoneY, zoneW, zoneH);
+
+        // Dibujar el índice en el centro de la zona
+        ctx.fillStyle = "black";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(zone.id, zoneX + zoneW / 2, zoneY + zoneH / 2);
+
+        // Restaurar color para la siguiente zona
+        ctx.fillStyle = "rgba(0, 255, 0, 0.2)";
     });
 }
-
 
 
 // Evitar que el mapa se desplace fuera de los límites
@@ -107,9 +134,26 @@ function placeTower(event) {
 
 let towerMenuVisible = false; 
 let selectedTower = null;
+let currentZone = null;
+let lastMenuLeft = 0;
+let lastMenuTop = 0;
 
 // Mostrar el menú de la torre
-function showTowerMenu(zone) {
+function showTowerMenu(event) {
+    console.log("Mostrando el menú de la torre");
+    console.log("selectedTower:", selectedTower);
+
+    const rect = canvas.getBoundingClientRect();
+    const clickX = event.clientX - rect.left;
+    const clickY = event.clientY - rect.top;
+    const zone = isInsideZone(clickX, clickY);
+
+    if (!zone) return;
+    console.log("Zona ocupada:", zone.id);
+
+   
+    currentZone = zone;
+
     const menu = document.getElementById('towerMenu');
 
     const zoneCenterX = (zone.x + zone.width / 2) * scale + offsetX;
@@ -118,40 +162,46 @@ function showTowerMenu(zone) {
     const menuWidth = menu.offsetWidth;
     const menuHeight = menu.offsetHeight;
 
-    const menuLeft = zoneCenterX - menuWidth / 2; 
+    const menuLeft = zoneCenterX - menuWidth / 2;
     const menuTop = zoneCenterY - menuHeight / 2;
+
+    lastMenuLeft = menuLeft;
+    lastMenuTop = menuTop;
 
     menu.style.left = `${menuLeft}px`;
     menu.style.top = `${menuTop}px`;
-
     menu.style.display = 'block';
 
     towerMenuVisible = true;
-
-    // Poner punto en el centro de la zona con canvas
-    ctx.fillStyle = "rgba(255, 0, 0, 0.5)"; // Color rojo semitransparente
-    ctx.beginPath();
-    ctx.arc(zoneCenterX, zoneCenterY, 5, 0, Math.PI * 2); // Radio de 5 píxeles
-    ctx.fill();
-
-    ctx.closePath();
-
-    resetTowerMenuIcons(); 
-    
-
+    resetTowerMenuIcons();
 
     document.querySelectorAll('.towerOption').forEach((option, index) => {
-        option.addEventListener('click', () => {
-            const towerNames = ['canon', 'magic', 'mortar', 'archer'];
-            selectedTower = towerNames[index];
-
-            previewTowerArea(menuLeft, menuTop, towerProperties[selectedTower].range, index+1);
-            
-            resetTowerMenuIcons();
-            changeMenuTowerIcon(index+1)
-        });
+        option.removeEventListener('click', towerOptionClickHandler);
+        option.setAttribute('data-index', index);
+        option.addEventListener('click', towerOptionClickHandler);
     });
 }
+
+
+
+function towerOptionClickHandler(event) {
+    const option = event.currentTarget;
+    const index = parseInt(option.getAttribute('data-index'), 10);
+    const towerNames = ['stoneCannon', 'ironCannon', 'inferno', 'mortar'];
+    const clickedTower = towerNames[index];
+
+    if (selectedTower === clickedTower) {
+        deployTower(clickedTower, currentZone.id);
+        return;
+    }
+
+    selectedTower = clickedTower;
+    console.log("selectedTower:", selectedTower);
+    previewTowerArea(lastMenuLeft, lastMenuTop, towerProperties[selectedTower].range, index + 1);
+    resetTowerMenuIcons();
+    changeMenuTowerIcon(index + 1);
+}
+
 
 function resetTowerMenuIcons() {
     document.querySelectorAll('.towerOption').forEach((option) => {
@@ -164,18 +214,9 @@ function resetTowerMenuIcons() {
 function changeMenuTowerIcon(selectedTowerIndex) {
     towerOption = document.getElementById(`towerOption${selectedTowerIndex}`);
     const towerIcon = towerOption.querySelector('img');
-    towerIcon.src = '../../images/pencil.png';
+    towerIcon.src = '../../images/tick.jpeg';
 }
 
-
-
-const towerStyles = [ 
-    { towerBaseWidth: '60%', towerBaseTop: 0, towerBaseLet: '23%', frontAndBackLeft: '1%', backHeight: '11%', frontHeight: '13%', backBottom: '0%', frontBottom: '1%' },
-    { towerBaseWidth: '60%' ,towerBaseTop: 0, towerBaseLet: '23%', frontAndBackLeft: '0%',backHeight: '14%', frontHeight: '20%', backBottom: '5%', frontBottom: '10%' },
-    { towerBaseWidth: '60%' ,towerBaseTop: 0, towerBaseLet: '23%', frontAndBackLeft: '0%',backHeight: '13%', frontHeight: '22%', backBottom: '4%', frontBottom: '12%' },
-    { towerBaseWidth: '56%' ,towerBaseTop: '10%', towerBaseLet: '26%',frontAndBackLeft: '4%',backHeight: '14%', frontHeight: '15%', backBottom: '0%', frontBottom: '0%' },
-
-]
 
 
 function previewTowerArea(menuLeft, menuTop, range, selectedTowerIndex) {
@@ -195,21 +236,19 @@ function previewTowerArea(menuLeft, menuTop, range, selectedTowerIndex) {
         return;
     }
 
-    // Establecer posición y tamaño del contenedor
     previewDiv.style.left = `${menuLeft}px`;
     previewDiv.style.top = `${menuTop}px`;
-
     previewDiv.style.display = 'block'; 
 
-    
     previewArea.style.width = `${range * 2}px`; 
     previewArea.style.height = `${range * 2}px`;
 
-    // Determinar la ruta en función del índice
     const towerPath = `../../images/towers/tower${selectedTowerIndex}`;
-
-    // Cambiar las imágenes
     towerBase.style.backgroundImage = `url('${towerPath}/base.png')`;
+
+    towerBase.style.top = towerStyles[selectedTowerIndex - 1].towerBaseTop;
+    towerBase.style.left = towerStyles[selectedTowerIndex - 1].towerBaseLet;
+    towerBase.style.width = towerStyles[selectedTowerIndex - 1].towerBaseWidth;
 
     if (selectedTowerIndex !== 4) {
         towerBack.style.backgroundImage = `url('${towerPath}/back.png')`;
@@ -226,27 +265,75 @@ function previewTowerArea(menuLeft, menuTop, range, selectedTowerIndex) {
         towerBack.style.display = 'block'; 
         towerFront.style.display = 'block';
     } else {
-
-    
         towerSticks.style.display = 'block';
     }
 
-    towerBase.style.top = towerStyles[selectedTowerIndex - 1].towerBaseTop;
-    towerBase.style.left = towerStyles[selectedTowerIndex - 1].towerBaseLet;
-    towerBase.style.width = towerStyles[selectedTowerIndex - 1].towerBaseWidth;
 }
+
+
+
+async function deployTower(towerName, zoneId) {
+    selectedTower = null;
+    const token = localStorage.getItem('token');
+    const dataToSend = {
+        gameId: params.get('gameId'),  
+        name: towerName,
+        position: zoneId
+    };
+    
+    try {
+        const response = await fetch(`${serverUrl}/api/towers/deployTower`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`  
+            },
+            body: JSON.stringify(dataToSend)
+        });
+
+        if (!response.ok) {
+            throw new Error('Error en la respuesta del servidor: ' + response.statusText);
+        }
+
+        const responseData = await response.json();
+        console.log('Torre desplegada con éxito:', responseData);
+        console.log("Post selectedTower:", selectedTower);
+
+        // const zone = towerZones.find(zone => zone.id === zoneId);
+        // if (zone) {
+        //     placeTowerInZone(zone, towerName);
+        // }
+
+        // zone.occupied = true; 
+
+        // const menu = document.getElementById('towerMenu');
+        // menu.style.display = 'none';
+        // towerMenuVisible = false;
+
+
+    } catch (error) {
+        console.error('Error al desplegar la torre:', error);
+        alert('Hubo un problema al desplegar la torre. Inténtalo de nuevo.');
+    }
+}
+
+function placeTowerInZone(towerName, zoneId) {
+    console.log("Todo bien, zona ocupada:", zone);
+}
+
 
 // Ocultar el menú si se arrastra o se hace zoom
 function hideTowerMenuIfDraggedOrZoomed() {
     if (towerMenuVisible) {
         const menu = document.getElementById('towerMenu');
         menu.style.display = 'none';
-        towerMenuVisible = false; // El menú ya no está visible
+        towerMenuVisible = false; 
 
         const previewDiv = document.getElementById('previewContainer');
         if (previewDiv) {
-            previewDiv.style.display = 'none'; // Ocultar la previsualización
+            previewDiv.style.display = 'none'; 
         }
+        selectedTower = null; 
     }
 }
 
@@ -267,30 +354,8 @@ canvas.addEventListener('touchmove', (event) => {
 });
 
 
-
-
-
-
-
-// Función de colocación de torre, como la tenías previamente
-function placeTower(event) {
-    const rect = canvas.getBoundingClientRect();
-    const clickX = event.clientX - rect.left;
-    const clickY = event.clientY - rect.top;
-
-    const zone = isInsideZone(clickX, clickY);
-
-    if (zone) {
-        //zone.occupied = true;
-        showTowerMenu(zone);
-        
-        // Detener la propagación del clic para evitar que se oculte el menú inmediatamente
-        event.stopPropagation();
-    }
-}
-
 // Evento de clic en el canvas
-canvas.addEventListener("click", placeTower);
+canvas.addEventListener("click", showTowerMenu);
 
 
 
