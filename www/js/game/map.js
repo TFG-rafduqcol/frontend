@@ -106,6 +106,7 @@ function placeTower(event) {
 
 
 let towerMenuVisible = false; 
+let selectedTower = null;
 
 // Mostrar el menú de la torre
 function showTowerMenu(zone) {
@@ -134,6 +135,8 @@ function showTowerMenu(zone) {
     ctx.fill();
 
     ctx.closePath();
+
+    resetTowerMenuIcons(); 
     
 
 
@@ -143,9 +146,28 @@ function showTowerMenu(zone) {
             selectedTower = towerNames[index];
 
             previewTowerArea(menuLeft, menuTop, towerProperties[selectedTower].range, index+1);
+            
+            resetTowerMenuIcons();
+            changeMenuTowerIcon(index+1)
         });
     });
 }
+
+function resetTowerMenuIcons() {
+    document.querySelectorAll('.towerOption').forEach((option) => {
+        const towerIcon = option.querySelector('img');
+        towerIcon.src = towerIcon.getAttribute('data-original-src'); 
+    });
+}
+
+
+function changeMenuTowerIcon(selectedTowerIndex) {
+    towerOption = document.getElementById(`towerOption${selectedTowerIndex}`);
+    const towerIcon = towerOption.querySelector('img');
+    towerIcon.src = '../../images/pencil.png';
+}
+
+
 
 const towerStyles = [ 
     { towerBaseWidth: '60%', towerBaseTop: 0, towerBaseLet: '23%', frontAndBackLeft: '1%', backHeight: '11%', frontHeight: '13%', backBottom: '0%', frontBottom: '1%' },
