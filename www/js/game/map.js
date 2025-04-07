@@ -62,7 +62,7 @@ function drawMap() {
 
 // Dibujar las zonas clicables
 function drawZones() {
-    ctx.fillStyle = "rgba(0, 255, 0, 0.3)"; // Verde semitransparente
+    ctx.fillStyle = "rgba(0, 255, 0, 0)"; // Verde semitransparente
     towerZones.forEach(zone => {
         // Dibujar las zonas teniendo en cuenta el desplazamiento y el zoom
         ctx.fillRect(zone.x * scale + offsetX, zone.y * scale + offsetY, zone.width * scale, zone.height * scale);
@@ -122,71 +122,96 @@ function showTowerMenu(zone) {
 
     menu.style.left = `${menuLeft}px`;
     menu.style.top = `${menuTop}px`;
-    menu.style.transform = 'translate(-50%, -50%)';
 
     menu.style.display = 'block';
-    menu.style.position = 'absolute';
-    menu.style.zIndex = '1000';
 
     towerMenuVisible = true;
+
+    // Poner punto en el centro de la zona con canvas
+    ctx.fillStyle = "rgba(255, 0, 0, 0.5)"; // Color rojo semitransparente
+    ctx.beginPath();
+    ctx.arc(zoneCenterX, zoneCenterY, 5, 0, Math.PI * 2); // Radio de 5 píxeles
+    ctx.fill();
+
+    ctx.closePath();
+    
+
 
     document.querySelectorAll('.towerOption').forEach((option, index) => {
         option.addEventListener('click', () => {
             const towerNames = ['canon', 'magic', 'mortar', 'archer'];
             selectedTower = towerNames[index];
 
-            previewTowerArea(menuLeft, menuTop, towerProperties[selectedTower].range);
+            previewTowerArea(menuLeft, menuTop, towerProperties[selectedTower].range, index+1);
         });
     });
 }
 
-function previewTowerArea(menuLeft, menuTop, range) {
-    let previewDiv = document.getElementById('previewContainer');  
+const towerStyles = [ 
+    { towerBaseWidth: '60%', towerBaseTop: 0, towerBaseLet: '23%', frontAndBackLeft: '1%', backHeight: '11%', frontHeight: '13%', backBottom: '0%', frontBottom: '1%' },
+    { towerBaseWidth: '60%' ,towerBaseTop: 0, towerBaseLet: '23%', frontAndBackLeft: '0%',backHeight: '14%', frontHeight: '20%', backBottom: '5%', frontBottom: '10%' },
+    { towerBaseWidth: '60%' ,towerBaseTop: 0, towerBaseLet: '23%', frontAndBackLeft: '0%',backHeight: '13%', frontHeight: '22%', backBottom: '4%', frontBottom: '12%' },
+    { towerBaseWidth: '56%' ,towerBaseTop: '10%', towerBaseLet: '26%',frontAndBackLeft: '4%',backHeight: '14%', frontHeight: '15%', backBottom: '0%', frontBottom: '0%' },
 
-    if (!previewDiv) {
-        console.error('No se encontró el div de previsualización.');
+]
+
+
+function previewTowerArea(menuLeft, menuTop, range, selectedTowerIndex) {
+    const previewDiv = document.getElementById('previewContainer');  
+    const previewArea = document.getElementById('previewArea');
+    const towerBase = previewDiv.querySelector('.towerBase');
+    const towerBack = previewDiv.querySelector('.towerBack');
+    const towerFront = previewDiv.querySelector('.towerFront');
+    const towerSticks = previewDiv.querySelector('.towerSticks'); 
+
+    towerBack.style.display = 'none';
+    towerFront.style.display = 'none';
+    towerSticks.style.display = 'none';
+
+    if (!previewDiv || !towerBase || (!towerBack && selectedTowerIndex !== 4) || (!towerFront && selectedTowerIndex !== 4) || (selectedTowerIndex === 4 && !towerSticks)) {
+        console.error('No se encontraron elementos necesarios para la previsualización.');
         return;
     }
 
-    const previewZoneLeft = menuLeft 
-    const previewZoneTop = menuTop 
+    // Establecer posición y tamaño del contenedor
+    previewDiv.style.left = `${menuLeft}px`;
+    previewDiv.style.top = `${menuTop}px`;
 
-    console.log(`Posición de previsualización: ${previewZoneLeft}, ${previewZoneTop}`); 
-
-    previewDiv.style.left = `${previewZoneLeft}px`;
-    previewDiv.style.top = `${previewZoneTop}px`;
-    previewDiv.style.transform = 'translate(-50%, -50%)';
-    previewDiv.style.width = `${range * 2}px`; 
-    previewDiv.style.height = `${range * 2}px`; 
     previewDiv.style.display = 'block'; 
-    previewDiv.style.position = 'absolute';
-    previewDiv.style.zIndex = '1001';
-}
-
-
-
-// Ocultar el menú si se hace clic fuera
-function hideTowerMenuIfClickedOutside(event) {
-    const menu = document.getElementById('towerMenu');
-    const towerMenuRect = menu.getBoundingClientRect();
-    const towerOptions = document.querySelectorAll('.towerOption');
-
-    // Verificar si el clic no fue dentro del menú ni en sus opciones
-    const isInsideMenu = event.clientX >= towerMenuRect.left &&
-                         event.clientX <= towerMenuRect.right &&
-                         event.clientY >= towerMenuRect.top &&
-                         event.clientY <= towerMenuRect.bottom;
-
-    const isInsideOption = Array.from(towerOptions).some(option => option.contains(event.target));
-
-    if (!isInsideMenu && !isInsideOption) {
-        menu.style.display = 'none';
-        towerMenuVisible = false; // El menú ya no está visible
-    }
-
-    // Las opciones tmp son visibles
 
     
+    previewArea.style.width = `${range * 2}px`; 
+    previewArea.style.height = `${range * 2}px`;
+
+    // Determinar la ruta en función del índice
+    const towerPath = `../../images/towers/tower${selectedTowerIndex}`;
+
+    // Cambiar las imágenes
+    towerBase.style.backgroundImage = `url('${towerPath}/base.png')`;
+
+    if (selectedTowerIndex !== 4) {
+        towerBack.style.backgroundImage = `url('${towerPath}/back.png')`;
+        towerFront.style.backgroundImage = `url('${towerPath}/front.png')`;
+        towerBack.style.height = towerStyles[selectedTowerIndex - 1].backHeight; 
+        towerFront.style.height = towerStyles[selectedTowerIndex - 1].frontHeight;
+
+        towerBack.style.bottom = towerStyles[selectedTowerIndex - 1].backBottom;
+        towerFront.style.bottom = towerStyles[selectedTowerIndex - 1].frontBottom;
+
+        towerBack.style.left = towerStyles[selectedTowerIndex - 1].frontAndBackLeft;
+        towerFront.style.left = towerStyles[selectedTowerIndex - 1].frontAndBackLeft;
+
+        towerBack.style.display = 'block'; 
+        towerFront.style.display = 'block';
+    } else {
+
+    
+        towerSticks.style.display = 'block';
+    }
+
+    towerBase.style.top = towerStyles[selectedTowerIndex - 1].towerBaseTop;
+    towerBase.style.left = towerStyles[selectedTowerIndex - 1].towerBaseLet;
+    towerBase.style.width = towerStyles[selectedTowerIndex - 1].towerBaseWidth;
 }
 
 // Ocultar el menú si se arrastra o se hace zoom
@@ -195,6 +220,11 @@ function hideTowerMenuIfDraggedOrZoomed() {
         const menu = document.getElementById('towerMenu');
         menu.style.display = 'none';
         towerMenuVisible = false; // El menú ya no está visible
+
+        const previewDiv = document.getElementById('previewContainer');
+        if (previewDiv) {
+            previewDiv.style.display = 'none'; // Ocultar la previsualización
+        }
     }
 }
 
@@ -213,9 +243,6 @@ canvas.addEventListener('touchmove', (event) => {
         hideTowerMenuIfDraggedOrZoomed();
     }
 });
-
-// Escuchar clics en el documento para cerrar el menú
-document.addEventListener('click', hideTowerMenuIfClickedOutside);
 
 
 
@@ -242,9 +269,6 @@ function placeTower(event) {
 
 // Evento de clic en el canvas
 canvas.addEventListener("click", placeTower);
-
-// Evento de clic en cualquier parte del documento para ocultar el menú si se hace fuera de él
-document.addEventListener('click', hideTowerMenuIfClickedOutside);
 
 
 

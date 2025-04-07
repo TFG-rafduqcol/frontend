@@ -26,57 +26,70 @@ body {
 }
 
 #towerMenu {
+    position: absolute;
+    display: none;
     padding: 10px;
     transition: 0.3s ease;
-    border: 3px solid rgba(255, 255, 255, 0.7);
+    border: 3px solid rgba(0, 0, 0, 0.3); 
+    background-color: transparent;
     border-radius: 50%;
-    height: 10vh;
-    width: 10vh; /* Tamaño del menú de torres */
+    height: 16vh;
+    width: 16vh;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+
 
 }
 
 .towerOption {
     background-size: cover;
-    width: 8vh;  /* Tamaño de la torre */
-    height: 8vh;  /* Tamaño de la torre */
-    border-radius: 50%;  /* Hacer la imagen circular */
+    width: 8vh; 
+    height: 8vh; 
+    border-radius: 50%;  
+    background-color: #ffffff; 
+    border: 3px solid rgba(0, 0, 0, 0.3); 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
 }
 
 #towerOption1, #towerOption2, #towerOption3, #towerOption4 {
-    display: block;
     position: absolute;
     transform: translate(-50%, -50%);
+    
 }
 
 #towerOption1 {
-    left: 2vh;
+    left: 3vh;
     top: 1vh;
 }
 
 #towerOption2 {
-    left: 12vh;
+    left: 18vh;
     top: 1vh;
 }
 
 #towerOption3 {
-    left: 2vh;
-    top: 12vh;
+    left: 3vh;
+    top: 17vh;
 }
 
 
 #towerOption4 {
-    left: 12vh;
-    top: 12vh;
+    left: 18vh;
+    top: 17vh;
 }
 
-
+#towerOption1:hover, #towerOption2:hover, #towerOption3:hover, #towerOption4:hover {
+    cursor: pointer;
+    filter: brightness(1.2);
+    -webkit-tap-highlight-color: transparent;
+}
 
 .towerOption img {
-    width: 100%; /* Hace que la imagen se ajuste al tamaño del div */
-    height: 100%; /* Hace que la imagen se ajuste al tamaño del div */
-    object-fit: cover; /* Asegura que la imagen se ajuste correctamente sin deformarse */
+    width: 100%;
+    height: 100%; 
+    object-fit: contain; 
     border-radius: 50%;
-    border: 3px solid rgba(255, 255, 255, 0.7);
+    transform: scale(0.8)
 
 }
 
@@ -87,34 +100,167 @@ body {
 
 .previewContainer {
     position: absolute;
-    display: none; /* Oculto por defecto */
-    border-radius: 50%; /* Para que la previsualización tenga forma circular */
-    border: 2px solid rgba(255, 0, 0, 0.5);
-    background-color: rgba(255, 0, 0, 0.2);
-    pointer-events: none; /* Para que no interfiera con el clic en el canvas */
+    display: none;
+    transform: translate(-50%, -50%);
+    z-index: 999;
+    pointer-events: none; 
+    width: 18vh;
+    height: 18vh;
+}
+
+.previewArea {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%; 
+    background-image: radial-gradient(circle, transparent 50%, #19753E 90%);
+    background-color: transparent;
+    z-index: 999;
+    transform: translate(-50%, -50%);
 }
 
 
+.towerPreview {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%; 
+    height: 100%;
+    z-index: 1000;
 
+}
+
+.towerBase {
+    position: absolute; 
+    top: 0;
+    left: 23%;
+    width: 60%; 
+    height: 70%;
+    background-image: url('.././../images/towers/tower1/base.png');  
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: 1001;
+}
+
+.towerBack,
+.towerFront {
+    position: relative;
+    background-size: contain;
+    left:2%;
+    background-repeat: no-repeat;
+    background-position: center;
+    transform: translate(-50%, -50%);
+    z-index: 1002;
+}
+
+.towerBack {
+    bottom: 0%;
+    height: 11%;
+    background-image: url('.././../images/towers/tower1/back.png'); 
+    animation: moveYBack 2s infinite alternate; 
+    z-index: 999;
+}
+
+.towerFront {
+    bottom: 1%; 
+    height: 13%;
+    background-image: url('.././../images/towers/tower1/front.png');  
+    animation: moveYFront 2s infinite alternate; 
+    z-index: 1002;
+
+}
+
+.towerSticks {
+    position: absolute;
+    bottom: 55%;
+    left: 10%;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+}
+
+.towerStick1, .towerStick2 {
+    position: absolute;
+    width: 100%;
+    height: 30%;
+    background-image: url('.././../images/towers/tower4/stick.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    animation: moveSticks 2s infinite alternate; 
+}
+
+.towerStick1 {
+    bottom: 0%; 
+    left: -24%;
+}
+
+.towerStick2 {
+    bottom: 0%; 
+    left: 3%;
+}
+
+@keyframes moveSticks {
+    0% {
+        transform: translateY(0); 
+    }
+    100% {
+        transform: translateY(-10px); 
+    }
+}
+
+@keyframes moveYBack {
+    0% {
+        transform: translateY(0); 
+    }
+    100% {
+        transform: translateY(23px);
+    }
+}
+
+@keyframes moveYFront {
+    0% {
+        transform: translateY(0); 
+    }
+    100% {
+        transform: translateY(23px); 
+    }
+}
     </style>
 </head>
 <body>
     <div id="gameCanvasContainer">
         <canvas id="gameCanvas"></canvas>
-                    <div  class= "previewContainer" id="previewContainer"></div>
 
+        <div class="previewContainer" id="previewContainer">
+            <div class="previewArea" id="previewArea"></div>
+            <div class="towerPreview" id="towerPreview">
+                <div class="towerBase"></div>
+                <div class="towerBack"></div>
+                <div class="towerFront"></div>
+                <div class="towerSticks">
+                    <div class="towerStick1"></div>
+                    <div class="towerStick2"></div>
+                </div>
+            </div>       
+         </div>
+
+        
         <div id="towerMenu" style="display: none; position: absolute;">
             <div class="towerOption" id="towerOption1">
-                <img src="../../images/avatars/avatar_1.jpeg" alt="Torre 1">
+                <img src="../../images/towers/tower1/base.png" alt="Torre 1">
             </div>
             <div class="towerOption" id="towerOption2">
-                <img src="../../images/avatars/avatar_1.jpeg" alt="Torre 2">
+                <img src="../../images/towers/tower2/base.png" alt="Torre 1">
             </div>
             <div class="towerOption" id="towerOption3">
-                <img src="../../images/avatars/avatar_1.jpeg" alt="Torre 3">
+                <img src="../../images/towers/tower3/base.png" alt="Torre 1">
             </div>
             <div class="towerOption" id="towerOption4">
-                <img src="../../images/avatars/avatar_1.jpeg" alt="Torre 4">
+                <img src="../../images/towers/tower4/base.png" alt="Torre 1">
             </div>
         </div>
 
