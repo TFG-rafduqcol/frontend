@@ -16,13 +16,13 @@ let minZoom, maxZoom = 5;
 
 // Definir las zonas clicables
 const towerZones = [
-    { x: 775, y: 580, width: 50, height: 50, occupied: false },
-    { x: 520, y: 580, width: 50, height: 50, occupied: false },
-    { x: 262, y: 420, width: 50, height: 50, occupied: false },
-    { x: 262, y: 132, width: 50, height: 50, occupied: false },
-    { x: 582, y: 132, width: 50, height: 50, occupied: false },
-    { x: 647, y: 260, width: 50, height: 50, occupied: false },
-    { x: 870, y: 70, width: 50, height: 50, occupied: false },
+    { position: 1, x: 775, y: 580, width: 50, height: 50, occupied: false },
+    { position: 2, x: 520, y: 580, width: 50, height: 50, occupied: false },
+    { position: 3, x: 262, y: 420, width: 50, height: 50, occupied: false },
+    { position: 4, x: 262, y: 132, width: 50, height: 50, occupied: false },
+    { position: 5, x: 582, y: 132, width: 50, height: 50, occupied: false },
+    { position: 6, x: 647, y: 260, width: 50, height: 50, occupied: false },
+    { position: 7, x: 870, y: 70, width: 50, height: 50, occupied: false },
 ];
 
 
@@ -34,12 +34,20 @@ const towerProperties = {
 };
 
 const towerStyles = [ 
-    { towerBaseWidth: '60%', towerBaseTop: 0, towerBaseLet: '23%', frontAndBackLeft: '1%', backHeight: '11%', frontHeight: '13%', backBottom: '0%', frontBottom: '1%' },
-    { towerBaseWidth: '60%' ,towerBaseTop: 0, towerBaseLet: '23%', frontAndBackLeft: '0%',backHeight: '14%', frontHeight: '20%', backBottom: '5%', frontBottom: '10%' },
-    { towerBaseWidth: '60%' ,towerBaseTop: 0, towerBaseLet: '23%', frontAndBackLeft: '0%',backHeight: '13%', frontHeight: '22%', backBottom: '4%', frontBottom: '12%' },
-    { towerBaseWidth: '56%' ,towerBaseTop: '10%', towerBaseLet: '26%',frontAndBackLeft: '4%',backHeight: '14%', frontHeight: '15%', backBottom: '0%', frontBottom: '0%' },
-
+    { towerBaseWidth: '60%', towerBaseTop: 0, towerBaseLeft: '23%', frontAndBackLeft: '1%', backHeight: '11%', frontHeight: '13%', backBottom: '0%', frontBottom: '1%' },
+    { towerBaseWidth: '60%' ,towerBaseTop: 0, towerBaseLeft: '23%', frontAndBackLeft: '0%',backHeight: '14%', frontHeight: '20%', backBottom: '5%', frontBottom: '10%' },
+    { towerBaseWidth: '60%' ,towerBaseTop: 0, towerBaseLeft: '23%', frontAndBackLeft: '0%',backHeight: '13%', frontHeight: '22%', backBottom: '4%', frontBottom: '12%' },
+    { towerBaseWidth: '56%' ,towerBaseTop: '10%', towerBaseLeft: '26%',frontAndBackLeft: '4%',backHeight: '14%', frontHeight: '15%', backBottom: '0%', frontBottom: '0%' },
 ]
+
+const towerImages = {
+    1: "../../images/towers/tower1/base.png",
+    2: "../../images/towers/tower2/base.png",
+    3: "../../images/towers/tower3/base.png",
+    4: "../../images/towers/tower4/base.png",
+};
+
+let towersDeployed = [];
 
 
 
@@ -76,8 +84,7 @@ function drawZones() {
     ctx.font = "16px Arial";
     ctx.fillStyle = "rgba(0, 255, 0, 0.2)"; // Color para las zonas
 
-    towerZones.forEach((zone, index) => {
-        zone.id = index + 1; // Asignamos un ID a cada zona (1 al 7)
+    towerZones.forEach((zone) => {
         const zoneX = zone.x * scale + offsetX;
         const zoneY = zone.y * scale + offsetY;
         const zoneW = zone.width * scale;
@@ -90,7 +97,7 @@ function drawZones() {
         ctx.fillStyle = "black";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        ctx.fillText(zone.id, zoneX + zoneW / 2, zoneY + zoneH / 2);
+        ctx.fillText(zone.position, zoneX + zoneW / 2, zoneY + zoneH / 2);
 
         // Restaurar color para la siguiente zona
         ctx.fillStyle = "rgba(0, 255, 0, 0.2)";
@@ -130,18 +137,33 @@ function placeTower(event) {
     }
 }
 
-
-
 let towerMenuVisible = false; 
 let selectedTower = null;
 let currentZone = null;
 let lastMenuLeft = 0;
 let lastMenuTop = 0;
 
+function towerOptionClickHandler(event) {
+    const option = event.currentTarget;
+    const index = parseInt(option.getAttribute('data-index'), 10);
+    const towerNames = ['stoneCannon', 'ironCannon', 'inferno', 'mortar'];
+    const clickedTower = towerNames[index];
+
+    if (selectedTower === clickedTower) {
+        deployTower(clickedTower, currentZone.position);
+        return;
+    }
+
+    selectedTower = clickedTower;
+    previewTowerArea(lastMenuLeft, lastMenuTop, towerProperties[selectedTower].range, index + 1);
+    resetTowerMenuIcons();
+    changeMenuTowerIcon(index + 1);
+}
+
+
+
 // Mostrar el menú de la torre
 function showTowerMenu(event) {
-    console.log("Mostrando el menú de la torre");
-    console.log("selectedTower:", selectedTower);
 
     const rect = canvas.getBoundingClientRect();
     const clickX = event.clientX - rect.left;
@@ -149,22 +171,13 @@ function showTowerMenu(event) {
     const zone = isInsideZone(clickX, clickY);
 
     if (!zone) return;
-    console.log("Zona ocupada:", zone.id);
 
-   
     currentZone = zone;
-
     const menu = document.getElementById('towerMenu');
 
-    const zoneCenterX = (zone.x + zone.width / 2) * scale + offsetX;
-    const zoneCenterY = (zone.y + zone.height / 2) * scale + offsetY;
-
-    const menuWidth = menu.offsetWidth;
-    const menuHeight = menu.offsetHeight;
-
-    const menuLeft = zoneCenterX - menuWidth / 2;
-    const menuTop = zoneCenterY - menuHeight / 2;
-
+    const menuLeft = (zone.x + zone.width / 2) * scale + offsetX;
+    const menuTop = (zone.y + zone.height / 2) * scale + offsetY;
+ 
     lastMenuLeft = menuLeft;
     lastMenuTop = menuTop;
 
@@ -182,25 +195,6 @@ function showTowerMenu(event) {
     });
 }
 
-
-
-function towerOptionClickHandler(event) {
-    const option = event.currentTarget;
-    const index = parseInt(option.getAttribute('data-index'), 10);
-    const towerNames = ['stoneCannon', 'ironCannon', 'inferno', 'mortar'];
-    const clickedTower = towerNames[index];
-
-    if (selectedTower === clickedTower) {
-        deployTower(clickedTower, currentZone.id);
-        return;
-    }
-
-    selectedTower = clickedTower;
-    console.log("selectedTower:", selectedTower);
-    previewTowerArea(lastMenuLeft, lastMenuTop, towerProperties[selectedTower].range, index + 1);
-    resetTowerMenuIcons();
-    changeMenuTowerIcon(index + 1);
-}
 
 
 function resetTowerMenuIcons() {
@@ -247,7 +241,7 @@ function previewTowerArea(menuLeft, menuTop, range, selectedTowerIndex) {
     towerBase.style.backgroundImage = `url('${towerPath}/base.png')`;
 
     towerBase.style.top = towerStyles[selectedTowerIndex - 1].towerBaseTop;
-    towerBase.style.left = towerStyles[selectedTowerIndex - 1].towerBaseLet;
+    towerBase.style.left = towerStyles[selectedTowerIndex - 1].towerBaseLeft;
     towerBase.style.width = towerStyles[selectedTowerIndex - 1].towerBaseWidth;
 
     if (selectedTowerIndex !== 4) {
@@ -271,14 +265,13 @@ function previewTowerArea(menuLeft, menuTop, range, selectedTowerIndex) {
 }
 
 
-
-async function deployTower(towerName, zoneId) {
+async function deployTower(towerName, zonePosition) {
     selectedTower = null;
     const token = localStorage.getItem('token');
     const dataToSend = {
-        gameId: params.get('gameId'),  
+        gameId: params.get('gameId'),
         name: towerName,
-        position: zoneId
+        position: zonePosition
     };
     
     try {
@@ -294,22 +287,21 @@ async function deployTower(towerName, zoneId) {
         if (!response.ok) {
             throw new Error('Error en la respuesta del servidor: ' + response.statusText);
         }
+        const previewDiv = document.getElementById('previewContainer');  
+        if (previewDiv) {
+            previewDiv.style.display = 'none';
+        }
 
         const responseData = await response.json();
-        console.log('Torre desplegada con éxito:', responseData);
-        console.log("Post selectedTower:", selectedTower);
 
-        // const zone = towerZones.find(zone => zone.id === zoneId);
-        // if (zone) {
-        //     placeTowerInZone(zone, towerName);
-        // }
+        const { gameId, projectileId, ...towerData } = responseData.tower;
+        towersDeployed.push(towerData);
 
-        // zone.occupied = true; 
+        const menu = document.getElementById('towerMenu');
+        menu.style.display = 'none';
+        towerMenuVisible = false;
 
-        // const menu = document.getElementById('towerMenu');
-        // menu.style.display = 'none';
-        // towerMenuVisible = false;
-
+        drawTowers(); 
 
     } catch (error) {
         console.error('Error al desplegar la torre:', error);
@@ -317,9 +309,91 @@ async function deployTower(towerName, zoneId) {
     }
 }
 
-function placeTowerInZone(towerName, zoneId) {
-    console.log("Todo bien, zona ocupada:", zone);
+function drawTowers() {
+
+    document.querySelectorAll('.tower').forEach(tower => tower.remove());
+    towersDeployed.forEach(tower => {
+        const zone = towerZones.find(z => z.position === tower.position);
+
+        if (zone) {
+            
+            const zoneCenterX = (zone.x + zone.width / 2) * scale + offsetX;
+            const zoneCenterY = (zone.y + zone.height / 2) * scale + offsetY;
+
+            const menuLeft = zoneCenterX;
+            const menuTop = zoneCenterY;
+
+            const towerDiv = document.createElement('div');
+            towerDiv.className = 'tower';
+            towerDiv.style.left = `${menuLeft}px`;
+            towerDiv.style.top = `${menuTop}px`;
+
+            const towerBase = document.createElement('div');
+            towerBase.className = 'towerBase';
+
+            const towerNumbers = {
+                stoneCannon: 1,
+                ironCannon: 2,
+                inferno: 3,
+                mortar: 4
+            };
+
+            const towerNumber = towerNumbers[tower.name] || 1;
+            const towerPath = `../../images/towers/tower${towerNumber}`;
+
+            towerBase.style.backgroundImage = `url('${towerPath}/base.png')`;
+            towerBase.style.top = towerStyles[towerNumber - 1].towerBaseTop;
+
+            towerBase.style.left = towerStyles[towerNumber - 1].towerBaseLeft;
+            towerBase.style.width = towerStyles[towerNumber - 1].towerBaseWidth;
+
+            if (towerNumber !== 4) {
+
+                const towerBack = document.createElement('div');
+                towerBack.className = 'towerBack';
+    
+                const towerFront = document.createElement('div');
+                towerFront.className = 'towerFront';
+
+                towerBack.style.backgroundImage = `url('${towerPath}/back.png')`;
+                towerFront.style.backgroundImage = `url('${towerPath}/front.png')`;
+
+                towerBack.style.height = towerStyles[towerNumber - 1].backHeight;
+                towerFront.style.height = towerStyles[towerNumber - 1].frontHeight;
+
+                towerBack.style.bottom = towerStyles[towerNumber - 1].backBottom;
+                towerFront.style.bottom = towerStyles[towerNumber - 1].frontBottom;
+
+                towerBack.style.left = towerStyles[towerNumber - 1].frontAndBackLeft;
+                towerFront.style.left = towerStyles[towerNumber - 1].frontAndBackLeft;
+
+                towerDiv.appendChild(towerBack);
+                towerDiv.appendChild(towerFront);
+            } else {
+                const towerSticks = document.createElement('div');
+                towerSticks.className = 'towerSticks';
+                towerSticks.style.display = 'block';
+
+                const towerStick1 = document.createElement('div');
+                towerStick1.className = 'towerStick1';
+                towerStick1.style.backgroundImage = `url('${towerPath}/stick.png')`;
+
+                const towerStick2 = document.createElement('div');
+                towerStick2.className = 'towerStick2';
+                towerStick2.style.backgroundImage = `url('${towerPath}/stick.png')`;
+
+
+                towerSticks.appendChild(towerStick1);
+                towerSticks.appendChild(towerStick2);
+                towerDiv.appendChild(towerSticks);
+            }
+
+            towerDiv.appendChild(towerBase);
+            document.getElementById("gameCanvasContainer").appendChild(towerDiv);
+        }
+    });
 }
+
 
 
 // Ocultar el menú si se arrastra o se hace zoom
@@ -357,11 +431,6 @@ canvas.addEventListener('touchmove', (event) => {
 // Evento de clic en el canvas
 canvas.addEventListener("click", showTowerMenu);
 
-
-
-
-
-// Evento de arrastre táctil (touch)
 canvas.addEventListener('touchstart', (event) => {
     if (event.touches.length === 1) {
         isDragging = true;
@@ -390,7 +459,8 @@ canvas.addEventListener('touchmove', (event) => {
 
         limitScroll();
         drawMap();
-        drawZones(); // Redibujar las zonas clicables después del desplazamiento
+        drawZones();   // Redibuja zonas
+        drawTowers();  // Redibuja torres
     } else if (event.touches.length === 2) {
         const currentDistance = Math.hypot(
             event.touches[0].clientX - event.touches[1].clientX,
@@ -399,28 +469,25 @@ canvas.addEventListener('touchmove', (event) => {
         const zoomFactor = currentDistance / initialDistance;
         initialDistance = currentDistance;
 
-        // Zoom centrado en el punto medio de los dedos
         const centerX = (event.touches[0].clientX + event.touches[1].clientX) / 2;
         const centerY = (event.touches[0].clientY + event.touches[1].clientY) / 2;
         const mouseX = (centerX - offsetX) / scale;
         const mouseY = (centerY - offsetY) / scale;
 
-        // Aplicar zoom
         scale *= zoomFactor;
-
-        // Limitar zoom
         if (scale > maxZoom) scale = maxZoom;
         if (scale < minZoom) scale = minZoom;
 
-        // Ajustar desplazamiento
         offsetX = centerX - mouseX * scale;
         offsetY = centerY - mouseY * scale;
 
         limitScroll();
         drawMap();
-        drawZones(); // Redibujar las zonas clicables después del zoom
+        drawZones();   // Redibuja zonas
+        drawTowers();  // Redibuja torres
     }
 });
+
 
 canvas.addEventListener('touchend', () => {
     isDragging = false;
@@ -431,6 +498,7 @@ mapImage.onload = () => {
     resizeCanvas();
     drawMap();
     drawZones(); // Dibujar las zonas clicables después de cargar la imagen
+    drawTowers(); // Dibujar las torres después de cargar la imagen
 };
 
 // Ajustar el canvas al cambiar el tamaño de la pantalla

@@ -17,6 +17,8 @@ body {
 
 #gameCanvasContainer {
     position: relative;
+    width: 100%;
+    height: 100%;
 }
 
 #gameCanvas {
@@ -203,6 +205,38 @@ body {
     left: 3%;
 }
 
+.deployedTowersContainer {
+    position: absolute;
+    display: none;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    z-index: 1004;
+}
+.deployedTower {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url('.././../images/towers/tower1/base.png');
+    z-index: 1005;
+}
+.tower {
+    position: absolute;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: 1005;
+    width: 18vh;
+    height: 18vh;
+    transform: translate(-50%, -50%);
+
+
+}
+
 @keyframes moveSticks {
     0% {
         transform: translateY(0); 
@@ -263,6 +297,20 @@ body {
                 <img src="../../images/towers/tower4/base.png" alt="Torre 4" data-original-src="../../images/towers/tower4/base.png">
             </div>
         </div>
+
+
+        <div class="deployedTowersContainer" id="deployedTowersContainer">
+            <div class="deployedTower" id="towerDeploy1"></div>
+            <div class="deployedTower" id="towerDeploy2"></div>
+            <div class="deployedTower" id="towerDeploy3"></div>
+            <div class="deployedTower" id="towerDeploy4"> </div>
+            <div class="deployedTower" id="towerDeploy5"></div>
+            <div class="deployedTower" id="towerDeploy6"></div>
+            <div class="deployedTower" id="towerDeploy7"></div>
+        </div>
+        
+        
+        
         
 
         
