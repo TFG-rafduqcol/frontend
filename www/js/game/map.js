@@ -211,9 +211,24 @@ function changeMenuTowerIcon(selectedTowerIndex) {
     towerIcon.src = '../../images/tick.jpeg';
 }
 
+function changeDeleteTowerIcon() {
+    const deleteTowerImg = document.getElementById('deleteTower');
+    const deleteIcon = deleteTowerImg.querySelector('img');
+    deleteIcon.src = '../../images/tick.jpeg';
+}
+
+function resetDeleteTowerIcon() {   
+    const deleteTowerImg = document.getElementById('deleteTower');
+    const deleteIcon = deleteTowerImg.querySelector('img');
+    deleteIcon.src = deleteIcon.getAttribute('data-original-src');
+    deleteClickedOnce = false;
+    deleteClickHandler = null;
+}
+
 
 
 function previewTowerArea(menuLeft, menuTop, range, selectedTowerIndex) {
+
     const previewDiv = document.getElementById('previewContainer');  
     const previewArea = document.getElementById('previewArea');
     const towerBase = previewDiv.querySelector('.towerBase');
@@ -296,6 +311,7 @@ async function deployTower(towerName, zonePosition) {
 
         const { gameId, projectileId, ...towerData } = responseData.tower;
         towersDeployed.push(towerData);
+        console.log('Torre desplegada:', towersDeployed);
 
         const menu = document.getElementById('towerMenu');
         menu.style.display = 'none';
@@ -390,10 +406,89 @@ function drawTowers() {
 
             towerDiv.appendChild(towerBase);
             document.getElementById("gameCanvasContainer").appendChild(towerDiv);
+
+            towerDiv.addEventListener('click', (event) => {
+                previewEditMenuArea(menuLeft, menuTop, tower.name, tower.position, event);
+            event.stopPropagation(); 
+            });
         }
     });
 }
 
+
+let towerOptionMenuVisible = false;
+let deleteClickHandler = null;
+let deleteClickedOnce = false;
+
+function previewEditMenuArea(menuLeft, menuTop, towerName, zonePosition) {
+    console.log('Entrando a previewEditMenuArea');
+    const towerDiv = document.getElementById('towerEditMenu');
+    const towerAreaDiv = document.getElementById('towerArea');
+
+    const deleteTowerDiv = document.getElementById('deleteTower');
+    const upgradeTowerDiv = document.getElementById('upgradeTower');
+
+    if (!towerDiv || !deleteTowerDiv || !upgradeTowerDiv) {
+        console.error('No se encontraron elementos necesarios para la previsualización.');
+        return;
+    }
+
+    towerDiv.style.left = `${menuLeft}px`;
+    towerDiv.style.top = `${menuTop}px`;
+    towerDiv.style.display = 'block';
+
+    towerOptionMenuVisible = true;
+    range = towerProperties[towerName].range;
+
+    towerAreaDiv.style.width = `${range * 2}px`; 
+    towerAreaDiv.style.height = `${range * 2}px`;
+    towerAreaDiv.style.zIndex = 999;
+
+
+    if (deleteClickHandler) {
+        deleteTowerDiv.removeEventListener('click', deleteClickHandler);
+    }
+
+    // Reset estado
+    deleteClickedOnce = false;
+    resetDeleteTowerIcon();
+    deleteClickHandler = function () {
+        if (!deleteClickedOnce) {
+            deleteClickedOnce = true;
+            changeDeleteTowerIcon();
+        } else {
+            deleteTower(zonePosition);
+        }
+    };
+
+    deleteTowerDiv.addEventListener('click', deleteClickHandler);
+}
+    
+async function deleteTower(zonePosition) {
+    const token = localStorage.getItem('token');
+    const towerId= towersDeployed.find(tower => tower.position === zonePosition).id;
+    const response = await fetch(`${serverUrl}/api/towers/deleteTower/${towerId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+    });
+
+    if (response.ok) {
+        towersDeployed = towersDeployed.filter(tower => tower.position !== zonePosition);
+        const zone = towerZones.find(z => z.position === zonePosition);
+        if (zone) {
+            zone.occupied = false;
+        }
+        drawTowers(); 
+    }
+    else {
+        console.error('Error al eliminar la torre:', response.statusText);
+        alert('Hubo un problema al eliminar la torre. Inténtalo de nuevo.');
+    }
+}
+       
 
 
 // Ocultar el menú si se arrastra o se hace zoom
@@ -408,6 +503,11 @@ function hideTowerMenuIfDraggedOrZoomed() {
             previewDiv.style.display = 'none'; 
         }
         selectedTower = null; 
+    }
+    if (towerOptionMenuVisible) {
+        const previewDiv = document.getElementById('towerEditMenu');
+        previewDiv.style.display = 'none'; 
+        towerOptionMenuVisible = false; 
     }
 }
 
