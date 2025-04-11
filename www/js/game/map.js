@@ -14,7 +14,6 @@ let lastY = 0;
 let initialDistance = 0;
 let minZoom, maxZoom = 5;
 
-// Definir las zonas clicables
 const towerZones = [
     { position: 1, x: 775, y: 580, width: 50, height: 50, occupied: false },
     { position: 2, x: 520, y: 580, width: 50, height: 50, occupied: false },
@@ -50,26 +49,22 @@ const towerImages = {
 let towersDeployed = [];
 
 
-
-// Ajustar el tamaño del canvas al tamaño de la pantalla
 function resizeCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    // Calcular el zoom mínimo para que la imagen siempre llene la pantalla
     const scaleX = canvas.width / mapImage.width;
     const scaleY = canvas.height / mapImage.height;
     minZoom = Math.max(scaleX, scaleY);
 
-    // Aplicar el zoom mínimo
     scale = minZoom;
 
-    // Centrar la imagen correctamente
     offsetX = (canvas.width - mapImage.width * scale) / 2;
     offsetY = (canvas.height - mapImage.height * scale) / 2;
 
     drawMap();
-    drawZones(); // Dibujar las zonas clicables
+    drawZones(); 
+    drawTowers();
 }
 
 // Dibujar el mapa
@@ -232,15 +227,11 @@ function previewTowerArea(menuLeft, menuTop, range, selectedTowerIndex) {
     const previewDiv = document.getElementById('previewContainer');  
     const previewArea = document.getElementById('previewArea');
     const towerBase = previewDiv.querySelector('.towerBase');
-    const towerBack = previewDiv.querySelector('.towerBack');
-    const towerFront = previewDiv.querySelector('.towerFront');
     const towerSticks = previewDiv.querySelector('.towerSticks'); 
 
-    towerBack.style.display = 'none';
-    towerFront.style.display = 'none';
     towerSticks.style.display = 'none';
 
-    if (!previewDiv || !towerBase || (!towerBack && selectedTowerIndex !== 4) || (!towerFront && selectedTowerIndex !== 4) || (selectedTowerIndex === 4 && !towerSticks)) {
+    if (!previewDiv || !towerBase || (selectedTowerIndex === 4 && !towerSticks)) {
         console.error('No se encontraron elementos necesarios para la previsualización.');
         return;
     }
@@ -260,17 +251,13 @@ function previewTowerArea(menuLeft, menuTop, range, selectedTowerIndex) {
     towerBase.style.width = towerStyles[selectedTowerIndex - 1].towerBaseWidth;
 
     if (selectedTowerIndex !== 4) {
-        towerBack.style.backgroundImage = `url('${towerPath}/back.png')`;
-        towerFront.style.backgroundImage = `url('${towerPath}/front.png')`;
-        towerBack.style.height = towerStyles[selectedTowerIndex - 1].backHeight; 
-        towerFront.style.height = towerStyles[selectedTowerIndex - 1].frontHeight;
 
-        towerBack.style.bottom = towerStyles[selectedTowerIndex - 1].backBottom;
-        towerFront.style.bottom = towerStyles[selectedTowerIndex - 1].frontBottom;
+        const towerBack = previewDiv.querySelector('.towerBack');
+        const towerFront = previewDiv.querySelector('.towerFront');
 
-        towerBack.style.left = towerStyles[selectedTowerIndex - 1].frontAndBackLeft;
-        towerFront.style.left = towerStyles[selectedTowerIndex - 1].frontAndBackLeft;
+        applyTowerDesign(towerBack, towerFront, selectedTowerIndex, towerPath, towerStyles);
 
+    
         towerBack.style.display = 'block'; 
         towerFront.style.display = 'block';
     } else {
@@ -278,6 +265,22 @@ function previewTowerArea(menuLeft, menuTop, range, selectedTowerIndex) {
     }
 
 }
+
+function applyTowerDesign (towerBack, towerFront, selectedTowerIndex, towerPath, towerStyles) {
+    
+    towerBack.style.backgroundImage = `url('${towerPath}/back.png')`;
+    towerFront.style.backgroundImage = `url('${towerPath}/front.png')`;
+    towerBack.style.height = towerStyles[selectedTowerIndex - 1].backHeight; 
+    towerFront.style.height = towerStyles[selectedTowerIndex - 1].frontHeight;
+
+    towerBack.style.bottom = towerStyles[selectedTowerIndex - 1].backBottom;
+    towerFront.style.bottom = towerStyles[selectedTowerIndex - 1].frontBottom;
+
+    towerBack.style.left = towerStyles[selectedTowerIndex - 1].frontAndBackLeft;
+    towerFront.style.left = towerStyles[selectedTowerIndex - 1].frontAndBackLeft;
+}
+
+
 
 
 async function deployTower(towerName, zonePosition) {
@@ -371,17 +374,7 @@ function drawTowers() {
                 const towerFront = document.createElement('div');
                 towerFront.className = 'towerFront';
 
-                towerBack.style.backgroundImage = `url('${towerPath}/back.png')`;
-                towerFront.style.backgroundImage = `url('${towerPath}/front.png')`;
-
-                towerBack.style.height = towerStyles[towerNumber - 1].backHeight;
-                towerFront.style.height = towerStyles[towerNumber - 1].frontHeight;
-
-                towerBack.style.bottom = towerStyles[towerNumber - 1].backBottom;
-                towerFront.style.bottom = towerStyles[towerNumber - 1].frontBottom;
-
-                towerBack.style.left = towerStyles[towerNumber - 1].frontAndBackLeft;
-                towerFront.style.left = towerStyles[towerNumber - 1].frontAndBackLeft;
+                applyTowerDesign(towerBack, towerFront, towerNumber, towerPath, towerStyles);
 
                 towerDiv.appendChild(towerBack);
                 towerDiv.appendChild(towerFront);
@@ -421,7 +414,6 @@ let deleteClickHandler = null;
 let deleteClickedOnce = false;
 
 function previewEditMenuArea(menuLeft, menuTop, towerName, zonePosition) {
-    console.log('Entrando a previewEditMenuArea');
     const towerDiv = document.getElementById('towerEditMenu');
     const towerAreaDiv = document.getElementById('towerArea');
 
@@ -481,6 +473,9 @@ async function deleteTower(zonePosition) {
         if (zone) {
             zone.occupied = false;
         }
+        const previewDiv = document.getElementById('towerEditMenu');
+        previewDiv.style.display = 'none'; 
+        towerOptionMenuVisible = false;
         drawTowers(); 
     }
     else {
@@ -490,8 +485,6 @@ async function deleteTower(zonePosition) {
 }
        
 
-
-// Ocultar el menú si se arrastra o se hace zoom
 function hideTowerMenuIfDraggedOrZoomed() {
     if (towerMenuVisible) {
         const menu = document.getElementById('towerMenu');
@@ -511,7 +504,6 @@ function hideTowerMenuIfDraggedOrZoomed() {
     }
 }
 
-// Detectar si el usuario está arrastrando
 canvas.addEventListener('touchmove', () => {
     hideTowerMenuIfDraggedOrZoomed();
 });
@@ -520,15 +512,12 @@ canvas.addEventListener('mousemove', () => {
     hideTowerMenuIfDraggedOrZoomed();
 });
 
-// Detectar si se hace zoom
 canvas.addEventListener('touchmove', (event) => {
     if (event.touches.length === 2) {
         hideTowerMenuIfDraggedOrZoomed();
     }
 });
 
-
-// Evento de clic en el canvas
 canvas.addEventListener("click", showTowerMenu);
 
 canvas.addEventListener('touchstart', (event) => {
@@ -559,8 +548,8 @@ canvas.addEventListener('touchmove', (event) => {
 
         limitScroll();
         drawMap();
-        drawZones();   // Redibuja zonas
-        drawTowers();  // Redibuja torres
+        drawZones();   
+        drawTowers();  
     } else if (event.touches.length === 2) {
         const currentDistance = Math.hypot(
             event.touches[0].clientX - event.touches[1].clientX,
@@ -583,23 +572,23 @@ canvas.addEventListener('touchmove', (event) => {
 
         limitScroll();
         drawMap();
-        drawZones();   // Redibuja zonas
-        drawTowers();  // Redibuja torres
+        drawZones();   
+        drawTowers();  
     }
 });
+
+
+window.addEventListener('resize', resizeCanvas);
 
 
 canvas.addEventListener('touchend', () => {
     isDragging = false;
 });
 
-// Cargar la imagen y ajustar el canvas
 mapImage.onload = () => {
     resizeCanvas();
     drawMap();
-    drawZones(); // Dibujar las zonas clicables después de cargar la imagen
-    drawTowers(); // Dibujar las torres después de cargar la imagen
+    drawZones();
+    drawTowers();
 };
 
-// Ajustar el canvas al cambiar el tamaño de la pantalla
-window.addEventListener('resize', resizeCanvas);
