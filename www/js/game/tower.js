@@ -3,9 +3,9 @@ const ctx = canvas.getContext('2d');
 const params = new URLSearchParams(window.location.search);
 
 const towerZones = [
-    { position: 1, x: 775, y: 580, width: 50, height: 50, occupied: false },
-    { position: 2, x: 520, y: 580, width: 50, height: 50, occupied: false },
-    { position: 3, x: 262, y: 420, width: 50, height: 50, occupied: false },
+    { position: 1, x: 230, y: 645, width: 50, height: 50, occupied: false },
+    { position: 2, x: 325, y: 420, width: 50, height: 50, occupied: false },
+    { position: 3, x: 165, y: 390, width: 50, height: 50, occupied: false },
     { position: 4, x: 262, y: 132, width: 50, height: 50, occupied: false },
     { position: 5, x: 582, y: 132, width: 50, height: 50, occupied: false },
     { position: 6, x: 647, y: 260, width: 50, height: 50, occupied: false },

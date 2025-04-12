@@ -1,4 +1,3 @@
-
 const mapImage = new Image();
 mapImage.src = '../../images/MapaAzteka.png';
 
@@ -13,11 +12,33 @@ let minZoom, maxZoom = 5;
 
 
 const path = [
-    { x: 100, y: 500 },
-    { x: 300, y: 500 },
-    { x: 300, y: 300 },
-    { x: 600, y: 300 }
+    { x: 160, y: 640 },
+    { x: 160, y: 560 },
+    { x: 250, y: 560 },
+    { x: 250, y: 180 },
+    { x: 800, y: 180 },
+
 ];
+
+const images = [];
+for (let i = 1; i <= 4; i++) {
+    const img = new Image();
+    img.src = `../../images/enemies/golem/Golem_02_Walking_00${i}.png`;
+    images.push(img);
+}
+
+let enemy = {
+    x: path[0].x,
+    y: path[0].y,
+    speed: 1,
+    currentPoint: 0,
+    t: 0,
+    spriteFrame: 0,
+    totalFrames: images.length,
+    frameTimer: 0,
+    frameDelay: 10
+};
+
 
 
 function drawMap() {
@@ -169,6 +190,8 @@ canvas.addEventListener('touchmove', (event) => {
         drawZones();   
         drawTowers();  
         drawPath();
+        
+
     } else if (event.touches.length === 2) {
         const currentDistance = Math.hypot(
             event.touches[0].clientX - event.touches[1].clientX,
@@ -197,6 +220,19 @@ canvas.addEventListener('touchmove', (event) => {
     }
 });
 
+function gameLoop() {
+
+
+    drawMap();
+    drawZones();
+    drawPath(); 
+
+    moveEnemy();
+    updateAnimation();
+    drawSprite(enemy.x * scale + offsetX, enemy.y * scale + offsetY);
+    requestAnimationFrame(gameLoop);
+}
+
 
 window.addEventListener('resize', resizeCanvas);
 
@@ -207,9 +243,5 @@ canvas.addEventListener('touchend', () => {
 
 mapImage.onload = () => {
     resizeCanvas();
-    drawMap();
-    drawZones();
-    drawTowers();
-    drawPath();
+    gameLoop(); 
 };
-
