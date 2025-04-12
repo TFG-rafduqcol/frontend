@@ -39,6 +39,29 @@ let enemy = {
     frameDelay: 10
 };
 
+let enemies = [ {
+    x: path[0].x,
+    y: path[0].y,
+    speed: 1,
+    currentPoint: 0,
+    t: 0,
+    spriteFrame: 0,
+    totalFrames: images.length,
+    frameTimer: 0,
+    frameDelay: 10
+}, 
+{
+    x: path[0].x,
+    y: path[0].y,
+    speed: 1,
+    currentPoint: 0,
+    t: 1,
+    spriteFrame: 0,
+    totalFrames: images.length,
+    frameTimer: 0,
+    frameDelay: 10
+}];
+
 
 
 function drawMap() {
@@ -227,9 +250,8 @@ function gameLoop() {
     drawZones();
     drawPath(); 
 
-    moveEnemy();
-    updateAnimation();
-    drawSprite(enemy.x * scale + offsetX, enemy.y * scale + offsetY);
+    drawEnemies();
+
     requestAnimationFrame(gameLoop);
 }
 
