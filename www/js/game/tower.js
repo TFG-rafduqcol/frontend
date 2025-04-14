@@ -35,6 +35,8 @@ const towerImages = {
 
 let towersDeployed = [];
 
+let towerAreas = [];
+
 let towerMenuVisible = false; 
 let selectedTower = null;
 let currentZone = null;
@@ -300,6 +302,18 @@ async function deployTower(towerName, zonePosition) {
         const { gameId, projectileId, ...towerData } = responseData.tower;
         towersDeployed.push(towerData);
         console.log('Torre desplegada:', towersDeployed);
+        const zone = towerZones.find(z => z.position === zonePosition);
+        if (zone) {
+            zone.occupied = true;
+        }
+
+        towerAreas.push({
+            position: zonePosition,
+            range: towerProperties[towerName].range,
+            x: zone.x * scale + offsetX,
+            y: zone.y * scale + offsetY,
+            towerId: towerData.id,
+        });
 
         const menu = document.getElementById('towerMenu');
         menu.style.display = 'none';

@@ -80,22 +80,29 @@ function drawHealthBar(enemy) {
 }
 
 
-function checkEnemiesInTowerRange() {
-    towersDeployed.forEach(tower => {
-        const zone = towerZones.find(z => z.position === tower.position);
-        if (!zone) return;
+function checkEnemyInOccupiedArea(enemy) {
+    const enemyX = enemy.x * scale + offsetX;
+    const enemyY = enemy.y * scale + offsetY;
 
-        const towerX = zone.x + zone.width / 2;
-        const towerY = zone.y + zone.height / 2;
+    let insideAnyArea = false;
 
-        enemies.forEach(enemy => {
-            const dx = (enemy.x * scale + offsetX) - towerX;
-            const dy = (enemy.y * scale + offsetY) - towerY;
-            const distance = Math.sqrt(dx * dx + dy * dy);
+    towerAreas.forEach(area => {
+        const dx = enemyX - area.x;
+        const dy = enemyY - area.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
 
-            if (distance <= tower.range) {
-                console.log(`🛡️ Torre '${tower.name}' (ID ${tower.id}) detectó enemigo en rango.`);
+        if (distance <= area.range) {
+            insideAnyArea = true;
+
+            if (!enemy.loggedZoneEntry) {
+                console.log(`💥 Enemy entró en área de torre con rango ${area.range}`);
+                enemy.loggedZoneEntry = true;
             }
-        });
+        }
     });
+
+    if (!insideAnyArea && enemy.loggedZoneEntry) {
+        console.log(`🏃‍♂️ Enemy salió del área de torre`);
+        enemy.loggedZoneEntry = false;
+    }
 }
