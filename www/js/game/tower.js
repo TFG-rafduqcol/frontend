@@ -2,6 +2,7 @@ const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const params = new URLSearchParams(window.location.search);
 
+
 const towerZones = [
     { position: 1, x: 230, y: 645, width: 50, height: 50, occupied: false },
     { position: 2, x: 325, y: 420, width: 50, height: 50, occupied: false },
@@ -35,7 +36,9 @@ const towerImages = {
 
 let towersDeployed = [];
 
-let towerAreas = [];
+let towersArea = [];
+
+let projectiles = [];
 
 let towerMenuVisible = false; 
 let selectedTower = null;
@@ -301,13 +304,15 @@ async function deployTower(towerName, zonePosition) {
 
         const { gameId, projectileId, ...towerData } = responseData.tower;
         towersDeployed.push(towerData);
+
         console.log('Torre desplegada:', towersDeployed);
+
         const zone = towerZones.find(z => z.position === zonePosition);
         if (zone) {
             zone.occupied = true;
         }
 
-        towerAreas.push({
+        towersArea.push({
             position: zonePosition,
             range: towerProperties[towerName].range,
             x: zone.x * scale + offsetX,

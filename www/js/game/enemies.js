@@ -1,5 +1,5 @@
 const enemyCanvas = document.getElementById("enemyCanvas");
-const eneymCtx = enemyCanvas.getContext("2d");
+const enemyCtx = enemyCanvas.getContext("2d");
 
 function moveEnemy(enemy) {
     if (enemy.delay > 0) {
@@ -37,7 +37,7 @@ function drawSprite(x, y, enemy) {
     const imageWidth = 60; 
     const imageHeight = 60;
     
-    eneymCtx.drawImage(currentImage, x - imageWidth / 2, y - imageHeight / 2, imageWidth, imageHeight);
+    enemyCtx.drawImage(currentImage, x - imageWidth / 2, y - imageHeight / 2, imageWidth, imageHeight);
 }
 
 function updateAnimation(enemy) {
@@ -51,7 +51,7 @@ function updateAnimation(enemy) {
 function drawEnemies() {
 
     // Limpiar el canvas
-    eneymCtx.clearRect(0, 0, enemyCanvas.width, enemyCanvas.height);
+    enemyCtx.clearRect(0, 0, enemyCanvas.width, enemyCanvas.height);
     enemies.forEach((enemy) => {
         moveEnemy(enemy);      
         if (enemy.currentPoint < path.length) { 
@@ -68,15 +68,15 @@ function drawHealthBar(enemy) {
     const x = enemy.x * scale + offsetX - barWidth / 2;
     const y = enemy.y * scale + offsetY - 40; 
 
-    eneymCtx.fillStyle = "red";
-    eneymCtx.fillRect(x, y, barWidth, barHeight);
+    enemyCtx.fillStyle = "red";
+    enemyCtx.fillRect(x, y, barWidth, barHeight);
 
     const healthRatio = enemy.health / enemy.maxHealth;
-    eneymCtx.fillStyle = "limegreen";
-    eneymCtx.fillRect(x, y, barWidth * healthRatio, barHeight);
+    enemyCtx.fillStyle = "limegreen";
+    enemyCtx.fillRect(x, y, barWidth * healthRatio, barHeight);
 
-    eneymCtx.strokeStyle = "black";
-    eneymCtx.strokeRect(x, y, barWidth, barHeight);
+    enemyCtx.strokeStyle = "black";
+    enemyCtx.strokeRect(x, y, barWidth, barHeight);
 }
 
 
@@ -84,25 +84,22 @@ function checkEnemyInOccupiedArea(enemy) {
     const enemyX = enemy.x * scale + offsetX;
     const enemyY = enemy.y * scale + offsetY;
 
-    let insideAnyArea = false;
-
-    towerAreas.forEach(area => {
+    towersArea.forEach(area => {
         const dx = enemyX - area.x;
         const dy = enemyY - area.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
 
+        // Verificar si el enemigo entra en el área de la torre
         if (distance <= area.range) {
-            insideAnyArea = true;
-
             if (!enemy.loggedZoneEntry) {
                 console.log(`💥 Enemy entró en área de torre con rango ${area.range}`);
                 enemy.loggedZoneEntry = true;
+                
+                const projectileType = 1; 
+                createProjectile(area.towerId, enemy, projectileType); 
             }
+        } else {
+            enemy.loggedZoneEntry = false;
         }
     });
-
-    if (!insideAnyArea && enemy.loggedZoneEntry) {
-        console.log(`🏃‍♂️ Enemy salió del área de torre`);
-        enemy.loggedZoneEntry = false;
-    }
 }

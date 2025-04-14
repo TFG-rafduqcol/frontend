@@ -27,19 +27,8 @@ for (let i = 1; i <= 4; i++) {
     images.push(img);
 }
 
-let enemy = {
-    x: path[0].x,
-    y: path[0].y,
-    speed: 1,
-    currentPoint: 0,
-    t: 0,
-    spriteFrame: 0,
-    totalFrames: images.length,
-    frameTimer: 0,
-    frameDelay: 10
-};
-
 let enemies = [ {
+    id: 1,
     x: path[0].x,
     y: path[0].y,
     speed: 1,
@@ -51,7 +40,8 @@ let enemies = [ {
     totalFrames: images.length,
     frameTimer: 0,
     frameDelay: 10, 
-    delay: 0
+    delay: 0, 
+    loggedZoneEntry: false
 }, 
 // {
 //     x: path[0].x,
@@ -281,6 +271,8 @@ function gameLoop() {
     enemies.forEach(enemy => {
         checkEnemyInOccupiedArea(enemy);
     });
+    updateProjectiles();
+    drawProjectiles();
     requestAnimationFrame(gameLoop);
 }
 
