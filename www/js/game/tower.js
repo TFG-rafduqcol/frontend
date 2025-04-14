@@ -35,22 +35,6 @@ const towerImages = {
 
 let towersDeployed = [];
 
-
-
-// Colocar una torre en la zona
-function placeTower(event) {
-    const rect = canvas.getBoundingClientRect();
-    const clickX = event.clientX - rect.left;
-    const clickY = event.clientY - rect.top;
-
-    const zone = isInsideZone(clickX, clickY);
-
-    if (zone) {
-        //zone.occupied = true;
-        showTowerMenu(zone);
-    }
-}
-
 let towerMenuVisible = false; 
 let selectedTower = null;
 let currentZone = null;
@@ -76,7 +60,6 @@ function towerOptionClickHandler(event) {
 
 
 
-// Mostrar el menú de la torre
 function showTowerMenu(event) {
 
     const rect = canvas.getBoundingClientRect();
@@ -115,9 +98,13 @@ function previewTowerArea(menuLeft, menuTop, range, selectedTowerIndex) {
     const previewDiv = document.getElementById('previewContainer');  
     const previewArea = document.getElementById('previewArea');
     const towerBase = previewDiv.querySelector('.towerBase');
+    const towerBack = previewDiv.querySelector('.towerBack');
+    const towerFront = previewDiv.querySelector('.towerFront');
     const towerSticks = previewDiv.querySelector('.towerSticks'); 
 
     towerSticks.style.display = 'none';
+    towerFront.style.display = 'none';
+    towerBack.style.display = 'none';
 
     if (!previewDiv || !towerBase || (selectedTowerIndex === 4 && !towerSticks)) {
         console.error('No se encontraron elementos necesarios para la previsualización.');
@@ -140,8 +127,6 @@ function previewTowerArea(menuLeft, menuTop, range, selectedTowerIndex) {
 
     if (selectedTowerIndex !== 4) {
 
-        const towerBack = previewDiv.querySelector('.towerBack');
-        const towerFront = previewDiv.querySelector('.towerFront');
 
         applyTowerDesign(towerBack, towerFront, selectedTowerIndex, towerPath, towerStyles);
 

@@ -43,24 +43,46 @@ let enemies = [ {
     x: path[0].x,
     y: path[0].y,
     speed: 1,
+    health: 100, 
+    maxHealth: 100,
     currentPoint: 0,
     t: 0,
     spriteFrame: 0,
     totalFrames: images.length,
     frameTimer: 0,
-    frameDelay: 10
+    frameDelay: 10, 
+    delay: 0
 }, 
 {
     x: path[0].x,
     y: path[0].y,
     speed: 1,
+    health: 100, 
+    maxHealth: 100,
     currentPoint: 0,
-    t: 1,
+    t: 0,
     spriteFrame: 0,
     totalFrames: images.length,
     frameTimer: 0,
-    frameDelay: 10
-}];
+    frameDelay: 10,
+    delay: 30
+
+}, 
+{
+    x: path[0].x,
+    y: path[0].y,
+    speed: 1.1,
+    health: 100, 
+    maxHealth: 100,
+    currentPoint: 0,
+    t: 0,
+    spriteFrame: 0,
+    totalFrames: images.length,
+    frameTimer: 0,
+    frameDelay: 10, 
+    delay: 60
+}, 
+];
 
 
 
@@ -114,6 +136,9 @@ function drawPath() {
 function resizeCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+
+    enemyCanvas.width = canvas.width;
+    enemyCanvas.height = canvas.height;
 
     const scaleX = canvas.width / mapImage.width;
     const scaleY = canvas.height / mapImage.height;
@@ -246,11 +271,14 @@ canvas.addEventListener('touchmove', (event) => {
 function gameLoop() {
 
 
+
     drawMap();
     drawZones();
     drawPath(); 
 
     drawEnemies();
+
+    checkEnemiesInTowerRange();
 
     requestAnimationFrame(gameLoop);
 }

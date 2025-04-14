@@ -22,9 +22,19 @@ body {
 }
 
 #gameCanvas {
-    width: 100%;
-    height: 100%;
-    border: 1px solid #000;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    
+}
+
+#enemyCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    pointer-events: none;
 }
 
 .towerMenu {
@@ -295,6 +305,8 @@ body {
         <div class="towerArea" id="towerArea"></div>
 
         </div>
+        <canvas id="enemyCanvas"></canvas>
+
     </div>
 
     <script src="../../js/utils/config.js"></script>
