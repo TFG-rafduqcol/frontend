@@ -38,7 +38,7 @@ let towersDeployed = [];
 
 let towersArea = [];
 
-let projectiles = [];
+const projectiles = [];
 
 let towerMenuVisible = false; 
 let selectedTower = null;
@@ -318,6 +318,7 @@ async function deployTower(towerName, zonePosition) {
             x: zone.x * scale + offsetX,
             y: zone.y * scale + offsetY,
             towerId: towerData.id,
+            hasActiveProjectile: false,
         });
 
         const menu = document.getElementById('towerMenu');

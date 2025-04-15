@@ -1,6 +1,37 @@
 const enemyCanvas = document.getElementById("enemyCanvas");
 const enemyCtx = enemyCanvas.getContext("2d");
 
+// Llamar a la función cuando el botón se haga clic
+document.getElementById('generateEnemyButton').addEventListener('click', generateEnemy);
+
+function generateEnemy() {
+    // Crear un enemigo con atributos predeterminados
+    const newEnemy = {
+        x: 0,  // posición inicial en x
+        y: 0,  // posición inicial en y
+        speed: 2,  // velocidad del enemigo
+        health: 100,  // salud inicial
+        maxHealth: 100,  // salud máxima
+        spriteFrame: 0,  // cuadro de la animación
+        totalFrames: 4,  // cantidad total de cuadros en la animación
+        frameTimer: 0,  // temporizador de los cuadros
+        frameDelay: 5,  // retraso entre cuadros de la animación
+        currentPoint: 0,  // punto actual del camino
+        t: 0,  // factor de interpolación
+        delay: 0,  // retraso para el movimiento
+        loggedZoneEntry: false,  // indicador de entrada en la zona
+    };
+
+    // Agregar el nuevo enemigo a la lista de enemigos
+    enemies.push(newEnemy);
+
+    // Imprimir en consola para ver el enemigo creado
+    console.log('Nuevo enemigo creado:', newEnemy);
+}
+
+
+
+
 function moveEnemy(enemy) {
     if (enemy.delay > 0) {
         enemy.delay--;
@@ -89,13 +120,13 @@ function checkEnemyInOccupiedArea(enemy) {
         const dy = enemyY - area.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
 
-        // Verificar si el enemigo entra en el área de la torre
         if (distance <= area.range) {
-            if (!enemy.loggedZoneEntry) {
-                console.log(`💥 Enemy entró en área de torre con rango ${area.range}`);
+            console.log("hasActive:", area.hasActiveProjectile);
+            if (!enemy.loggedZoneEntry && !area.hasActiveProjectile) {
+                console.log("🚀 Enemigo en zona ocupada:", enemy);
                 enemy.loggedZoneEntry = true;
-                
                 const projectileType = 1; 
+                area.hasActiveProjectile = true;
                 createProjectile(area.towerId, enemy, projectileType); 
             }
         } else {

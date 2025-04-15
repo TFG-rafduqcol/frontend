@@ -259,10 +259,18 @@ body {
         transform: translateY(23px); 
     }
 }
+
+
+#generateEnemyButton {
+    z-index: 1007;
+    position: absolute;
+}
     </style>
 </head>
 <body>
     <div id="gameCanvasContainer">
+        <button id="generateEnemyButton">Generar Enemigo</button>
+
         <canvas id="gameCanvas"></canvas>
 
         <div class="previewContainer" id="previewContainer">
@@ -305,6 +313,7 @@ body {
         <div class="towerArea" id="towerArea"></div>
 
         </div>
+
         <canvas id="enemyCanvas"></canvas>
 
     </div>

@@ -28,20 +28,19 @@ for (let i = 1; i <= 4; i++) {
 }
 
 let enemies = [ {
-    id: 1,
-    x: path[0].x,
-    y: path[0].y,
-    speed: 1,
-    health: 100, 
-    maxHealth: 100,
-    currentPoint: 0,
-    t: 0,
-    spriteFrame: 0,
-    totalFrames: images.length,
-    frameTimer: 0,
-    frameDelay: 10, 
-    delay: 0, 
-    loggedZoneEntry: false
+    x: path[0].x,  // posición inicial en x
+    y: path[0].y,  // posición inicial en y
+    speed: 2,  // velocidad del enemigo
+    health: 100,  // salud inicial
+    maxHealth: 100,  // salud máxima
+    spriteFrame: 0,  // cuadro de la animación
+    totalFrames: 4,  // cantidad total de cuadros en la animación
+    frameTimer: 0,  // temporizador de los cuadros
+    frameDelay: 5,  // retraso entre cuadros de la animación
+    currentPoint: 0,  // punto actual del camino
+    t: 0,  // factor de interpolación
+    delay: 0,  // retraso para el movimiento
+    loggedZoneEntry: false,  // indicador de entrada en la zona
 }, 
 // {
 //     x: path[0].x,
@@ -273,6 +272,7 @@ function gameLoop() {
     });
     updateProjectiles();
     drawProjectiles();
+
     requestAnimationFrame(gameLoop);
 }
 
