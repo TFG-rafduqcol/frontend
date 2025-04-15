@@ -121,8 +121,7 @@ function checkEnemyInOccupiedArea(enemy) {
         const distance = Math.sqrt(dx * dx + dy * dy);
 
         if (distance <= area.range) {
-            console.log("hasActive:", area.hasActiveProjectile);
-            if (!enemy.loggedZoneEntry && !area.hasActiveProjectile) {
+            if (!area.hasActiveProjectile) {
                 console.log("🚀 Enemigo en zona ocupada:", enemy);
                 enemy.loggedZoneEntry = true;
                 const projectileType = 1; 

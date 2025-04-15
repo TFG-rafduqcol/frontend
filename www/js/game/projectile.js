@@ -40,9 +40,7 @@ function createProjectile(towerId, targetEnemy, projectileType) {
 
 
 function updateProjectiles() {
-    for (let i = projectiles.length - 1; i >= 0; i--) {
-        const projectile = projectiles[i];
-
+    projectiles.forEach((projectile, index) => {
         projectile.x += projectile.directionX * projectile.speed;
         projectile.y += projectile.directionY * projectile.speed;
 
@@ -50,14 +48,17 @@ function updateProjectiles() {
         const dy = (projectile.target.y * scale + offsetY) - projectile.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
 
-        if (distance <= projectile.radius + 15) {
-            projectile.target.health -= 10;
+        if (distance <= projectile.radius + 20) {  
+            console.log("🎯 ¡Proyectil impactó al enemigo!");
+            projectile.target.health -= 10; 
+
+            projectiles.splice(index, 1);
 
             const tower = towersArea.find(t => t.towerId === projectile.towerId);
-            if (tower) tower.hasActiveProjectile = false;
-            projectiles.splice(i, 1);
+            tower.hasActiveProjectile = false;  
+            
         }
-    }
+    });
 }
 
 
