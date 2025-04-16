@@ -178,14 +178,14 @@ body {
 .towerBack {
     bottom: 0%;
     height: 11%;
-    animation: moveYBack 0.5s infinite alternate; 
+    animation: moveYBack 2s infinite alternate; 
     z-index: 999;
 }
 
 .towerFront {
     bottom: 1%; 
     height: 13%;
-    animation: moveYFront 0.5s infinite alternate; 
+    animation: moveYFront 2s infinite alternate; 
     z-index: 1002;
 
 }
@@ -247,12 +247,16 @@ body {
 
 @keyframes moveSticks {
     0% {
-        transform: translateY(0); 
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
     }
     100% {
-        transform: translateY(-10px); 
+        transform: translateY(0);
     }
 }
+
 
 @keyframes moveYBack {
     0% {
@@ -281,21 +285,28 @@ body {
 
 @keyframes moveProjectile {
     0% {
-        transform: translateY(0); 
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-21px);
     }
     100% {
-        transform: translateY(-21px); 
+        transform: translateY(0);
     }
 }
 
 @keyframes moveMorterProjectile {
     0% {
-        transform: translateY(0); 
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
     }
     100% {
-        transform: translateY(-10px); 
+        transform: translateY(0);
     }
 }
+
 
 #generateEnemyButton {
     z-index: 1007;

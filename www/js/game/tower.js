@@ -140,25 +140,15 @@ function previewTowerArea(menuLeft, menuTop, range, selectedTowerIndex) {
     towerBase.style.left = towerStyles[selectedTowerIndex - 1].towerBaseLeft;
     towerBase.style.width = towerStyles[selectedTowerIndex - 1].towerBaseWidth;
 
-    const projectilePath = `../../images/projectiles/tower${selectedTowerIndex}/projectile.png`;
-        towerProjectile.style.backgroundImage = `url('${projectilePath}')`;
-        towerProjectile.style.left = projectileStyles[selectedTowerIndex - 1].left;
-        towerProjectile.style.bottom = projectileStyles[selectedTowerIndex - 1].bottom;
-        towerProjectile.style.width = projectileStyles[selectedTowerIndex - 1].width || '100%';
-        towerProjectile.style.zIndex = projectileStyles[selectedTowerIndex - 1]['z-index'] || '1000';
-        towerProjectile.style.display = 'block';
+    projectileDesign(towerProjectile, projectileStyles, selectedTowerIndex);
 
     if (selectedTowerIndex !== 4) {
         applyTowerDesign(towerBack, towerFront, selectedTowerIndex, towerPath, towerStyles);
-        towerProjectile.style.animation = 'moveProjectile 2s infinite alternate';
         towerBack.style.display = 'block'; 
         towerFront.style.display = 'block';
+        towerProjectile.style.animation = 'moveProjectile 2s infinite alternate';
     } else {
         towerSticks.style.display = 'block';
-
-        towerProjectile.style.animation = 'none'; 
-        void towerProjectile.offsetWidth; 
-
         towerProjectile.style.animation = 'moveMorterProjectile 2s infinite alternate';
     }
 }
@@ -186,6 +176,9 @@ function drawTowers() {
             const towerBase = document.createElement('div');
             towerBase.className = 'towerBase';
 
+            const towerProjectile = document.createElement('div');
+            towerProjectile.className = 'towerProjectile';
+
             const towerNumbers = {
                 stoneCannon: 1,
                 ironCannon: 2,
@@ -202,6 +195,8 @@ function drawTowers() {
             towerBase.style.left = towerStyles[towerNumber - 1].towerBaseLeft;
             towerBase.style.width = towerStyles[towerNumber - 1].towerBaseWidth;
 
+            projectileDesign(towerProjectile, projectileStyles, towerNumber);
+
             if (towerNumber !== 4) {
 
                 const towerBack = document.createElement('div');
@@ -213,6 +208,9 @@ function drawTowers() {
                 towerFront.style.animationPlayState = 'paused';
 
                 applyTowerDesign(towerBack, towerFront, towerNumber, towerPath, towerStyles);
+
+                towerProjectile.style.animation = 'moveProjectile 2s infinite alternate';
+                towerProjectile.style.animationPlayState = 'paused';
 
                 towerDiv.appendChild(towerBack);
                 towerDiv.appendChild(towerFront);
@@ -233,12 +231,15 @@ function drawTowers() {
                 towerStick2.style.backgroundImage = `url('${towerPath}/stick.png')`;
                 towerStick2.style.animationPlayState = 'paused';
 
+                towerProjectile.style.animation = 'moveMorterProjectile 2s infinite alternate';
+                towerProjectile.style.animationPlayState = 'paused';
+
                 towerSticks.appendChild(towerStick1);
                 towerSticks.appendChild(towerStick2);
                 towerDiv.appendChild(towerSticks);
             }
-
             towerDiv.appendChild(towerBase);
+            towerDiv.appendChild(towerProjectile);
             document.getElementById("gameCanvasContainer").appendChild(towerDiv);
 
             towerDiv.addEventListener('click', (event) => {
@@ -336,6 +337,14 @@ async function deployTower(towerName, zonePosition) {
         if (zone) {
             zone.occupied = true;
         }
+        
+        const towerNumber = {
+            stoneCannon: 1,
+            ironCannon: 2,
+            inferno: 3,
+            mortar: 4
+        }[towerName] || 1;
+
 
         towersArea.push({
             position: zonePosition,
@@ -344,6 +353,7 @@ async function deployTower(towerName, zonePosition) {
             y: zone.y * scale + offsetY,
             towerId: towerData.id,
             isMorter: towerName === 'mortar',
+            towerNumber: towerNumber,
             hasActiveProjectile: false,
         });
 

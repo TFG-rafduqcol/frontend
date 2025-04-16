@@ -9,7 +9,7 @@ function generateEnemy() {
     const newEnemy = {
         x: 0,  // posición inicial en x
         y: 0,  // posición inicial en y
-        speed: 1,  // velocidad del enemigo
+        speed: 1.5,  // velocidad del enemigo
         health: 100,  // salud inicial
         maxHealth: 100,  // salud máxima
         spriteFrame: 0,  // cuadro de la animación
@@ -109,6 +109,7 @@ function drawHealthBar(enemy) {
     enemyCtx.strokeStyle = "black";
     enemyCtx.strokeRect(x, y, barWidth, barHeight);
 }
+
 function checkEnemyInOccupiedArea(enemy) {
     const enemyX = enemy.x * scale + offsetX;
     const enemyY = enemy.y * scale + offsetY;
@@ -120,51 +121,54 @@ function checkEnemyInOccupiedArea(enemy) {
 
         const towerDiv = document.getElementById(`tower${area.position}`);
         
+        const towerProjectile = towerDiv.querySelector('.towerProjectile');
+        const towerBack = towerDiv.querySelector('.towerBack');
+        const towerFront = towerDiv.querySelector('.towerFront');
+        const towerSticks = towerDiv.querySelector('.towerSticks');
+        const towerStick1 = towerDiv.querySelector('.towerStick1');
+        const towerStick2 = towerDiv.querySelector('.towerStick2');
+        
         if (distance <= area.range) {
-            // Si el enemigo entra en el área, inicia la animación
             if (!area.hasActiveProjectile) {
                 console.log("🚀 Enemigo en zona ocupada:", enemy);
                 enemy.loggedZoneEntry = true;
-                const projectileType = 1;
+                const projectileType = area.towerNumber;
                 area.hasActiveProjectile = true;
 
-                // Iniciar animación
+                towerProjectile.style.animationPlayState = 'running';
+
                 if (!area.isMorter) {
-                    const towerBack = towerDiv.querySelector('.towerBack');
-                    const towerFront = towerDiv.querySelector('.towerFront');
+                  
                     towerBack.style.animationPlayState = 'running';
                     towerFront.style.animationPlayState = 'running';
                 } else {
-                    const towerStick1 = towerDiv.querySelector('.towerStick1');
-                    const towerStick2 = towerDiv.querySelector('.towerStick2');
+
                     towerStick1.style.animationPlayState = 'running';
                     towerStick2.style.animationPlayState = 'running';
                 }
 
-                createProjectile(area.towerId, enemy, projectileType);
+                const duration = 0.5 * 1000; 
+                setTimeout(() => {
+                    createProjectile(area.towerId, enemy, projectileType);
+                }, duration / 2);           
             }
         } else {
             if (enemy.loggedZoneEntry) {
                 enemy.loggedZoneEntry = false;
 
-                const towerDiv = document.getElementById(`tower${area.position}`);
                 if (!area.isMorter) {
-                    const towerBack = towerDiv.querySelector('.towerBack');
-                    const towerFront = towerDiv.querySelector('.towerFront');
-
                     towerDiv.addEventListener('animationiteration', () => {
                         towerBack.style.animationPlayState = 'paused';
                         towerFront.style.animationPlayState = 'paused';
+                        towerProjectile.style.animationPlayState = 'paused';
                     }, { once: true });
                     
                 } else {
-                    const towerSticks = towerDiv.querySelector('.towerSticks');
-                    const towerStick1 = towerDiv.querySelector('.towerStick1');
-                    const towerStick2 = towerDiv.querySelector('.towerStick2');
 
                     towerSticks.addEventListener('animationiteration', () => {
                         towerStick1.style.animationPlayState = 'paused';
                         towerStick2.style.animationPlayState = 'paused';
+                        towerProjectile.style.animationPlayState = 'paused';
                     }, { once: true });
                     
                 }

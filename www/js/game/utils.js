@@ -1,5 +1,5 @@
 
-function applyTowerDesign (towerBack, towerFront, selectedTowerIndex, towerPath, towerStyles) {
+function applyTowerDesign(towerBack, towerFront, selectedTowerIndex, towerPath, towerStyles) {
     
     towerBack.style.backgroundImage = `url('${towerPath}/back.png')`;
     towerFront.style.backgroundImage = `url('${towerPath}/front.png')`;
@@ -10,10 +10,20 @@ function applyTowerDesign (towerBack, towerFront, selectedTowerIndex, towerPath,
     towerFront.style.bottom = towerStyles[selectedTowerIndex - 1].frontBottom;
 
     towerBack.style.left = towerStyles[selectedTowerIndex - 1].frontAndBackLeft;
-    towerFront.style.left = towerStyles[selectedTowerIndex - 1].frontAndBackLeft;
-
-    
+    towerFront.style.left = towerStyles[selectedTowerIndex - 1].frontAndBackLeft;   
 }
+
+function projectileDesign(towerProjectile, projectileStyles, selectedTowerIndex) {
+    console.log("🚀 Proyectil en zona ocupada:", selectedTowerIndex, "towerProjectile", towerProjectile);
+    
+    const projectilePath = `../../images/projectiles/tower${selectedTowerIndex}/projectile.png`;
+        towerProjectile.style.backgroundImage = `url('${projectilePath}')`;
+        towerProjectile.style.left = projectileStyles[selectedTowerIndex - 1].left;
+        towerProjectile.style.bottom = projectileStyles[selectedTowerIndex - 1].bottom;
+        towerProjectile.style.width = projectileStyles[selectedTowerIndex - 1].width || '100%';
+        towerProjectile.style.zIndex = projectileStyles[selectedTowerIndex - 1]['z-index'] || '1000';
+        towerProjectile.style.display = 'block';
+} 
 
 function resetTowerMenuIcons() {
     document.querySelectorAll('.towerOption').forEach((option) => {
