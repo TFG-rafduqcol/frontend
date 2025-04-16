@@ -178,16 +178,14 @@ body {
 .towerBack {
     bottom: 0%;
     height: 11%;
-    background-image: url('.././../images/towers/tower1/back.png'); 
-    animation: moveYBack 2s infinite alternate; 
+    animation: moveYBack 0.5s infinite alternate; 
     z-index: 999;
 }
 
 .towerFront {
     bottom: 1%; 
     height: 13%;
-    background-image: url('.././../images/towers/tower1/front.png');  
-    animation: moveYFront 2s infinite alternate; 
+    animation: moveYFront 0.5s infinite alternate; 
     z-index: 1002;
 
 }
@@ -233,6 +231,20 @@ body {
     transform: translate(-50%, -50%);
 }
 
+.towerProjectile {
+    position: absolute;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    left: 7.5vh;
+    bottom: 8vh;
+    width: 3vh;
+    height: 12vh; 
+    z-index: 1000;
+    transform: translate(-50%, -50%);
+    animation: moveProjectile 2s infinite alternate;
+}
+
 @keyframes moveSticks {
     0% {
         transform: translateY(0); 
@@ -244,27 +256,52 @@ body {
 
 @keyframes moveYBack {
     0% {
-        transform: translateY(0); 
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-21px);
     }
     100% {
-        transform: translateY(23px);
+        transform: translateY(0);
     }
 }
 
 @keyframes moveYFront {
     0% {
-        transform: translateY(0); 
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-21px);
     }
     100% {
-        transform: translateY(23px); 
+        transform: translateY(0);
     }
 }
 
+
+@keyframes moveProjectile {
+    0% {
+        transform: translateY(0); 
+    }
+    100% {
+        transform: translateY(-21px); 
+    }
+}
+
+@keyframes moveMorterProjectile {
+    0% {
+        transform: translateY(0); 
+    }
+    100% {
+        transform: translateY(-10px); 
+    }
+}
 
 #generateEnemyButton {
     z-index: 1007;
     position: absolute;
 }
+
     </style>
 </head>
 <body>
@@ -283,6 +320,7 @@ body {
                     <div class="towerStick1"></div>
                     <div class="towerStick2"></div>
                 </div>
+                <div class="towerProjectile"></div>
             </div>       
          </div>
 

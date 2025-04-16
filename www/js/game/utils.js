@@ -11,6 +11,8 @@ function applyTowerDesign (towerBack, towerFront, selectedTowerIndex, towerPath,
 
     towerBack.style.left = towerStyles[selectedTowerIndex - 1].frontAndBackLeft;
     towerFront.style.left = towerStyles[selectedTowerIndex - 1].frontAndBackLeft;
+
+    
 }
 
 function resetTowerMenuIcons() {

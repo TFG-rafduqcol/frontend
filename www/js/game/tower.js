@@ -21,10 +21,18 @@ const towerProperties = {
 };
 
 const towerStyles = [ 
-    { towerBaseWidth: '60%', towerBaseTop: 0, towerBaseLeft: '23%', frontAndBackLeft: '1%', backHeight: '11%', frontHeight: '13%', backBottom: '0%', frontBottom: '1%' },
-    { towerBaseWidth: '60%' ,towerBaseTop: 0, towerBaseLeft: '23%', frontAndBackLeft: '0%',backHeight: '14%', frontHeight: '20%', backBottom: '5%', frontBottom: '10%' },
-    { towerBaseWidth: '60%' ,towerBaseTop: 0, towerBaseLeft: '23%', frontAndBackLeft: '0%',backHeight: '13%', frontHeight: '22%', backBottom: '4%', frontBottom: '12%' },
+    { towerBaseWidth: '60%', towerBaseTop: 0, towerBaseLeft: '23%', frontAndBackLeft: '1%', backHeight: '11%', frontHeight: '14%', backBottom: '-32%', frontBottom: '-31%' },
+    { towerBaseWidth: '60%' ,towerBaseTop: 0, towerBaseLeft: '23%', frontAndBackLeft: '0%',backHeight: '14%', frontHeight: '20%', backBottom: '-25%', frontBottom: '-20%' },
+    { towerBaseWidth: '60%' ,towerBaseTop: 0, towerBaseLeft: '23%', frontAndBackLeft: '0%',backHeight: '13%', frontHeight: '22%', backBottom: '-20%', frontBottom: '-12%' },
     { towerBaseWidth: '56%' ,towerBaseTop: '10%', towerBaseLeft: '26%',frontAndBackLeft: '4%',backHeight: '14%', frontHeight: '15%', backBottom: '0%', frontBottom: '0%' },
+]
+
+const projectileStyles = [
+    { left: '42%', bottom: '27%', width: '17%', 'z-index': '1003' }, 
+    { left: '41%', bottom: '30%',width: '20%', 'z-index': '1000'  }, 
+    { left: '42%', bottom: '31%', width: '19%', 'z-index': '1000'  }, 
+    { left: '30%', bottom: '56%', width: '40%', 'z-index': '1000'  }, 
+
 ]
 
 const towerImages = {
@@ -106,12 +114,14 @@ function previewTowerArea(menuLeft, menuTop, range, selectedTowerIndex) {
     const towerBack = previewDiv.querySelector('.towerBack');
     const towerFront = previewDiv.querySelector('.towerFront');
     const towerSticks = previewDiv.querySelector('.towerSticks'); 
+    const towerProjectile = previewDiv.querySelector('.towerProjectile');
 
     towerSticks.style.display = 'none';
     towerFront.style.display = 'none';
     towerBack.style.display = 'none';
+    towerProjectile.style.display = 'none';
 
-    if (!previewDiv || !towerBase || (selectedTowerIndex === 4 && !towerSticks)) {
+    if (!previewDiv || !towerBase || !towerProjectile || (selectedTowerIndex === 4 && !towerSticks)) {
         console.error('No se encontraron elementos necesarios para la previsualización.');
         return;
     }
@@ -130,18 +140,27 @@ function previewTowerArea(menuLeft, menuTop, range, selectedTowerIndex) {
     towerBase.style.left = towerStyles[selectedTowerIndex - 1].towerBaseLeft;
     towerBase.style.width = towerStyles[selectedTowerIndex - 1].towerBaseWidth;
 
+    const projectilePath = `../../images/projectiles/tower${selectedTowerIndex}/projectile.png`;
+        towerProjectile.style.backgroundImage = `url('${projectilePath}')`;
+        towerProjectile.style.left = projectileStyles[selectedTowerIndex - 1].left;
+        towerProjectile.style.bottom = projectileStyles[selectedTowerIndex - 1].bottom;
+        towerProjectile.style.width = projectileStyles[selectedTowerIndex - 1].width || '100%';
+        towerProjectile.style.zIndex = projectileStyles[selectedTowerIndex - 1]['z-index'] || '1000';
+        towerProjectile.style.display = 'block';
+
     if (selectedTowerIndex !== 4) {
-
-
         applyTowerDesign(towerBack, towerFront, selectedTowerIndex, towerPath, towerStyles);
-
-    
+        towerProjectile.style.animation = 'moveProjectile 2s infinite alternate';
         towerBack.style.display = 'block'; 
         towerFront.style.display = 'block';
     } else {
         towerSticks.style.display = 'block';
-    }
 
+        towerProjectile.style.animation = 'none'; 
+        void towerProjectile.offsetWidth; 
+
+        towerProjectile.style.animation = 'moveMorterProjectile 2s infinite alternate';
+    }
 }
 
 function drawTowers() {
@@ -160,6 +179,7 @@ function drawTowers() {
 
             const towerDiv = document.createElement('div');
             towerDiv.className = 'tower';
+            towerDiv.id = `tower${zone.position}`;
             towerDiv.style.left = `${menuLeft}px`;
             towerDiv.style.top = `${menuTop}px`;
 
@@ -186,9 +206,11 @@ function drawTowers() {
 
                 const towerBack = document.createElement('div');
                 towerBack.className = 'towerBack';
+                towerBack.style.animationPlayState = 'paused';
     
                 const towerFront = document.createElement('div');
                 towerFront.className = 'towerFront';
+                towerFront.style.animationPlayState = 'paused';
 
                 applyTowerDesign(towerBack, towerFront, towerNumber, towerPath, towerStyles);
 
@@ -198,15 +220,18 @@ function drawTowers() {
                 const towerSticks = document.createElement('div');
                 towerSticks.className = 'towerSticks';
                 towerSticks.style.display = 'block';
+                towerSticks.style.animationPlayState = 'paused';
 
                 const towerStick1 = document.createElement('div');
                 towerStick1.className = 'towerStick1';
                 towerStick1.style.backgroundImage = `url('${towerPath}/stick.png')`;
+                towerStick1.style.animationPlayState = 'paused';
+
 
                 const towerStick2 = document.createElement('div');
                 towerStick2.className = 'towerStick2';
                 towerStick2.style.backgroundImage = `url('${towerPath}/stick.png')`;
-
+                towerStick2.style.animationPlayState = 'paused';
 
                 towerSticks.appendChild(towerStick1);
                 towerSticks.appendChild(towerStick2);
@@ -318,6 +343,7 @@ async function deployTower(towerName, zonePosition) {
             x: zone.x * scale + offsetX,
             y: zone.y * scale + offsetY,
             towerId: towerData.id,
+            isMorter: towerName === 'mortar',
             hasActiveProjectile: false,
         });
 
