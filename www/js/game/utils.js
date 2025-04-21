@@ -52,3 +52,9 @@ function resetDeleteTowerIcon() {
     deleteClickedOnce = false;
     deleteClickHandler = null;
 }
+
+function restartAnimation(element) {
+    element.style.animation = 'none';
+    element.offsetHeight;
+    element.style.animation = '';
+}

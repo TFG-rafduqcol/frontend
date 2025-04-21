@@ -81,7 +81,6 @@ function updateAnimation(enemy) {
 
 function drawEnemies() {
 
-    // Limpiar el canvas
     enemyCtx.clearRect(0, 0, enemyCanvas.width, enemyCanvas.height);
     enemies.forEach((enemy) => {
         moveEnemy(enemy);      
@@ -135,23 +134,40 @@ function checkEnemyInOccupiedArea(enemy) {
                 const projectileType = area.towerNumber;
                 area.hasActiveProjectile = true;
 
-                towerProjectile.style.animationPlayState = 'running';
+
+                const duration = 2000;
 
                 if (!area.isMorter) {
-                  
+                    restartAnimation(towerBack);
+                    restartAnimation(towerFront);
+                    restartAnimation(towerProjectile);
+
                     towerBack.style.animationPlayState = 'running';
                     towerFront.style.animationPlayState = 'running';
+                    towerProjectile.style.animationPlayState = 'running';
+
                 } else {
+                    restartAnimation(towerStick1);
+                    restartAnimation(towerStick2);
+                    restartAnimation(towerProjectile);
 
                     towerStick1.style.animationPlayState = 'running';
                     towerStick2.style.animationPlayState = 'running';
+                    towerProjectile.style.animationPlayState = 'running';
+
                 }
 
-                const duration = 0.5 * 1000; 
                 setTimeout(() => {
+                    towerProjectile.style.display = 'none';
                     createProjectile(area.towerId, enemy, projectileType);
-                }, duration / 2);           
+                }, duration / 2);   
+
+                setTimeout(() => {
+                    towerProjectile.style.display = 'block';
+                    towerProjectile.style.transform = 'translateY(0)';
+                }, duration);    
             }
+           
         } else {
             if (enemy.loggedZoneEntry) {
                 enemy.loggedZoneEntry = false;
