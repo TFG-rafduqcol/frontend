@@ -108,7 +108,6 @@ function drawHealthBar(enemy) {
     enemyCtx.strokeStyle = "black";
     enemyCtx.strokeRect(x, y, barWidth, barHeight);
 }
-
 function checkEnemyInOccupiedArea(enemy) {
     const enemyX = enemy.x * scale + offsetX;
     const enemyY = enemy.y * scale + offsetY;
@@ -119,14 +118,14 @@ function checkEnemyInOccupiedArea(enemy) {
         const distance = Math.sqrt(dx * dx + dy * dy);
 
         const towerDiv = document.getElementById(`tower${area.position}`);
-        
+
         const towerProjectile = towerDiv.querySelector('.towerProjectile');
         const towerBack = towerDiv.querySelector('.towerBack');
         const towerFront = towerDiv.querySelector('.towerFront');
         const towerSticks = towerDiv.querySelector('.towerSticks');
         const towerStick1 = towerDiv.querySelector('.towerStick1');
         const towerStick2 = towerDiv.querySelector('.towerStick2');
-        
+
         if (distance <= area.range) {
             if (!area.hasActiveProjectile) {
                 console.log("🚀 Enemigo en zona ocupada:", enemy);
@@ -134,8 +133,7 @@ function checkEnemyInOccupiedArea(enemy) {
                 const projectileType = area.towerNumber;
                 area.hasActiveProjectile = true;
 
-
-                const duration = 2000;
+                const duration = 2000; // Duración total de la animación
 
                 if (!area.isMorter) {
                     restartAnimation(towerBack);
@@ -145,7 +143,6 @@ function checkEnemyInOccupiedArea(enemy) {
                     towerBack.style.animationPlayState = 'running';
                     towerFront.style.animationPlayState = 'running';
                     towerProjectile.style.animationPlayState = 'running';
-
                 } else {
                     restartAnimation(towerStick1);
                     restartAnimation(towerStick2);
@@ -154,20 +151,31 @@ function checkEnemyInOccupiedArea(enemy) {
                     towerStick1.style.animationPlayState = 'running';
                     towerStick2.style.animationPlayState = 'running';
                     towerProjectile.style.animationPlayState = 'running';
-
                 }
 
                 setTimeout(() => {
                     towerProjectile.style.display = 'none';
                     createProjectile(area.towerId, enemy, projectileType);
-                }, duration / 2);   
+                }, duration / 2);
 
                 setTimeout(() => {
                     towerProjectile.style.display = 'block';
                     towerProjectile.style.transform = 'translateY(0)';
-                }, duration);    
+                 
+                }, duration);
+
+                if (!area.projectileIntervalId) {
+                    area.projectileIntervalId = setInterval(() => {
+                        towerProjectile.style.display = 'block';
+                        towerProjectile.style.animationPlayState = 'running';
+                        createProjectile(area.towerId, enemy, projectileType);
+
+                        setTimeout(() => {
+                            towerProjectile.style.display = 'none';
+                        }, duration);
+                    }, 1000); 
+                }
             }
-           
         } else {
             if (enemy.loggedZoneEntry) {
                 enemy.loggedZoneEntry = false;
@@ -178,16 +186,18 @@ function checkEnemyInOccupiedArea(enemy) {
                         towerFront.style.animationPlayState = 'paused';
                         towerProjectile.style.animationPlayState = 'paused';
                     }, { once: true });
-                    
                 } else {
-
                     towerSticks.addEventListener('animationiteration', () => {
                         towerStick1.style.animationPlayState = 'paused';
                         towerStick2.style.animationPlayState = 'paused';
                         towerProjectile.style.animationPlayState = 'paused';
                     }, { once: true });
-                    
                 }
+
+                // Detener el intervalo de proyectiles cuando el enemigo sale
+                clearInterval(area.projectileIntervalId);
+                area.projectileIntervalId = null;
+                area.hasActiveProjectile = false;
             }
         }
     });
