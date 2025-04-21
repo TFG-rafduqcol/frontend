@@ -49,13 +49,10 @@ function updateProjectiles() {
         const distance = Math.sqrt(dx * dx + dy * dy);
 
         if (distance <= projectile.radius + 20) {  
-            console.log("🎯 ¡Proyectil impactó al enemigo!");
             projectile.target.health -= 10; 
 
             projectiles.splice(index, 1);
 
-            const tower = towersArea.find(t => t.towerId === projectile.towerId);
-            tower.hasActiveProjectile = false;  
             
         }
     });

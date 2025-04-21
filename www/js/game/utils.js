@@ -14,7 +14,6 @@ function applyTowerDesign(towerBack, towerFront, selectedTowerIndex, towerPath, 
 }
 
 function projectileDesign(towerProjectile, projectileStyles, selectedTowerIndex) {
-    console.log("🚀 Proyectil en zona ocupada:", selectedTowerIndex, "towerProjectile", towerProjectile);
     
     const projectilePath = `../../images/projectiles/tower${selectedTowerIndex}/projectile.png`;
         towerProjectile.style.backgroundImage = `url('${projectilePath}')`;

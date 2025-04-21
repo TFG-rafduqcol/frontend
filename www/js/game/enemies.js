@@ -164,17 +164,7 @@ function checkEnemyInOccupiedArea(enemy) {
                  
                 }, duration);
 
-                if (!area.projectileIntervalId) {
-                    area.projectileIntervalId = setInterval(() => {
-                        towerProjectile.style.display = 'block';
-                        towerProjectile.style.animationPlayState = 'running';
-                        createProjectile(area.towerId, enemy, projectileType);
-
-                        setTimeout(() => {
-                            towerProjectile.style.display = 'none';
-                        }, duration);
-                    }, 1000); 
-                }
+                
             }
         } else {
             if (enemy.loggedZoneEntry) {
@@ -194,9 +184,6 @@ function checkEnemyInOccupiedArea(enemy) {
                     }, { once: true });
                 }
 
-                // Detener el intervalo de proyectiles cuando el enemigo sale
-                clearInterval(area.projectileIntervalId);
-                area.projectileIntervalId = null;
                 area.hasActiveProjectile = false;
             }
         }
