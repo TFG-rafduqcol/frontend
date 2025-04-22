@@ -50,6 +50,12 @@ function updateProjectiles() {
 
         if (distance <= projectile.radius + 10) {  
             projectile.target.health -= 10; 
+            if (projectile.target.health <= 0) {
+                const enemyIndex = enemies.findIndex(enemy => enemy === projectile.target);
+                if (enemyIndex !== -1) {
+                    enemies[enemyIndex].isDead = true; 
+                }                
+            }
             projectiles.splice(index, 1);
         }
     });

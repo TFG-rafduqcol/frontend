@@ -40,7 +40,7 @@ let enemies = [ {
     currentPoint: 0,  // punto actual del camino
     t: 0,  // factor de interpolación
     delay: 0,  // retraso para el movimiento
-    loggedZoneEntry: false,  // indicador de entrada en la zona
+    isDead: false,  // estado del enemigo
 }, 
 // {
 //     x: path[0].x,
@@ -264,7 +264,6 @@ function gameLoop() {
     drawMap();
     drawZones();
     drawPath(); 
-
     drawEnemies();
     
     checkAreasWithEnemies();

@@ -10,7 +10,7 @@ function generateEnemy() {
         x: 0,  // posición inicial en x
         y: 0,  // posición inicial en y
         speed: 2,  // velocidad del enemigo
-        health: 100,  // salud inicial
+        health: 10,  // salud inicial
         maxHealth: 100,  // salud máxima
         spriteFrame: 0,  // cuadro de la animación
         totalFrames: 4,  // cantidad total de cuadros en la animación
@@ -20,6 +20,9 @@ function generateEnemy() {
         t: 0,  // factor de interpolación
         delay: 0,  // retraso para el movimiento
         loggedZoneEntry: false,  // indicador de entrada en la zona
+        isDead: false,  // indicador de muerte
+        deatTimer: 60,  // temporizador de muerte
+        opacity: 1,  // opacidad del enemigo
     };
 
     // Agregar el nuevo enemigo a la lista de enemigos
@@ -33,8 +36,7 @@ function generateEnemy() {
 
 
 function moveEnemy(enemy) {
-    if (enemy.delay > 0) {
-        enemy.delay--;
+    if (enemy.delay > 0 || enemy.isDead) {
         return;
     }
 
@@ -63,15 +65,13 @@ function moveEnemy(enemy) {
     }
 }
 
-function drawSprite(x, y, enemy) {
-    const currentImage = images[enemy.spriteFrame];
-    const imageWidth = 60; 
-    const imageHeight = 60;
-    
-    enemyCtx.drawImage(currentImage, x - imageWidth / 2, y - imageHeight / 2, imageWidth, imageHeight);
-}
-
 function updateAnimation(enemy) {
+    if (enemy.isDead) {
+    
+        updateDeathAnimation(enemy); 
+        return;  
+    }
+    
     enemy.frameTimer++;
     if (enemy.frameTimer >= enemy.frameDelay) {
         enemy.spriteFrame = (enemy.spriteFrame + 1) % enemy.totalFrames;
@@ -79,8 +79,8 @@ function updateAnimation(enemy) {
     }
 }
 
-function drawEnemies() {
 
+function drawEnemies() {
     enemyCtx.clearRect(0, 0, enemyCanvas.width, enemyCanvas.height);
     enemies.forEach((enemy) => {
         moveEnemy(enemy);      
@@ -92,21 +92,36 @@ function drawEnemies() {
     });
 }
 
+function drawSprite(x, y, enemy) {
+    const currentImage = images[enemy.spriteFrame];
+    const imageWidth = 60; 
+    const imageHeight = 60;
+    
+    enemyCtx.globalAlpha = enemy.opacity;
+
+    enemyCtx.drawImage(currentImage, x - imageWidth / 2, y - imageHeight / 2, imageWidth, imageHeight);
+    
+    enemyCtx.globalAlpha = 1;
+}
+
+
 function drawHealthBar(enemy) {
-    const barWidth = 40;
-    const barHeight = 6;
-    const x = enemy.x * scale + offsetX - barWidth / 2;
-    const y = enemy.y * scale + offsetY - 40; 
+    if (!enemy.isDead) {
+        const barWidth = 40;
+        const barHeight = 6;
+        const x = enemy.x * scale + offsetX - barWidth / 2;
+        const y = enemy.y * scale + offsetY - 40; 
 
-    enemyCtx.fillStyle = "red";
-    enemyCtx.fillRect(x, y, barWidth, barHeight);
+        enemyCtx.fillStyle = "red";
+        enemyCtx.fillRect(x, y, barWidth, barHeight);
 
-    const healthRatio = enemy.health / enemy.maxHealth;
-    enemyCtx.fillStyle = "limegreen";
-    enemyCtx.fillRect(x, y, barWidth * healthRatio, barHeight);
+        const healthRatio = enemy.health / enemy.maxHealth;
+        enemyCtx.fillStyle = "limegreen";
+        enemyCtx.fillRect(x, y, barWidth * healthRatio, barHeight);
 
-    enemyCtx.strokeStyle = "black";
-    enemyCtx.strokeRect(x, y, barWidth, barHeight);
+        enemyCtx.strokeStyle = "black";
+        enemyCtx.strokeRect(x, y, barWidth, barHeight);
+    }   
 }
 
 
@@ -117,7 +132,7 @@ function checkAreasWithEnemies() {
             const enemyY = enemy.y * scale + offsetY;
             const dx = enemyX - area.x;
             const dy = enemyY - area.y;
-            return Math.hypot(dx, dy) <= area.range;
+            return Math.hypot(dx, dy) <= area.range && !enemy.isDead;
         });
         const towerDiv       = document.getElementById(`tower${area.position}`);
         const towerProjectile= towerDiv.querySelector('.towerProjectile');
@@ -180,3 +195,6 @@ function checkAreasWithEnemies() {
         }
     });
 }
+
+
+
