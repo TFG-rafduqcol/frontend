@@ -48,12 +48,9 @@ function updateProjectiles() {
         const dy = (projectile.target.y * scale + offsetY) - projectile.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
 
-        if (distance <= projectile.radius + 20) {  
+        if (distance <= projectile.radius + 10) {  
             projectile.target.health -= 10; 
-
             projectiles.splice(index, 1);
-
-            
         }
     });
 }

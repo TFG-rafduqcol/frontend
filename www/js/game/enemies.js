@@ -9,7 +9,7 @@ function generateEnemy() {
     const newEnemy = {
         x: 0,  // posición inicial en x
         y: 0,  // posición inicial en y
-        speed: 1.5,  // velocidad del enemigo
+        speed: 2,  // velocidad del enemigo
         health: 100,  // salud inicial
         maxHealth: 100,  // salud máxima
         spriteFrame: 0,  // cuadro de la animación
@@ -110,93 +110,71 @@ function drawHealthBar(enemy) {
 }
 
 
-
-
-function checkEnemyInOccupiedArea(enemy) {
-    const enemyX = enemy.x * scale + offsetX;
-    const enemyY = enemy.y * scale + offsetY;
-
+function checkAreasWithEnemies() {
     towersArea.forEach(area => {
-        const dx = enemyX - area.x;
-        const dy = enemyY - area.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
+        const enemiesInArea = enemies.filter( enemy => { 
+            const enemyX = enemy.x * scale + offsetX;
+            const enemyY = enemy.y * scale + offsetY;
+            const dx = enemyX - area.x;
+            const dy = enemyY - area.y;
+            return Math.hypot(dx, dy) <= area.range;
+        });
+        const towerDiv       = document.getElementById(`tower${area.position}`);
+        const towerProjectile= towerDiv.querySelector('.towerProjectile');
+        const towerBack      = towerDiv.querySelector('.towerBack');
+        const towerFront     = towerDiv.querySelector('.towerFront');
+        const towerSticks    = towerDiv.querySelector('.towerSticks');
+        const towerStick1    = towerDiv.querySelector('.towerStick1');
+        const towerStick2    = towerDiv.querySelector('.towerStick2');
 
-        const towerDiv = document.getElementById(`tower${area.position}`);
-
-        const towerProjectile = towerDiv.querySelector('.towerProjectile');
-        const towerBack = towerDiv.querySelector('.towerBack');
-        const towerFront = towerDiv.querySelector('.towerFront');
-        const towerSticks = towerDiv.querySelector('.towerSticks');
-        const towerStick1 = towerDiv.querySelector('.towerStick1');
-        const towerStick2 = towerDiv.querySelector('.towerStick2');
-
-        if (distance <= area.range) {
+        if (enemiesInArea.length > 0 && !area.animationInProgress) {
             if (!area.hasActiveProjectile) {
-                console.log("🚀 Enemigo en zona ocupada:", enemy);
-                enemy.loggedZoneEntry = true;
-                const projectileType = area.towerNumber;
                 area.hasActiveProjectile = true;
-
-                const duration = 2000; // Duración total de la animación
+                const projectileType = area.towerNumber;
+                const duration = 2000;
 
                 if (!area.isMorter) {
-                    restartAnimation(towerBack);
-                    restartAnimation(towerFront);
-                    restartAnimation(towerProjectile);
-
-                    towerBack.style.animationPlayState = 'running';
-                    towerFront.style.animationPlayState = 'running';
-                    towerProjectile.style.animationPlayState = 'running';
+                    [towerBack, towerFront, towerProjectile].forEach(restartAnimation);
+                    [towerBack, towerFront, towerProjectile].forEach(el => el.style.animationPlayState = 'running');
                 } else {
-                    restartAnimation(towerStick1);
-                    restartAnimation(towerStick2);
-                    restartAnimation(towerProjectile);
-
-                    towerStick1.style.animationPlayState = 'running';
-                    towerStick2.style.animationPlayState = 'running';
-                    towerProjectile.style.animationPlayState = 'running';
+                    [towerStick1, towerStick2, towerProjectile].forEach(restartAnimation);
+                    [towerStick1, towerStick2, towerProjectile].forEach(el => el.style.animationPlayState = 'running');
                 }
 
                 setTimeout(() => {
-                    towerProjectile.style.display = 'none';
-                    createProjectile(area.towerId, enemy, projectileType);
+                    createProjectile(area.towerId, enemiesInArea[0], projectileType);
                 }, duration / 2);
 
                 setTimeout(() => {
-                    towerProjectile.style.display = 'block';
-                    towerProjectile.style.transform = 'translateY(0)';
-                 
+                    area.hasActiveProjectile = false;
+                    area.animationInProgress = false;
                 }, duration);
+            } else {
+                return;
+            }
 
+        } else {
+            if (area.hasActiveProjectile) area.animationInProgress = true;
+            area.hasActiveProjectile = false;
+
+            if (!area.isMorter) {
+                towerDiv.addEventListener('animationiteration', () => {
+                    towerBack.style.animationPlayState = 'paused';
+                    towerFront.style.animationPlayState = 'paused';
+                    towerProjectile.style.animationPlayState = 'paused';
+                    area.animationInProgress = false; 
+                }, { once: true });
+                
+            } else {
+                towerSticks.addEventListener('animationiteration', () => {
+                    towerStick1.style.animationPlayState = 'paused';
+                    towerStick2.style.animationPlayState = 'paused';
+                    towerProjectile.style.animationPlayState = 'paused';
+                    area.animationInProgress = false; 
+                }, { once: true });
                 
             }
-        } else {
-            if (enemy.loggedZoneEntry) {
-                enemy.loggedZoneEntry = false;
 
-                // Ver si hay mas de un enemigo en la zona ocupada
-                const enemiesInArea = enemies.filter(e => e.loggedZoneEntry && e.currentPoint === area.position);
-                    if (enemiesInArea.length < 1) {
-
-                    if (!area.isMorter) {
-                        towerDiv.addEventListener('animationiteration', () => {
-                            towerBack.style.animationPlayState = 'paused';
-                            towerFront.style.animationPlayState = 'paused';
-                            towerProjectile.style.animationPlayState = 'paused';
-                        }, { once: true });
-                    } else {
-                        towerSticks.addEventListener('animationiteration', () => {
-                            towerStick1.style.animationPlayState = 'paused';
-                            towerStick2.style.animationPlayState = 'paused';
-                            towerProjectile.style.animationPlayState = 'paused';
-                        }, { once: true });
-                    }
-                    area.hasActiveProjectile = false;
-
-                } else {
-                    return;
-                }
-            }
         }
     });
 }

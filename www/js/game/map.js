@@ -267,9 +267,7 @@ function gameLoop() {
 
     drawEnemies();
     
-    enemies.forEach(enemy => {
-        checkEnemyInOccupiedArea(enemy);
-    });
+    checkAreasWithEnemies();
     updateProjectiles();
     drawProjectiles();
 

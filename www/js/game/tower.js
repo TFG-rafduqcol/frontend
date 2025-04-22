@@ -355,6 +355,7 @@ async function deployTower(towerName, zonePosition) {
             isMorter: towerName === 'mortar',
             towerNumber: towerNumber,
             hasActiveProjectile: false,
+            animationInProgress: false,
         });
 
         const menu = document.getElementById('towerMenu');
