@@ -14,10 +14,10 @@ const towerZones = [
 ];
 
 const towerProperties = {
-    stoneCannon: { cost: 100, damage: 10, fire_rate: 3, range: 40, projectile_type: 'stone' },
-    ironCannon: { cost: 125,  damage: 12, fire_rate: 2.5, range: 50, projectile_type: 'iron' },
-    inferno: { cost: 150,  damage: 15, fire_rate: 4, range: 60, projectile_type: 'fire' },
-    mortar: { cost: 120,  damage: 15, fire_rate: 4, range: 70, projectile_type: 'rock' },
+    stoneCannon: { cost: 90, damage: 10, fire_rate: 3, range: 40, projectile_type: 'stone' },
+    ironCannon: { cost: 100,  damage: 12, fire_rate: 2.5, range: 50, projectile_type: 'iron' },
+    inferno: { cost: 125,  damage: 15, fire_rate: 4, range: 60, projectile_type: 'fire' },
+    mortar: { cost: 150,  damage: 15, fire_rate: 4, range: 70, projectile_type: 'rock' },
 };
 
 const towerStyles = [ 
@@ -363,6 +363,9 @@ async function deployTower(towerName, zonePosition) {
 
         drawTowers(); 
 
+        updateGame(false, -towerProperties[towerName].cost, undefined)
+
+
     } catch (error) {
         console.error('Error al desplegar la torre:', error);
         alert('Hubo un problema al desplegar la torre. Inténtalo de nuevo.');
@@ -372,7 +375,8 @@ async function deployTower(towerName, zonePosition) {
 
 async function deleteTower(zonePosition) {
     const token = localStorage.getItem('token');
-    const towerId= towersDeployed.find(tower => tower.position === zonePosition).id;
+    const towerDeployed = towersDeployed.find(tower => tower.position === zonePosition);
+    const towerId = towerDeployed.id;
     const response = await fetch(`${serverUrl}/api/towers/deleteTower/${towerId}`, {
         method: 'DELETE',
         headers: {
@@ -390,6 +394,8 @@ async function deleteTower(zonePosition) {
         const previewDiv = document.getElementById('towerEditMenu');
         previewDiv.style.display = 'none'; 
         towerOptionMenuVisible = false;
+
+        updateGame(false, towerProperties[towerDeployed.name].cost / 2, undefined);
         drawTowers(); 
     }
     else {
@@ -398,3 +404,53 @@ async function deleteTower(zonePosition) {
     }
 }
 
+async function updateGame(newRound, towerPrice, minusLives) {
+    const token = localStorage.getItem('token');
+    const gameId = params.get('gameId');
+
+    try {
+        const response = await fetch(`${serverUrl}/api/games/updateGame/${gameId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                round: newRound ? round + 1 : undefined,
+                gold: gold + towerPrice, 
+                lives: minusLives !== undefined ? lives - minusLives : undefined
+            })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Error updating game:', errorData);
+            return;
+        }
+
+        const updatedGame = await response.json();
+        console.log('Game updated successfully:', updatedGame);
+
+        const goldElement = document.getElementById('gold');
+        gold = updatedGame.gold;
+        if (goldElement) {
+            goldElement.textContent = `${updatedGame.gold}`; 
+        }
+
+        const livesElement = document.getElementById('lives');
+        lives = updatedGame.lives;
+        if (livesElement) {
+            livesElement.textContent = `${updatedGame.lives}`; 
+        }
+
+        const roundElement = document.getElementById('round');
+        round = updatedGame.round;
+        if (roundElement) {
+            roundElement.textContent = `${updatedGame.round}`; 
+        }
+        
+        return updatedGame;
+    } catch (error) {
+        console.error('Fetch error:', error);
+    }
+}

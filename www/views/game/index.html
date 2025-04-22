@@ -68,6 +68,20 @@ body {
     z-index: 1008;
 }
 
+.towerPrice {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    font-size: 3vh;
+    padding: 3px 5px;
+    border-radius: 8px;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
 #towerEditMenu {
     z-index: 1006;
 }
@@ -369,17 +383,22 @@ body {
          <div id="towerMenu" class="towerMenu">
             <div class="towerOption" id="towerOption1">
                 <img src="../../images/towers/tower1/base.png" alt="Torre 1" data-original-src="../../images/towers/tower1/base.png">
+                <div class="towerPrice">$90</div> 
             </div>
             <div class="towerOption" id="towerOption2">
                 <img src="../../images/towers/tower2/base.png" alt="Torre 2" data-original-src="../../images/towers/tower2/base.png">
+                <div class="towerPrice">$100</div>
             </div>
             <div class="towerOption" id="towerOption3">
                 <img src="../../images/towers/tower3/base.png" alt="Torre 3" data-original-src="../../images/towers/tower3/base.png">
+                <div class="towerPrice">$125</div> 
             </div>
             <div class="towerOption" id="towerOption4">
                 <img src="../../images/towers/tower4/base.png" alt="Torre 4" data-original-src="../../images/towers/tower4/base.png">
+                <div class="towerPrice">$150</div> 
             </div>
         </div>
+        
 
         
         <div id="towerEditMenu" class="towerMenu">
