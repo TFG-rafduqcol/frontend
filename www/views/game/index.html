@@ -4,7 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mapa Tower Defense</title>
+    <link rel="stylesheet" href="../../css/topBar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
+
+
+
 body {
     margin: 0;
     padding: 0;
@@ -245,6 +250,8 @@ body {
     animation: moveProjectile 2s infinite alternate;
 }
 
+
+
 @keyframes moveSticks {
     0% {
         transform: translateY(0);
@@ -318,6 +325,29 @@ body {
 <body>
     <div id="gameCanvasContainer">
         <button id="generateEnemyButton">Generar Enemigo</button>
+
+
+        <div class="top-bar">
+            <div class="gold-bar-container">
+                <i class="fa-solid fa-coins"></i>
+                <div class="gold-container">
+                    <span id="gold">500</span>
+                </div>
+            </div>
+            <div class="life-bar-container">
+                <i class="fa-solid fa-heart"></i>
+                <div class="lives-container">
+                    <span id="lives">20</span>
+                </div>
+            </div> 
+            <div class="round-bar-container">
+                <i class="fa-solid fa-bullseye"></i>
+                <div class="round-container">
+                    <span id="round">1</span>
+                </div>
+            </div>                     
+            </div>
+        </div>
 
         <canvas id="gameCanvas"></canvas>
 

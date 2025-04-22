@@ -13,7 +13,6 @@ if (user) {
     document.getElementById("experience").textContent = `${experience} / ${maxExperience}`;
     document.getElementById("xp-fill").style.width = `${progressPercentage}%`;
 
-    document.getElementById("gold").textContent = user.gold || 0;
     document.getElementById("gems").textContent = user.gems || 0;
     document.getElementById("username").textContent = user.username || "User";
     document.getElementById("avatar").src = user.avatar || "";

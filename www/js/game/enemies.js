@@ -108,6 +108,10 @@ function drawHealthBar(enemy) {
     enemyCtx.strokeStyle = "black";
     enemyCtx.strokeRect(x, y, barWidth, barHeight);
 }
+
+
+
+
 function checkEnemyInOccupiedArea(enemy) {
     const enemyX = enemy.x * scale + offsetX;
     const enemyY = enemy.y * scale + offsetY;
@@ -170,21 +174,28 @@ function checkEnemyInOccupiedArea(enemy) {
             if (enemy.loggedZoneEntry) {
                 enemy.loggedZoneEntry = false;
 
-                if (!area.isMorter) {
-                    towerDiv.addEventListener('animationiteration', () => {
-                        towerBack.style.animationPlayState = 'paused';
-                        towerFront.style.animationPlayState = 'paused';
-                        towerProjectile.style.animationPlayState = 'paused';
-                    }, { once: true });
-                } else {
-                    towerSticks.addEventListener('animationiteration', () => {
-                        towerStick1.style.animationPlayState = 'paused';
-                        towerStick2.style.animationPlayState = 'paused';
-                        towerProjectile.style.animationPlayState = 'paused';
-                    }, { once: true });
-                }
+                // Ver si hay mas de un enemigo en la zona ocupada
+                const enemiesInArea = enemies.filter(e => e.loggedZoneEntry && e.currentPoint === area.position);
+                    if (enemiesInArea.length < 1) {
 
-                area.hasActiveProjectile = false;
+                    if (!area.isMorter) {
+                        towerDiv.addEventListener('animationiteration', () => {
+                            towerBack.style.animationPlayState = 'paused';
+                            towerFront.style.animationPlayState = 'paused';
+                            towerProjectile.style.animationPlayState = 'paused';
+                        }, { once: true });
+                    } else {
+                        towerSticks.addEventListener('animationiteration', () => {
+                            towerStick1.style.animationPlayState = 'paused';
+                            towerStick2.style.animationPlayState = 'paused';
+                            towerProjectile.style.animationPlayState = 'paused';
+                        }, { once: true });
+                    }
+                    area.hasActiveProjectile = false;
+
+                } else {
+                    return;
+                }
             }
         }
     });
