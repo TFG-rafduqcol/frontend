@@ -16,7 +16,7 @@ const towerZones = [
 const towerProperties = {
     stoneCannon: { cost: 90, damage: 10, fire_rate: 3, range: 40, projectile_type: 'stone' },
     ironCannon: { cost: 100,  damage: 12, fire_rate: 2.5, range: 50, projectile_type: 'iron' },
-    inferno: { cost: 125,  damage: 15, fire_rate: 4, range: 60, projectile_type: 'fire' },
+    inferno: { cost: 125,  damage: 15, fire_rate: 4, range: 120, projectile_type: 'fire' },
     mortar: { cost: 150,  damage: 15, fire_rate: 4, range: 70, projectile_type: 'rock' },
 };
 

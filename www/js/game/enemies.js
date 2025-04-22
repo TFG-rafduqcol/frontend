@@ -142,12 +142,14 @@ function checkAreasWithEnemies() {
                 }
 
                 setTimeout(() => {
+                    towerProjectile.style.display = 'none';
+                    towerProjectile.style.animationPlayState = 'running';
                     createProjectile(area.towerId, enemiesInArea[0], projectileType);
                 }, duration / 2);
 
                 setTimeout(() => {
+                    towerProjectile.style.display = 'block';
                     area.hasActiveProjectile = false;
-                    area.animationInProgress = false;
                 }, duration);
             } else {
                 return;
