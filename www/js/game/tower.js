@@ -31,7 +31,7 @@ const projectileStyles = [
     { left: '42%', bottom: '27%', width: '17%', 'z-index': '1003' }, 
     { left: '41%', bottom: '30%',width: '20%', 'z-index': '1000'  }, 
     { left: '42%', bottom: '31%', width: '19%', 'z-index': '1000'  }, 
-    { left: '30%', bottom: '56%', width: '40%', 'z-index': '1000'  }, 
+    { left: '28%', bottom: '58%', width: '46%', 'z-index': '1000'  }, 
 
 ]
 

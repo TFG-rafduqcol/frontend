@@ -5,6 +5,12 @@ const projectileImages = {
     4: "../../images/projectiles/tower4/projectile.png",  
 };
 
+// Tamano tipo de proyectil 
+// Tipo 1: 12x12
+// Tipo 2: 17x17
+// Tipo 3: 20x20
+// Tipo 4: 25x25
+
 const impactFramesByType = {};
 
 for (let type = 1; type <= 4; type++) {
@@ -36,10 +42,10 @@ function createProjectile(towerId, targetEnemy, projectileType) {
     const directionY = dy / distance;
 
     const projectile = {
-        x: towerX,
-        y: towerY,
+        x: towerX + 12,
+        y: towerY - 10,
         target: targetEnemy,
-        speed: 5,
+        speed: 0.5,
         radius: 5,
         type: projectileType,
         image: new Image(),
@@ -95,7 +101,7 @@ function drawProjectiles() {
             projectile.image,
             projectile.x - projectile.radius,
             projectile.y - projectile.radius,
-            20,
+            35,
             20
         );
     });
