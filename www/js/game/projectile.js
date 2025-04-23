@@ -5,11 +5,15 @@ const projectileImages = {
     4: "../../images/projectiles/tower4/projectile.png",  
 };
 
-// Tamano tipo de proyectil 
-// Tipo 1: 12x12
-// Tipo 2: 17x17
-// Tipo 3: 20x20
-// Tipo 4: 25x25
+
+
+const projectileSizes = {
+    1: { width: 12, height: 12 },
+    2: { width: 17, height: 17 },
+    3: { width: 20, height: 20 },
+    4: { width: 25, height: 25 },
+};
+
 
 const impactFramesByType = {};
 
@@ -29,7 +33,7 @@ let impactParticles = [];
 
 function createProjectile(towerId, targetEnemy, projectileType) {
     const tower = towersArea.find(t => t.towerId === towerId);
-    const towerX = tower.x; 
+    const towerX = tower.x;
     const towerY = tower.y;
 
     const enemyX = targetEnemy.x * scale + offsetX;
@@ -44,55 +48,69 @@ function createProjectile(towerId, targetEnemy, projectileType) {
     const projectile = {
         x: towerX + 12,
         y: towerY - 10,
+        height: projectileSizes[projectileType].height,
+        width: projectileSizes[projectileType].width,
         target: targetEnemy,
-        speed: 0.5,
+        speed: 5,
         radius: 5,
         type: projectileType,
         image: new Image(),
-        isImageLoaded: false,
         directionX,
         directionY,
-        towerId: towerId
+        towerId: towerId,
+        
     };
 
     projectile.image.src = projectileImages[projectileType];
     projectiles.push(projectile);
 }
 
-
 function updateProjectiles() {
     projectiles.forEach((projectile, index) => {
-        projectile.x += projectile.directionX * projectile.speed;
-        projectile.y += projectile.directionY * projectile.speed;
+        if (!projectile.target || projectile.target.isDead) {
+            projectiles.splice(index, 1);
+            return;
+        }
 
-        const dx = (projectile.target.x * scale + offsetX) - projectile.x;
-        const dy = (projectile.target.y * scale + offsetY) - projectile.y;
+        const targetX = projectile.target.x * scale + offsetX;
+        const targetY = projectile.target.y * scale + offsetY;
+
+        const dx = targetX - projectile.x;
+        const dy = targetY - projectile.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
 
-        if (distance <= projectile.radius + 10) {  
-            projectile.target.health -= 10; 
+        const directionX = dx / distance;
+        const directionY = dy / distance;
 
+        projectile.x += directionX * projectile.speed;
+        projectile.y += directionY * projectile.speed;
+
+        if (distance <= projectile.radius + 10) {
+            projectile.target.health -= 10;
 
             impactParticles.push({
                 x: projectile.x,
                 y: projectile.y,
                 frame: 0,
                 frameTimer: 0,
-                frameInterval: 5,
-                maxFrames: 4, 
-                frames: impactFramesByType[projectile.type], 
+                frameInterval: 15,
+                maxFrames: 4,
+                frames: impactFramesByType[projectile.type],
+                radius: projectile.radius 
             });
 
             if (projectile.target.health <= 0) {
                 const enemyIndex = enemies.findIndex(enemy => enemy === projectile.target);
                 if (enemyIndex !== -1) {
-                    enemies[enemyIndex].isDead = true; 
-                }                
+                    enemies[enemyIndex].isDead = true;
+                }
             }
+
             projectiles.splice(index, 1);
         }
     });
 }
+
 
 
 function drawProjectiles() {
@@ -101,8 +119,8 @@ function drawProjectiles() {
             projectile.image,
             projectile.x - projectile.radius,
             projectile.y - projectile.radius,
-            35,
-            20
+            projectile.width,
+            projectile.height
         );
     });
 }
