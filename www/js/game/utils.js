@@ -52,8 +52,15 @@ function resetDeleteTowerIcon() {
     deleteClickHandler = null;
 }
 
-function restartAnimation(element) {
-    element.style.animation = 'none';
-    element.offsetHeight;
-    element.style.animation = '';
+function restartAnimation(element, isMorter) {
+    if (isMorter) {
+        element.style.animation = 'none';
+        element.offsetHeight; 
+        element.style.animation = 'moveMorterProjectile 2s infinite alternate';
+    } else {
+        element.style.animation = 'none';
+        element.offsetHeight; 
+        element.style.animation = 'moveProjectile 2s infinite alternate';
+    }
+    
 }

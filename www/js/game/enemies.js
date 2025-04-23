@@ -10,7 +10,7 @@ function generateEnemy() {
         x: 0,  // posición inicial en x
         y: 0,  // posición inicial en y
         speed: 2,  // velocidad del enemigo
-        health: 10,  // salud inicial
+        health: 100,  // salud inicial
         maxHealth: 100,  // salud máxima
         spriteFrame: 0,  // cuadro de la animación
         totalFrames: 4,  // cantidad total de cuadros en la animación
@@ -21,7 +21,7 @@ function generateEnemy() {
         delay: 0,  // retraso para el movimiento
         loggedZoneEntry: false,  // indicador de entrada en la zona
         isDead: false,  // indicador de muerte
-        deatTimer: 60,  // temporizador de muerte
+        deathTimer: 60,  // temporizador de muerte
         opacity: 1,  // opacidad del enemigo
     };
 
@@ -149,10 +149,10 @@ function checkAreasWithEnemies() {
                 const duration = 2000;
 
                 if (!area.isMorter) {
-                    [towerBack, towerFront, towerProjectile].forEach(restartAnimation);
+                    [towerBack, towerFront, towerProjectile].forEach(el => restartAnimation(el, false));
                     [towerBack, towerFront, towerProjectile].forEach(el => el.style.animationPlayState = 'running');
                 } else {
-                    [towerStick1, towerStick2, towerProjectile].forEach(restartAnimation);
+                    [towerStick1, towerStick2, towerProjectile].forEach(el => restartAnimation(el, true));
                     [towerStick1, towerStick2, towerProjectile].forEach(el => el.style.animationPlayState = 'running');
                 }
 

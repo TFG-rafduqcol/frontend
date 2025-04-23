@@ -8,8 +8,8 @@ function updateDeathAnimation(enemy) {
     drawSmokeParticles();
 
     if (enemy.opacity > 0) {
-        enemy.deatTimer--;
-        enemy.opacity = enemy.deatTimer / 60;
+        enemy.deathTimer--;
+        enemy.opacity = enemy.deathTimer / 60;
     } else {
         const index = enemies.indexOf(enemy);
         if (index > -1) {
