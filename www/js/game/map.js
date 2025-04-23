@@ -270,6 +270,9 @@ function gameLoop() {
     updateProjectiles();
     drawProjectiles();
 
+    updateImpactParticles();
+    drawImpactParticles();
+
     requestAnimationFrame(gameLoop);
 }
 

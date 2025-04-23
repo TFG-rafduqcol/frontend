@@ -72,7 +72,6 @@ function towerOptionClickHandler(event) {
 }
 
 
-
 function showTowerMenu(event) {
 
     const rect = canvas.getBoundingClientRect();

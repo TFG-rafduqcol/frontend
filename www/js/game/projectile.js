@@ -5,6 +5,21 @@ const projectileImages = {
     4: "../../images/projectiles/tower4/projectile.png",  
 };
 
+const impactFramesByType = {};
+
+for (let type = 1; type <= 4; type++) {
+    impactFramesByType[type] = [];
+
+    for (let i = 1; i <= 4; i++) {
+        const img = new Image();
+        img.src = `../../images/projectiles/tower${type}/impact${i}.png`;
+        impactFramesByType[type].push(img);
+    }
+}
+
+
+let impactParticles = [];
+
 
 function createProjectile(towerId, targetEnemy, projectileType) {
     const tower = towersArea.find(t => t.towerId === towerId);
@@ -50,6 +65,18 @@ function updateProjectiles() {
 
         if (distance <= projectile.radius + 10) {  
             projectile.target.health -= 10; 
+
+
+            impactParticles.push({
+                x: projectile.x,
+                y: projectile.y,
+                frame: 0,
+                frameTimer: 0,
+                frameInterval: 5,
+                maxFrames: 4, 
+                frames: impactFramesByType[projectile.type], 
+            });
+
             if (projectile.target.health <= 0) {
                 const enemyIndex = enemies.findIndex(enemy => enemy === projectile.target);
                 if (enemyIndex !== -1) {
@@ -71,5 +98,35 @@ function drawProjectiles() {
             20,
             20
         );
+    });
+}
+
+
+function drawImpactParticles() {
+    impactParticles.forEach(particle => {
+        const img = particle.frames[particle.frame];
+        if (img) {
+            enemyCtx.drawImage(
+                img,
+                particle.x,
+                particle.y,
+                20, 
+                20
+            );
+        }
+    });
+}
+
+
+
+function updateImpactParticles() {
+    impactParticles = impactParticles.filter(p => p.frame < p.maxFrames);
+
+    impactParticles.forEach(p => {
+        p.frameTimer++;
+        if (p.frameTimer >= p.frameInterval) {
+            p.frame++;
+            p.frameTimer = 0;
+        }
     });
 }
