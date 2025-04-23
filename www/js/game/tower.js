@@ -348,8 +348,8 @@ async function deployTower(towerName, zonePosition) {
         towersArea.push({
             position: zonePosition,
             range: towerProperties[towerName].range,
-            x: zone.x * scale + offsetX,
-            y: zone.y * scale + offsetY,
+            x: zone.x,
+            y: zone.y,
             towerId: towerData.id,
             isMorter: towerName === 'mortar',
             towerNumber: towerNumber,

@@ -33,8 +33,8 @@ let impactParticles = [];
 
 function createProjectile(towerId, targetEnemy, projectileType) {
     const tower = towersArea.find(t => t.towerId === towerId);
-    const towerX = tower.x;
-    const towerY = tower.y;
+    const towerX = tower.x * scale + offsetX;
+    const towerY = tower.y * scale + offsetY;
 
     const enemyX = targetEnemy.x * scale + offsetX;
     const enemyY = targetEnemy.y * scale + offsetY;

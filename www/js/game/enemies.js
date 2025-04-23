@@ -130,8 +130,8 @@ function checkAreasWithEnemies() {
         const enemiesInArea = enemies.filter( enemy => { 
             const enemyX = enemy.x * scale + offsetX;
             const enemyY = enemy.y * scale + offsetY;
-            const dx = enemyX - area.x;
-            const dy = enemyY - area.y;
+            const dx = enemyX - area.x * scale - offsetX;
+            const dy = enemyY - area.y * scale - offsetY; 
             return Math.hypot(dx, dy) <= area.range && !enemy.isDead;
         });
         const towerDiv       = document.getElementById(`tower${area.position}`);
