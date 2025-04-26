@@ -140,9 +140,12 @@ function resizeCanvas() {
 
     drawMap();
     drawZones(); 
-    drawTowers();
+    updateProjectiles();
+    drawProjectiles();
+    drawEnemies();
+    drawImpactParticles();
+    drawSmokeParticles();
     drawPath();
-    checkAreasWithEnemies();
 
 }
 
@@ -227,8 +230,8 @@ canvas.addEventListener('touchmove', (event) => {
 
         limitScroll();
         drawMap();
+        resiveTowers();
         drawZones();   
-        drawTowers();  
         drawPath();
         
 
@@ -254,8 +257,8 @@ canvas.addEventListener('touchmove', (event) => {
 
         limitScroll();
         drawMap();
+        resiveTowers();
         drawZones();   
-        drawTowers();  
         drawPath();
     }
 });

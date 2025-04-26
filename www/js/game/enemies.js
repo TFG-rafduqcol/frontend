@@ -67,11 +67,9 @@ function moveEnemy(enemy) {
 
 function updateAnimation(enemy) {
     if (enemy.isDead) {
-    
         updateDeathAnimation(enemy); 
         return;  
     }
-    
     enemy.frameTimer++;
     if (enemy.frameTimer >= enemy.frameDelay) {
         enemy.spriteFrame = (enemy.spriteFrame + 1) % enemy.totalFrames;
@@ -98,9 +96,7 @@ function drawSprite(x, y, enemy) {
     const imageHeight = 60;
     
     enemyCtx.globalAlpha = enemy.opacity;
-
     enemyCtx.drawImage(currentImage, x - imageWidth / 2, y - imageHeight / 2, imageWidth, imageHeight);
-    
     enemyCtx.globalAlpha = 1;
 }
 
@@ -127,10 +123,16 @@ function drawHealthBar(enemy) {
 
 function checkAreasWithEnemies() {
     towersArea.forEach(area => {
-
         const enemiesInArea = enemies.filter( enemy => { 
-            const dx = enemy.x - area.x;
-            const dy = enemy.y - area.y;
+
+            const enemyX = enemy.x * scale + offsetX;
+            const enemyY = enemy.y * scale + offsetY;
+            const towerX = area.x * scale + offsetX;
+            const towerY = area.y * scale + offsetY;
+           
+            const dx = enemyX - towerX;
+            const dy = enemyY - towerY;
+
             return Math.hypot(dx, dy) <= area.range && !enemy.isDead;
         });
         const towerDiv       = document.getElementById(`tower${area.position}`);

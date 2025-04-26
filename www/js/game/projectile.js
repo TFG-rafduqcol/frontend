@@ -85,7 +85,7 @@ function updateProjectiles() {
         projectile.x += directionX * projectile.speed;
         projectile.y += directionY * projectile.speed;
 
-        if (distance <= projectile.radius + 10) {
+        if (distance <= projectile.radius + 40) {
             projectile.target.health -= 10;
 
             impactParticles.push({
@@ -93,7 +93,7 @@ function updateProjectiles() {
                 y: projectile.y,
                 frame: 0,
                 frameTimer: 0,
-                frameInterval: 15,
+                frameInterval: 10,
                 maxFrames: 4,
                 frames: impactFramesByType[projectile.type],
                 radius: projectile.radius 

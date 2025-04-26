@@ -373,6 +373,19 @@ async function deployTower(towerName, zonePosition) {
 }
 
 
+function resiveTowers() {
+    towersArea.forEach(state => {
+
+        const zone = towerZones.find(z => z.position === state.position);
+        const menuLeft = (zone.x + zone.width / 2) * scale + offsetX;
+        const menuTop = (zone.y + zone.height / 2) * scale + offsetY;
+
+        const towerDiv = document.getElementById(`tower${state.position}`);
+        towerDiv.style.left = `${menuLeft}px`;
+        towerDiv.style.top = `${menuTop}px`;
+    });
+}
+
 async function deleteTower(zonePosition) {
     const token = localStorage.getItem('token');
     const towerDeployed = towersDeployed.find(tower => tower.position === zonePosition);
