@@ -127,11 +127,10 @@ function drawHealthBar(enemy) {
 
 function checkAreasWithEnemies() {
     towersArea.forEach(area => {
+
         const enemiesInArea = enemies.filter( enemy => { 
-            const enemyX = enemy.x * scale + offsetX;
-            const enemyY = enemy.y * scale + offsetY;
-            const dx = enemyX - area.x * scale - offsetX;
-            const dy = enemyY - area.y * scale - offsetY; 
+            const dx = enemy.x - area.x;
+            const dy = enemy.y - area.y;
             return Math.hypot(dx, dy) <= area.range && !enemy.isDead;
         });
         const towerDiv       = document.getElementById(`tower${area.position}`);

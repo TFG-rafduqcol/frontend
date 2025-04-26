@@ -142,6 +142,8 @@ function resizeCanvas() {
     drawZones(); 
     drawTowers();
     drawPath();
+    checkAreasWithEnemies();
+
 }
 
 function limitScroll() {
@@ -159,6 +161,7 @@ function isInsideZone(x, y) {
         !zone.occupied
     );
 }
+
 
 
 function hideTowerMenuIfDraggedOrZoomed() {
