@@ -9,7 +9,7 @@ function generateEnemy() {
     const newEnemy = {
         x: 0,  // posición inicial en x
         y: 0,  // posición inicial en y
-        speed: 2,  // velocidad del enemigo
+        speed: 10,  // velocidad del enemigo
         health: 100,  // salud inicial
         maxHealth: 100,  // salud máxima
         spriteFrame: 0,  // cuadro de la animación
@@ -61,6 +61,15 @@ function moveEnemy(enemy) {
         if (enemy.currentPoint >= path.length - 1) {
             const index = enemies.indexOf(enemy);
             if (index > -1) enemies.splice(index, 1);
+
+            updateGame(false, 0, 1); 
+
+            const gameCanvasContainer = document.getElementById('gameCanvasContainer');
+            gameCanvasContainer.classList.add('red-border');
+           
+            setTimeout(() => {
+                gameCanvasContainer.classList.remove('red-border');
+            }, 300); 
         }
     }
 }
