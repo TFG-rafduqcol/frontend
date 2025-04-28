@@ -59,17 +59,23 @@ function moveEnemy(enemy) {
         enemy.currentPoint++;
 
         if (enemy.currentPoint >= path.length - 1) {
-            const index = enemies.indexOf(enemy);
-            if (index > -1) enemies.splice(index, 1);
+            const loseSound = new Audio("../../audio/lose.mp3");
 
-            updateGame(false, 0, 1); 
+            loseSound.play().then(() => {
+                const index = enemies.indexOf(enemy);
+                if (index > -1) enemies.splice(index, 1);
 
-            const gameCanvasContainer = document.getElementById('gameCanvasContainer');
-            gameCanvasContainer.classList.add('red-border');
-           
-            setTimeout(() => {
-                gameCanvasContainer.classList.remove('red-border');
-            }, 300); 
+                updateGame(false, 0, 1); 
+
+                const gameCanvasContainer = document.getElementById('gameCanvasContainer');
+                gameCanvasContainer.classList.add('red-border');
+               
+                setTimeout(() => {
+                    gameCanvasContainer.classList.remove('red-border');
+                }, 300); 
+            }).catch((error) => {
+                console.log("Error al reproducir el sonido: ", error);
+            });
         }
     }
 }
@@ -144,19 +150,38 @@ function checkAreasWithEnemies() {
 
             return Math.hypot(dx, dy) <= area.range && !enemy.isDead;
         });
-        const towerDiv       = document.getElementById(`tower${area.position}`);
-        const towerProjectile= towerDiv.querySelector('.towerProjectile');
-        const towerBack      = towerDiv.querySelector('.towerBack');
-        const towerFront     = towerDiv.querySelector('.towerFront');
-        const towerSticks    = towerDiv.querySelector('.towerSticks');
-        const towerStick1    = towerDiv.querySelector('.towerStick1');
-        const towerStick2    = towerDiv.querySelector('.towerStick2');
+        const towerDiv = document.getElementById(`tower${area.position}`);
+        const towerProjectile = towerDiv.querySelector('.towerProjectile');
+        const towerBack = towerDiv.querySelector('.towerBack');
+        const towerFront = towerDiv.querySelector('.towerFront');
+        const towerSticks = towerDiv.querySelector('.towerSticks');
+        const towerStick1 = towerDiv.querySelector('.towerStick1');
+        const towerStick2 = towerDiv.querySelector('.towerStick2');
 
+        const movementSound = new Audio("../../audio/movement.mp3");
+
+        function playSound() {
+            if (movementSound.paused) {
+                movementSound.play();
+            }
+        }
+        
+        function stopSound() {
+            if (!movementSound.paused) {
+                movementSound.pause();
+                movementSound.currentTime = 0; 
+            }
+        }
+        
         if (enemiesInArea.length > 0 && !area.animationInProgress) {
             if (!area.hasActiveProjectile) {
                 area.hasActiveProjectile = true;
                 const projectileType = area.towerNumber;
                 const duration = 2000;
+
+                playSound();
+
+               
 
                 if (!area.isMorter) {
                     [towerBack, towerFront, towerProjectile].forEach(el => restartAnimation(el, false));
@@ -174,7 +199,9 @@ function checkAreasWithEnemies() {
 
                 setTimeout(() => {
                     towerProjectile.style.display = 'block';
+                    stopSound();
                     area.hasActiveProjectile = false;
+                  
                 }, duration);
             } else {
                 return;
@@ -189,6 +216,8 @@ function checkAreasWithEnemies() {
                     towerBack.style.animationPlayState = 'paused';
                     towerFront.style.animationPlayState = 'paused';
                     towerProjectile.style.animationPlayState = 'paused';
+                    stopSound();
+
                     area.animationInProgress = false; 
                 }, { once: true });
                 
@@ -197,7 +226,10 @@ function checkAreasWithEnemies() {
                     towerStick1.style.animationPlayState = 'paused';
                     towerStick2.style.animationPlayState = 'paused';
                     towerProjectile.style.animationPlayState = 'paused';
+                    stopSound();
+
                     area.animationInProgress = false; 
+
                 }, { once: true });
                 
             }
@@ -205,6 +237,5 @@ function checkAreasWithEnemies() {
         }
     });
 }
-
 
 

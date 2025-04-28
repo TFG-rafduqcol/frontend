@@ -86,14 +86,29 @@ function updateProjectiles() {
         projectile.y += directionY * projectile.speed;
 
         if (distance <= projectile.radius + 40) {
+
+            const projectileSounds = {
+                1: "../../audio/stone.mp3",
+                2: "../../audio/stone.mp3",
+                4: "../../audio/stone.mp3",
+                3: "../../audio/fire.mp3"
+            };
+            
+            if (projectileSounds[projectile.type]) {
+                const impactSound = new Audio(projectileSounds[projectile.type]);
+                impactSound.play();
+            }
+    
+
             projectile.target.health -= 10;
+
 
             impactParticles.push({
                 x: projectile.x,
                 y: projectile.y,
                 frame: 0,
                 frameTimer: 0,
-                frameInterval: 10,
+                frameInterval: 5,
                 maxFrames: 4,
                 frames: impactFramesByType[projectile.type],
                 radius: projectile.radius 

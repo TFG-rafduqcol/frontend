@@ -12,7 +12,7 @@ let minZoom, maxZoom = 5;
 
 
 const path = [
-    { x: 160, y: 640 },
+    { x: 160, y: 740 },
     { x: 160, y: 560 },
     { x: 250, y: 560 },
     { x: 250, y: 180 },
@@ -27,22 +27,22 @@ const path = [
 ];
 
 const images = [];
-for (let i = 1; i <= 4; i++) {
+for (let i = 0; i <= 19; i++) {
     const img = new Image();
-    img.src = `../../images/enemies/golem/Golem_02_Walking_00${i}.png`;
+    img.src = `../../images/enemies/blueGolem/5_enemies_1_walk_0${i}.png`;
     images.push(img);
 }
 
 let enemies = [ {
     x: path[0].x,  // posición inicial en x
     y: path[0].y,  // posición inicial en y
-    speed: 2,  // velocidad del enemigo
+    speed: 0.5,  // velocidad del enemigo
     health: 100,  // salud inicial
     maxHealth: 100,  // salud máxima
     spriteFrame: 0,  // cuadro de la animación
     totalFrames: 4,  // cantidad total de cuadros en la animación
     frameTimer: 0,  // temporizador de los cuadros
-    frameDelay: 5,  // retraso entre cuadros de la animación
+    frameDelay: 10,  // retraso entre cuadros de la animación
     currentPoint: 0,  // punto actual del camino
     t: 0,  // factor de interpolación
     delay: 0,  // retraso para el movimiento
