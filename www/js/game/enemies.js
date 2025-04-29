@@ -1,38 +1,58 @@
 const enemyCanvas = document.getElementById("enemyCanvas");
 const enemyCtx = enemyCanvas.getContext("2d");
 
-// Llamar a la función cuando el botón se haga clic
 document.getElementById('generateEnemyButton').addEventListener('click', generateEnemy);
 
-function generateEnemy() {
-    // Crear un enemigo con atributos predeterminados
-    const newEnemy = {
-        x: 0,  // posición inicial en x
-        y: 0,  // posición inicial en y
-        speed: 10,  // velocidad del enemigo
-        health: 100,  // salud inicial
-        maxHealth: 100,  // salud máxima
-        spriteFrame: 0,  // cuadro de la animación
-        totalFrames: 4,  // cantidad total de cuadros en la animación
-        frameTimer: 0,  // temporizador de los cuadros
-        frameDelay: 5,  // retraso entre cuadros de la animación
-        currentPoint: 0,  // punto actual del camino
-        t: 0,  // factor de interpolación
-        delay: 0,  // retraso para el movimiento
-        loggedZoneEntry: false,  // indicador de entrada en la zona
-        isDead: false,  // indicador de muerte
-        deathTimer: 60,  // temporizador de muerte
-        opacity: 1,  // opacidad del enemigo
-    };
 
-    // Agregar el nuevo enemigo a la lista de enemigos
+// Propiedades del enemigo
+const enemy_props = [
+    { name: "daggerkin", width: 35, height: 35, speed: 1.2, maxHealth: 30, totalFrames: 20, offsetX: -12, offsetY: -35, healthBarHeight: 40 }, // Basico, neutro ante todo
+    { name: "orcutter", width: 50, height: 50, speed: 0.65, maxHealth: 50, totalFrames: 20, offsetX: -15, offsetY: -45, healthBarHeight: 50 }, // "Padre" de daggerkin, neutro ante todo
+    { name: "oculom", width: 45, height: 45, speed: 1.1, maxHealth: 40, totalFrames: 18, offsetX: -25, offsetY: -20, healthBarHeight: 40 }, // Primer enemigo volador no le afecta el mortero (4)
+    { name: "devilOrc", width: 54, height: 54, speed: 0.65, maxHealth: 80, totalFrames: 20, offsetX: -15, offsetY: -45, healthBarHeight: 50 }, // Debil ante el fuego (3), fuerte contra hierro (1) y piedra (2) 
+    { name: "graySkull", width: 75, height: 75, speed: 0.5, maxHealth: 140, totalFrames: 20, offsetX: -22, offsetY: -70, healthBarHeight: 65, healthBarX: -2 }, // Debil contra el mortero (4)
+    { name: "carrionTropper", width: 45, height: 45, speed: 0.7, maxHealth: 90, totalFrames: 20, offsetX: -15, offsetY: -35, healthBarHeight: 45 }, // Debil fuego (3), fuerte contra el resto (1,2,4)
+    { name: "hellBat", width: 60, height: 60, speed: 0.8, maxHealth: 90, totalFrames: 18, offsetX: -35, offsetY: -40, healthBarHeight: 47 }, // Segundo enemigo volador, debil ante el mortero (4)
+    { name: "hexLord", width: 50, height: 50, speed: 0.8, maxHealth: 90, totalFrames: 20, offsetX: -15, offsetY: -40, healthBarHeight: 50 }, // Cura los enemigos cada 10s
+    { name: "darkSeer", width: 70, height: 70, speed: 0.6, maxHealth: 140, totalFrames: 20, offsetX: -30, offsetY: -65, healthBarHeight: 65, healthBarX: -4 } // Fuerte contra TODO (1,2,3,4)
+];
+
+
+function generateEnemy() {
+    const baseProps = enemy_props.find(e => e.name === "daggerkin");
+
+    const newEnemy = {
+        name: "daggerkin",  
+        x: 0,
+        y: 0,
+        xOffset: baseProps.offsetX,
+        yOffset: baseProps.offsetY, 
+        healthBarHeight: baseProps.healthBarHeight || 0,
+        healthBarX: baseProps.healthBarX || 0,
+        width: baseProps.width,
+        height: baseProps.height,
+        speed: baseProps.speed,
+        health: baseProps.maxHealth,
+        maxHealth: baseProps.maxHealth,
+        spriteFrame: 0,
+        totalFrames: baseProps.totalFrames,  
+        frameTimer: 0,
+        frameDelay: 5,
+        currentPoint: 0,
+        t: 0,
+        delay: 0,
+        loggedZoneEntry: false,
+        isDead: false,
+        deathTimer: 60,
+        opacity: 1,
+        spriteImages: []  
+    };
+    
+    newEnemy.spriteImages = loadEnemyImages(newEnemy.name, newEnemy.totalFrames);
     enemies.push(newEnemy);
 
-    // Imprimir en consola para ver el enemigo creado
     console.log('Nuevo enemigo creado:', newEnemy);
 }
-
-
 
 
 function moveEnemy(enemy) {
@@ -58,25 +78,29 @@ function moveEnemy(enemy) {
         enemy.t = 0;
         enemy.currentPoint++;
 
-        if (enemy.currentPoint >= path.length - 1) {
-            const loseSound = new Audio("../../audio/lose.mp3");
+        let loseSound = new Audio("../../audio/lose.mp3");
 
-            loseSound.play().then(() => {
+        if (enemy.currentPoint >= path.length - 1) {
+        
+            try {
+                loseSound.play();
+        
                 const index = enemies.indexOf(enemy);
                 if (index > -1) enemies.splice(index, 1);
-
-                updateGame(false, 0, 1); 
-
+        
+                updateGame(false, 0, 1);
+        
                 const gameCanvasContainer = document.getElementById('gameCanvasContainer');
                 gameCanvasContainer.classList.add('red-border');
-               
+                
                 setTimeout(() => {
                     gameCanvasContainer.classList.remove('red-border');
                 }, 300); 
-            }).catch((error) => {
+            } catch (error) {
                 console.log("Error al reproducir el sonido: ", error);
-            });
+            }
         }
+        
     }
 }
 
@@ -87,7 +111,7 @@ function updateAnimation(enemy) {
     }
     enemy.frameTimer++;
     if (enemy.frameTimer >= enemy.frameDelay) {
-        enemy.spriteFrame = (enemy.spriteFrame + 1) % enemy.totalFrames;
+        enemy.spriteFrame = (enemy.spriteFrame + 1) % enemy.spriteImages.length;;
         enemy.frameTimer = 0;
     }
 }
@@ -105,23 +129,29 @@ function drawEnemies() {
     });
 }
 
+
 function drawSprite(x, y, enemy) {
-    const currentImage = images[enemy.spriteFrame];
-    const imageWidth = 60; 
-    const imageHeight = 60;
-    
+
+    const imageWidth = enemy.width;
+    const imageHeight = enemy.height;
+
+    const xCorrected = x + enemy.xOffset;
+    const yCorrected = y + enemy.yOffset;
+
+    const currentImage = enemy.spriteImages[enemy.spriteFrame];
+
+
     enemyCtx.globalAlpha = enemy.opacity;
-    enemyCtx.drawImage(currentImage, x - imageWidth / 2, y - imageHeight / 2, imageWidth, imageHeight);
+    enemyCtx.drawImage(currentImage, xCorrected, yCorrected, imageWidth, imageHeight);
     enemyCtx.globalAlpha = 1;
 }
-
 
 function drawHealthBar(enemy) {
     if (!enemy.isDead) {
         const barWidth = 40;
         const barHeight = 6;
-        const x = enemy.x * scale + offsetX - barWidth / 2;
-        const y = enemy.y * scale + offsetY - 40; 
+        const x = enemy.x * scale + offsetX - barWidth / 2 + enemy.healthBarX;
+        const y = enemy.y * scale + offsetY - enemy.healthBarHeight; 
 
         enemyCtx.fillStyle = "red";
         enemyCtx.fillRect(x, y, barWidth, barHeight);
@@ -131,7 +161,9 @@ function drawHealthBar(enemy) {
         enemyCtx.fillRect(x, y, barWidth * healthRatio, barHeight);
 
         enemyCtx.strokeStyle = "black";
-        enemyCtx.strokeRect(x, y, barWidth, barHeight);
+        const healthBarX = enemy.healthBarX;
+        console.log(healthBarX);
+        enemyCtx.strokeRect(x , y, barWidth, barHeight);
     }   
 }
 

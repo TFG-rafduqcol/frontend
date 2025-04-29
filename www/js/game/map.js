@@ -13,71 +13,47 @@ let minZoom, maxZoom = 5;
 
 const path = [
     { x: 160, y: 740 },
-    { x: 160, y: 560 },
-    { x: 250, y: 560 },
-    { x: 250, y: 180 },
-    { x: 810, y: 180 },
+    { x: 160, y: 600 },
+    { x: 260, y: 600 },
+    { x: 260, y: 222 },
+    { x: 820, y: 222 },
 
-    { x: 810, y: 140 },
-    { x: 860, y: 140 },
+    { x: 820, y: 130 },
+    { x: 860, y: 130 },
     { x: 860, y: 110 },
     { x: 1020, y: 110 },
     { x: 1020, y: 0 },
 
 ];
 
-const images = [];
-for (let i = 0; i <= 19; i++) {
-    const img = new Image();
-    img.src = `../../images/enemies/blueGolem/5_enemies_1_walk_0${i}.png`;
-    images.push(img);
+function loadEnemyImages(enemyName, frameCount) {
+    const imgs = [];
+    let loadedImagesCount = 0;
+
+    for (let i = 1; i < frameCount; i++) {
+        const img = new Image();
+
+        img.src = `../../images/enemies/${enemyName}/walk_${i}.png`;
+
+        img.onload = () => {
+            loadedImagesCount++;
+            if (loadedImagesCount === frameCount) {
+                console.log('Todas las imágenes del enemigo están cargadas');
+            }
+        };
+
+        imgs.push(img);
+    }
+
+    return imgs;
 }
 
-let enemies = [ {
-    x: path[0].x,  // posición inicial en x
-    y: path[0].y,  // posición inicial en y
-    speed: 0.5,  // velocidad del enemigo
-    health: 100,  // salud inicial
-    maxHealth: 100,  // salud máxima
-    spriteFrame: 0,  // cuadro de la animación
-    totalFrames: 4,  // cantidad total de cuadros en la animación
-    frameTimer: 0,  // temporizador de los cuadros
-    frameDelay: 10,  // retraso entre cuadros de la animación
-    currentPoint: 0,  // punto actual del camino
-    t: 0,  // factor de interpolación
-    delay: 0,  // retraso para el movimiento
-    isDead: false,  // estado del enemigo
-}, 
-// {
-//     x: path[0].x,
-//     y: path[0].y,
-//     speed: 1,
-//     health: 100, 
-//     maxHealth: 100,
-//     currentPoint: 0,
-//     t: 0,
-//     spriteFrame: 0,
-//     totalFrames: images.length,
-//     frameTimer: 0,
-//     frameDelay: 10,
-//     delay: 30
 
-// }, 
-// {
-//     x: path[0].x,
-//     y: path[0].y,
-//     speed: 1.1,
-//     health: 100, 
-//     maxHealth: 100,
-//     currentPoint: 0,
-//     t: 0,
-//     spriteFrame: 0,
-//     totalFrames: images.length,
-//     frameTimer: 0,
-//     frameDelay: 10, 
-//     delay: 60
-// }, 
+
+let enemies = [ 
+
 ];
+
 
 
 
