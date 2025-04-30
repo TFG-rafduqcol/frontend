@@ -14,10 +14,10 @@ const towerZones = [
 ];
 
 const towerProperties = {
-    stoneCannon: { cost: 90, damage: 10, fire_rate: 3, range: 40, projectile_type: 'stone' },
-    ironCannon: { cost: 100,  damage: 12, fire_rate: 2.5, range: 50, projectile_type: 'iron' },
+    stoneCannon: { cost: 90, damage: 10, fire_rate: 3, range: 140, projectile_type: 'stone' },
+    ironCannon: { cost: 100,  damage: 12, fire_rate: 2.5, range: 120, projectile_type: 'iron' },
     inferno: { cost: 125,  damage: 15, fire_rate: 4, range: 120, projectile_type: 'fire' },
-    mortar: { cost: 150,  damage: 15, fire_rate: 4, range: 70, projectile_type: 'rock' },
+    mortar: { cost: 150,  damage: 15, fire_rate: 4, range: 110, projectile_type: 'rock' },
 };
 
 const towerStyles = [ 
@@ -129,8 +129,8 @@ function previewTowerArea(menuLeft, menuTop, range, selectedTowerIndex) {
     previewDiv.style.top = `${menuTop}px`;
     previewDiv.style.display = 'block'; 
 
-    previewArea.style.width = `${range * 2}px`; 
-    previewArea.style.height = `${range * 2}px`;
+    previewArea.style.width = `${range}px`; 
+    previewArea.style.height = `${range}px`;
 
     const towerPath = `../../images/towers/tower${selectedTowerIndex}`;
     towerBase.style.backgroundImage = `url('${towerPath}/base.png')`;
@@ -273,8 +273,8 @@ function previewEditMenuArea(menuLeft, menuTop, towerName, zonePosition) {
     towerOptionMenuVisible = true;
     range = towerProperties[towerName].range;
 
-    towerAreaDiv.style.width = `${range * 2}px`; 
-    towerAreaDiv.style.height = `${range * 2}px`;
+    towerAreaDiv.style.width = `${range}px`; 
+    towerAreaDiv.style.height = `${range}px`;
     towerAreaDiv.style.zIndex = 999;
 
 
@@ -356,6 +356,8 @@ async function deployTower(towerName, zonePosition) {
             hasActiveProjectile: false,
             animationInProgress: false,
         });
+
+        console.log('Torre desplegada en TowerArea:', towersArea);
 
         const menu = document.getElementById('towerMenu');
         menu.style.display = 'none';

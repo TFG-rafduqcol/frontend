@@ -51,6 +51,7 @@ function createProjectile(towerId, targetEnemy, projectileType) {
         height: projectileSizes[projectileType].height,
         width: projectileSizes[projectileType].width,
         target: targetEnemy,
+        damage: tower.damage,
         speed: 5,
         radius: 5,
         type: projectileType,
@@ -84,8 +85,8 @@ function updateProjectiles() {
 
         projectile.x += directionX * projectile.speed;
         projectile.y += directionY * projectile.speed;
-
-        if (distance <= projectile.radius + 40) {
+ 
+        if (distance <= projectile.radius + 10) {
 
             const projectileSounds = {
                 1: "../../audio/stone.mp3",
@@ -96,10 +97,10 @@ function updateProjectiles() {
             
             if (projectileSounds[projectile.type]) {
                 const impactSound = new Audio(projectileSounds[projectile.type]);
-                impactSound.play();
+                //impactSound.play();
             }
     
-
+            const damageMultiplier = getDamageMultiplier(projectile.target.name, projectile.type);
             projectile.target.health -= 10;
 
 
@@ -124,6 +125,21 @@ function updateProjectiles() {
             projectiles.splice(index, 1);
         }
     });
+}
+
+function getDamageMultiplier(enemyName, towerType) {
+    const damageMultipler = {
+        devilOrc: { 1: 0.5, 2: 0.5, 3: 2.0 },
+        graySkull: { 4: 2.0 },
+        carrionTropper: { 1: 0.5, 2: 0.5,  3: 2.0, 4: 0.5 },
+        darkSeer: { 1: 0.5, 2: 0.5, 3: 0.5, 4: 0.75 }
+    };
+
+    if (enemyName in damageMultipler && towerType in damageMultipler[enemyName]) {
+        return damageMultipler[enemyName][towerType];
+    } else {
+        return 1; 
+    }
 }
 
 

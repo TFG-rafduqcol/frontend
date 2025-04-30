@@ -1,7 +1,5 @@
-.top-bar {
+.top-bar-game, .top-bar-menu {
     position: fixed;
-    top: 2vh;
-    left: 0;
     display: flex;
     align-items: center;
     gap: 1vw;
@@ -11,7 +9,18 @@
     z-index: 1010;
 }
 
-.top-bar div {
+.top-bar-game {
+    top: 2vh;
+    right: 0;
+    flex-direction: column;
+}
+
+.top-bar-menu {
+    top: 2vh;
+    right: 2vh;
+}
+
+.top-bar-game div, .top-bar-menu div {
     color: white;
     padding: 0.8vh 2vw;
     border-radius: 1vw;
