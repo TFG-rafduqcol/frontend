@@ -6,8 +6,8 @@ document.getElementById('generateEnemyButton').addEventListener('click', generat
 
 // Propiedades del enemigo
 const enemy_props = [
-    { name: "daggerkin", width: 35, height: 35, speed: 1.2, maxHealth: 30, totalFrames: 20, offsetX: -12, offsetY: -35, healthBarHeight: 40, lifes: 1 }, // Basico, neutro ante todo
-    { name: "orcutter", width: 50, height: 50, speed: 0.65, maxHealth: 50, totalFrames: 20, offsetX: -15, offsetY: -45, healthBarHeight: 50, lifes: 1 }, // "Padre" de daggerkin, neutro ante todo
+    { name: "daggerkin", width: 35, height: 35, speed: 1.2, maxHealth: 40, totalFrames: 20, offsetX: -12, offsetY: -35, healthBarHeight: 40, lifes: 1 }, // Basico, neutro ante todo
+    { name: "orcutter", width: 50, height: 50, speed: 0.65, maxHealth: 60, totalFrames: 20, offsetX: -15, offsetY: -45, healthBarHeight: 50, lifes: 1 }, // "Padre" de daggerkin, neutro ante todo
     { name: "oculom", width: 45, height: 45, speed: 1.1, maxHealth: 40, totalFrames: 18, offsetX: -25, offsetY: -20, healthBarHeight: 40, lifes: 1 }, // Primer enemigo volador no le afecta el mortero (4)
     { name: "devilOrc", width: 54, height: 54, speed: 0.65, maxHealth: 80, totalFrames: 20, offsetX: -15, offsetY: -45, healthBarHeight: 50, lifes: 1 }, // Debil ante el fuego (3), fuerte contra hierro (1) y piedra (2) 
     { name: "graySkull", width: 75, height: 75, speed: 0.5, maxHealth: 140, totalFrames: 20, offsetX: -22, offsetY: -70, healthBarHeight: 65, healthBarX: -2, lifes: 3 }, // Debil contra el mortero (4)
@@ -19,10 +19,10 @@ const enemy_props = [
 
 
 function generateEnemy() {
-    const baseProps = enemy_props.find(e => e.name === "oculom");
+    const baseProps = enemy_props.find(e => e.name === "daggerkin");
 
     const newEnemy = {
-        name: "oculom",  
+        name: "daggerkin",  
         x: 0,
         y: 0,
         xOffset: baseProps.offsetX,
@@ -79,16 +79,23 @@ function moveEnemy(enemy) {
         enemy.t = 0;
         enemy.currentPoint++;
 
-        //let loseSound = new Audio("../../audio/lose.mp3");
+        let loseSound = new Audio("../../audio/lose.mp3");
+        loseSound.volume = 0.3;
+
 
         if (enemy.currentPoint >= path.length - 1) {
         
             try {
-                //loseSound.play();
+                if (loseSound.paused) {
+                    loseSound.play();
+                } else {
+                    loseSound.pause();
+                    loseSound.currentTime = 0;
+                    loseSound.play();
+                }
         
                 const index = enemies.indexOf(enemy);
                 if (index > -1) enemies.splice(index, 1);
-                console.log("Enemigo eliminado de la lista:", enemy.lifes);
         
                 updateGame(false, 0, enemy.lifes);
         
@@ -189,6 +196,7 @@ function checkAreasWithEnemies() {
             return Math.hypot(dx, dy) <= scaledRange;
         });
         const towerDiv = document.getElementById(`tower${area.position}`);
+        if (!towerDiv) return; 
         const towerProjectile = towerDiv.querySelector('.towerProjectile');
         const towerBack = towerDiv.querySelector('.towerBack');
         const towerFront = towerDiv.querySelector('.towerFront');
@@ -196,35 +204,29 @@ function checkAreasWithEnemies() {
         const towerStick1 = towerDiv.querySelector('.towerStick1');
         const towerStick2 = towerDiv.querySelector('.towerStick2');
 
-        //const movementSound = new Audio("../../audio/movement.mp3");
+        const movementSound = new Audio("../../audio/movement.mp3");
 
         function playSound() {
             if (movementSound.paused) {
-                //movementSound.play();
+                movementSound.volume = 0.2;
+                movementSound.play();
             }
         }
         
         function stopSound() {
             if (!movementSound.paused) {
-                //movementSound.pause();
-                //movementSound.currentTime = 0; 
+                movementSound.pause();
+                movementSound.currentTime = 0; 
             }
         }
         
         if (enemiesInArea.length > 0 && !area.animationInProgress) {
-           
-
-     
-            
-
             if (!area.hasActiveProjectile) {
                 area.hasActiveProjectile = true;
                 const projectileType = area.towerNumber;
                 const duration = 2000;
-
-                //playSound();
+                playSound();
  
-            
                 if (!area.isMorter) {
                     [towerBack, towerFront, towerProjectile].forEach(el => restartAnimation(el, false));
                     [towerBack, towerFront, towerProjectile].forEach(el => el.style.animationPlayState = 'running');
@@ -241,14 +243,13 @@ function checkAreasWithEnemies() {
 
                 setTimeout(() => {
                     towerProjectile.style.display = 'block';
-                    //stopSound();
+                    stopSound();
                     area.hasActiveProjectile = false;
                   
                 }, duration);
             } else {
                 return;
             }
-
         } else {
             if (area.hasActiveProjectile) area.animationInProgress = true;
             area.hasActiveProjectile = false;
@@ -258,8 +259,7 @@ function checkAreasWithEnemies() {
                     towerBack.style.animationPlayState = 'paused';
                     towerFront.style.animationPlayState = 'paused';
                     towerProjectile.style.animationPlayState = 'paused';
-                    //stopSound();
-
+                    stopSound();
                     area.animationInProgress = false; 
                 }, { once: true });
                 
@@ -268,8 +268,7 @@ function checkAreasWithEnemies() {
                     towerStick1.style.animationPlayState = 'paused';
                     towerStick2.style.animationPlayState = 'paused';
                     towerProjectile.style.animationPlayState = 'paused';
-                    //stopSound();
-
+                    stopSound();
                     area.animationInProgress = false; 
 
                 }, { once: true });

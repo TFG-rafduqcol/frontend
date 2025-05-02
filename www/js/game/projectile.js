@@ -97,12 +97,19 @@ function updateProjectiles() {
             
             if (projectileSounds[projectile.type]) {
                 const impactSound = new Audio(projectileSounds[projectile.type]);
-                //impactSound.play();
+                if (impactSound.paused) {
+                    impactSound.volume = 0.3; 
+                    impactSound.play();
+                } else{
+                    impactSound.pause();
+                    impactSound.currentTime = 0; 
+                    impactSound.volume = 0.1; 
+                    impactSound.play();
+                }
             }
     
             const damageMultiplier = getDamageMultiplier(projectile.target.name, projectile.type);
-            projectile.target.health -= 10;
-
+            projectile.target.health -= projectile.damage * damageMultiplier;         
 
             impactParticles.push({
                 x: projectile.x,

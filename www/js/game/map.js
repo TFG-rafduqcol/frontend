@@ -139,14 +139,13 @@ function limitScroll() {
     offsetY = Math.max(canvas.height - mapHeight, Math.min(offsetY, 0));
 }
 
-function isInsideZone(x, y) {
+function isInsideZone(x, y, isOccupied) {
     return towerZones.find(zone =>
         x >= (zone.x * scale + offsetX) && x <= (zone.x * scale + offsetX + zone.width * scale) &&
         y >= (zone.y * scale + offsetY) && y <= (zone.y * scale + offsetY + zone.height * scale) &&
-        !zone.occupied
+        zone.occupied === isOccupied
     );
 }
-
 
 
 function hideTowerMenuIfDraggedOrZoomed() {

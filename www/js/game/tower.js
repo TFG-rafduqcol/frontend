@@ -14,10 +14,10 @@ const towerZones = [
 ];
 
 const towerProperties = {
-    stoneCannon: { cost: 90, damage: 10, fire_rate: 3, range: 140, projectile_type: 'stone' },
-    ironCannon: { cost: 100,  damage: 12, fire_rate: 2.5, range: 120, projectile_type: 'iron' },
-    inferno: { cost: 125,  damage: 15, fire_rate: 4, range: 120, projectile_type: 'fire' },
-    mortar: { cost: 150,  damage: 15, fire_rate: 4, range: 110, projectile_type: 'rock' },
+    stoneCannon: { cost: 90, fire_rate: 3, range: 140, projectile_type: 'stone' },
+    ironCannon: { cost: 100,  fire_rate: 2.5, range: 120, projectile_type: 'iron' },
+    inferno: { cost: 125,  fire_rate: 4, range: 120, projectile_type: 'fire' },
+    mortar: { cost: 150,  fire_rate: 6, range: 110, projectile_type: 'rock' },
 };
 
 const towerStyles = [ 
@@ -77,7 +77,7 @@ function showTowerMenu(event) {
     const rect = canvas.getBoundingClientRect();
     const clickX = event.clientX - rect.left;
     const clickY = event.clientY - rect.top;
-    const zone = isInsideZone(clickX, clickY);
+    const zone = isInsideZone(clickX, clickY, false);
 
     if (!zone) return;
 
@@ -241,8 +241,8 @@ function drawTowers() {
             towerDiv.appendChild(towerProjectile);
             document.getElementById("gameCanvasContainer").appendChild(towerDiv);
 
-            towerDiv.addEventListener('click', (event) => {
-                previewEditMenuArea(menuLeft, menuTop, tower.name, tower.position, event);
+            towerDiv.addEventListener('click', function (event) {
+                previewEditMenuArea(event, tower.name, tower.position);
             event.stopPropagation(); 
             });
         }
@@ -254,9 +254,10 @@ let towerOptionMenuVisible = false;
 let deleteClickHandler = null;
 let deleteClickedOnce = false;
 
-function previewEditMenuArea(menuLeft, menuTop, towerName, zonePosition) {
+function previewEditMenuArea(event, towerName, zonePosition) {
     const towerDiv = document.getElementById('towerEditMenu');
     const towerAreaDiv = document.getElementById('towerArea');
+    
 
     const deleteTowerDiv = document.getElementById('deleteTower');
     const upgradeTowerDiv = document.getElementById('upgradeTower');
@@ -266,8 +267,19 @@ function previewEditMenuArea(menuLeft, menuTop, towerName, zonePosition) {
         return;
     }
 
-    towerDiv.style.left = `${menuLeft}px`;
-    towerDiv.style.top = `${menuTop}px`;
+    const rect = canvas.getBoundingClientRect();
+    const clickX = event.clientX - rect.left;
+    const clickY = event.clientY - rect.top;
+    const editTower = isInsideZone(clickX, clickY, true);
+
+    if (!editTower) return;
+    
+    const editMenuLeft = (editTower.x + editTower.width / 2) * scale + offsetX;
+    const editMenuTop = (editTower.y + editTower.height / 2) * scale + offsetY;
+
+
+    towerDiv.style.left = `${editMenuLeft}px`;
+    towerDiv.style.top = `${editMenuTop}px`;
     towerDiv.style.display = 'block';
 
     towerOptionMenuVisible = true;
@@ -350,6 +362,7 @@ async function deployTower(towerName, zonePosition) {
             range: towerProperties[towerName].range,
             x: zone.x,
             y: zone.y,
+            damage: towerData.damage,
             towerId: towerData.id,
             isMorter: towerName === 'mortar',
             towerNumber: towerNumber,
@@ -423,6 +436,15 @@ async function updateGame(newRound, towerPrice, minusLives) {
     const token = localStorage.getItem('token');
     const gameId = params.get('gameId');
 
+    if (minusLives !== undefined) {
+        lives -= minusLives;
+        const livesElement = document.getElementById('lives');
+        if (livesElement) {
+            livesElement.textContent = `${lives}`;
+        }
+    }
+
+
     try {
         const response = await fetch(`${serverUrl}/api/games/updateGame/${gameId}`, {
             method: 'PUT',
@@ -450,12 +472,6 @@ async function updateGame(newRound, towerPrice, minusLives) {
         gold = updatedGame.gold;
         if (goldElement) {
             goldElement.textContent = `${updatedGame.gold}`; 
-        }
-
-        const livesElement = document.getElementById('lives');
-        lives = updatedGame.lives;
-        if (livesElement) {
-            livesElement.textContent = `${updatedGame.lives}`; 
         }
 
         const roundElement = document.getElementById('round');
