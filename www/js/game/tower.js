@@ -14,10 +14,10 @@ const towerZones = [
 ];
 
 const towerProperties = {
-    stoneCannon: { cost: 90, fire_rate: 3, range: 140, projectile_type: 'stone' },
-    ironCannon: { cost: 100,  fire_rate: 2.5, range: 120, projectile_type: 'iron' },
-    inferno: { cost: 125,  fire_rate: 4, range: 120, projectile_type: 'fire' },
-    mortar: { cost: 150,  fire_rate: 6, range: 110, projectile_type: 'rock' },
+    stoneCannon: { cost: 90, fire_rate: 1.5, range: 140, projectile_type: 'stone' },
+    ironCannon: { cost: 100,  fire_rate: 2, range: 120, projectile_type: 'iron' },
+    inferno: { cost: 125,  fire_rate: 3, range: 120, projectile_type: 'fire' },
+    mortar: { cost: 150,  fire_rate: 4, range: 110, projectile_type: 'rock' },
 };
 
 const towerStyles = [ 
@@ -101,7 +101,7 @@ function showTowerMenu(event) {
         option.removeEventListener('click', towerOptionClickHandler);
         option.setAttribute('data-index', index);
         const price = option.querySelector('.towerPrice').textContent;
-        const towerGold = parseInt(price.replace('$', '').trim());
+        const towerGold = parseInt(price);
 
         if (towerGold > gold) {
             option.classList.add('disabled-tower');
@@ -195,6 +195,7 @@ function drawTowers() {
             };
 
             const towerNumber = towerNumbers[tower.name] || 1;
+            const fireRate = towerProperties[tower.name].fire_rate ;
             const towerPath = `../../images/towers/tower${towerNumber}`;
 
             towerBase.style.backgroundImage = `url('${towerPath}/base.png')`;
@@ -217,7 +218,8 @@ function drawTowers() {
 
                 applyTowerDesign(towerBack, towerFront, towerNumber, towerPath, towerStyles);
 
-                towerProjectile.style.animation = 'moveProjectile 2s infinite alternate';
+
+                towerProjectile.style.animation = `moveProjectile ${fireRate}s infinite alternate`;
                 towerProjectile.style.animationPlayState = 'paused';
 
                 towerDiv.appendChild(towerBack);
@@ -239,7 +241,7 @@ function drawTowers() {
                 towerStick2.style.backgroundImage = `url('${towerPath}/stick.png')`;
                 towerStick2.style.animationPlayState = 'paused';
 
-                towerProjectile.style.animation = 'moveMorterProjectile 2s infinite alternate';
+                towerProjectile.style.animation = `moveMorterProjectile ${fireRate}s infinite alternate`;
                 towerProjectile.style.animationPlayState = 'paused';
 
                 towerSticks.appendChild(towerStick1);
@@ -296,6 +298,7 @@ function previewEditMenuArea(event, towerName, zonePosition) {
 
     towerAreaDiv.style.width = `${range}px`; 
     towerAreaDiv.style.height = `${range}px`;
+    console.log('towerAreaDiv', towerAreaDiv.style.width, towerAreaDiv.style.height);
     towerAreaDiv.style.zIndex = 999;
 
 
@@ -317,6 +320,19 @@ function previewEditMenuArea(event, towerName, zonePosition) {
     deleteTowerDiv.addEventListener('click', deleteClickHandler);
 }
     
+
+function resiveTowers() {
+    towersArea.forEach(state => {
+
+        const zone = towerZones.find(z => z.position === state.position);
+        const menuLeft = (zone.x + zone.width / 2) * scale + offsetX;
+        const menuTop = (zone.y + zone.height / 2) * scale + offsetY;
+
+        const towerDiv = document.getElementById(`tower${state.position}`);
+        towerDiv.style.left = `${menuLeft}px`;
+        towerDiv.style.top = `${menuTop}px`;
+    });
+}
 
 
 async function deployTower(towerName, zonePosition) {
@@ -372,6 +388,7 @@ async function deployTower(towerName, zonePosition) {
             x: zone.x,
             y: zone.y,
             damage: towerData.damage,
+            fireRate: towerProperties[towerName].fire_rate * 1000,
             towerId: towerData.id,
             isMorter: towerName === 'mortar',
             towerNumber: towerNumber,
@@ -397,18 +414,6 @@ async function deployTower(towerName, zonePosition) {
 }
 
 
-function resiveTowers() {
-    towersArea.forEach(state => {
-
-        const zone = towerZones.find(z => z.position === state.position);
-        const menuLeft = (zone.x + zone.width / 2) * scale + offsetX;
-        const menuTop = (zone.y + zone.height / 2) * scale + offsetY;
-
-        const towerDiv = document.getElementById(`tower${state.position}`);
-        towerDiv.style.left = `${menuLeft}px`;
-        towerDiv.style.top = `${menuTop}px`;
-    });
-}
 
 async function deleteTower(zonePosition) {
     const token = localStorage.getItem('token');

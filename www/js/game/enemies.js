@@ -19,10 +19,10 @@ const enemy_props = [
 
 
 function generateEnemy() {
-    const baseProps = enemy_props.find(e => e.name === "daggerkin");
+    const baseProps = enemy_props.find(e => e.name === "devilOrc");
 
     const newEnemy = {
-        name: "daggerkin",  
+        name: "devilOrc",  
         x: 0,
         y: 0,
         xOffset: baseProps.offsetX,
@@ -153,6 +153,8 @@ function drawSprite(x, y, enemy) {
     enemyCtx.globalAlpha = enemy.opacity;
     enemyCtx.drawImage(currentImage, xCorrected, yCorrected, imageWidth, imageHeight);
     enemyCtx.globalAlpha = 1;
+
+
 }
 
 function drawHealthBar(enemy) {
@@ -177,22 +179,23 @@ function drawHealthBar(enemy) {
 
 function checkAreasWithEnemies() {
     towersArea.forEach(area => {
-        const towerX = area.x * scale + offsetX;
-        const towerY = area.y * scale + offsetY;
-        const scaledRange = area.range * scale;
+     
+
         const enemiesInArea = enemies.filter( enemy => { 
             if (enemy.isDead) return false; 
 
             const flyingEnemies = ['oculom', 'hellBat'];
             if (area.isMorter && flyingEnemies.includes(enemy.name)) return false;
 
+
+            const towerX = area.x * scale + offsetX;
+            const towerY = area.y * scale + offsetY;
             const enemyX = enemy.x * scale + offsetX;
             const enemyY = enemy.y * scale + offsetY;
-       
+            const scaledRange = area.range * scale;
             const dx = enemyX - towerX;
             const dy = enemyY - towerY;
-
-
+    
             return Math.hypot(dx, dy) <= scaledRange;
         });
         const towerDiv = document.getElementById(`tower${area.position}`);
@@ -204,7 +207,7 @@ function checkAreasWithEnemies() {
         const towerStick1 = towerDiv.querySelector('.towerStick1');
         const towerStick2 = towerDiv.querySelector('.towerStick2');
 
-        const movementSound = new Audio("../../audio/movement.mp3");
+        //const movementSound = new Audio("../../audio/movement.mp3");
 
         function playSound() {
             if (movementSound.paused) {
@@ -221,17 +224,18 @@ function checkAreasWithEnemies() {
         }
         
         if (enemiesInArea.length > 0 && !area.animationInProgress) {
+
             if (!area.hasActiveProjectile) {
                 area.hasActiveProjectile = true;
                 const projectileType = area.towerNumber;
-                const duration = 2000;
-                playSound();
+                const duration = area.fireRate;
+                //playSound();
  
                 if (!area.isMorter) {
-                    [towerBack, towerFront, towerProjectile].forEach(el => restartAnimation(el, false));
+                    [towerBack, towerFront, towerProjectile].forEach(el => restartAnimation(el, false, duration));
                     [towerBack, towerFront, towerProjectile].forEach(el => el.style.animationPlayState = 'running');
                 } else {
-                    [towerStick1, towerStick2, towerProjectile].forEach(el => restartAnimation(el, true));
+                    [towerStick1, towerStick2, towerProjectile].forEach(el => restartAnimation(el, true, duration));
                     [towerStick1, towerStick2, towerProjectile].forEach(el => el.style.animationPlayState = 'running');
                 }
 
@@ -243,7 +247,7 @@ function checkAreasWithEnemies() {
 
                 setTimeout(() => {
                     towerProjectile.style.display = 'block';
-                    stopSound();
+                    //stopSound();
                     area.hasActiveProjectile = false;
                   
                 }, duration);
@@ -259,7 +263,7 @@ function checkAreasWithEnemies() {
                     towerBack.style.animationPlayState = 'paused';
                     towerFront.style.animationPlayState = 'paused';
                     towerProjectile.style.animationPlayState = 'paused';
-                    stopSound();
+                    //stopSound();
                     area.animationInProgress = false; 
                 }, { once: true });
                 
@@ -268,7 +272,7 @@ function checkAreasWithEnemies() {
                     towerStick1.style.animationPlayState = 'paused';
                     towerStick2.style.animationPlayState = 'paused';
                     towerProjectile.style.animationPlayState = 'paused';
-                    stopSound();
+                    //stopSound();
                     area.animationInProgress = false; 
 
                 }, { once: true });
