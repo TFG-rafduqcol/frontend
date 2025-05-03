@@ -100,7 +100,16 @@ function showTowerMenu(event) {
     document.querySelectorAll('.towerOption').forEach((option, index) => {
         option.removeEventListener('click', towerOptionClickHandler);
         option.setAttribute('data-index', index);
-        option.addEventListener('click', towerOptionClickHandler);
+        const price = option.querySelector('.towerPrice').textContent;
+        const towerGold = parseInt(price.replace('$', '').trim());
+
+        if (towerGold > gold) {
+            option.classList.add('disabled-tower');
+            
+        }
+        else {
+            option.addEventListener('click', towerOptionClickHandler);
+        }
     });
 }
 

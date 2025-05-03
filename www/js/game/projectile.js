@@ -96,16 +96,7 @@ function updateProjectiles() {
             };
             
             if (projectileSounds[projectile.type]) {
-                const impactSound = new Audio(projectileSounds[projectile.type]);
-                if (impactSound.paused) {
-                    impactSound.volume = 0.3; 
-                    impactSound.play();
-                } else{
-                    impactSound.pause();
-                    impactSound.currentTime = 0; 
-                    impactSound.volume = 0.1; 
-                    impactSound.play();
-                }
+                
             }
     
             const damageMultiplier = getDamageMultiplier(projectile.target.name, projectile.type);

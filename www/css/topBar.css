@@ -87,7 +87,7 @@
     display: flex;
     align-items: center;
     background: rgba(69, 66, 66, 0.8);
-    width: auto; 
+    width: 80%; 
     height: 100%;
     position: relative;
 }
@@ -95,6 +95,9 @@
 .gold-container {
     background: linear-gradient(45deg, #f0c674, #d4af37); 
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); 
+    width: 100%;
+    text-align: center;
+
 }
 
 .fa-coins { 
@@ -126,7 +129,7 @@
     display: flex;
     align-items: center;
     background: rgba(69, 66, 66, 0.8);
-    width: auto;
+    width: 80%;
     height: 100%;
     position: relative;
 }
@@ -134,8 +137,9 @@
 .lives-container {
     background: linear-gradient(45deg, #ff4d4d, #ffcccc);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); 
-    padding: 0.5rem;
-    border-radius: 8px;
+    width: 100%;
+    text-align: center;
+
 }
 
 .fa-heart { 
@@ -147,7 +151,7 @@
     display: flex;
     align-items: center;
     background: rgba(69, 66, 66, 0.8);
-    width: auto;
+    width: 80%;
     height: 100%;
     position: relative;
 }
@@ -155,8 +159,9 @@
 .round-container {
     background: linear-gradient(45deg, #1e90ff, #87cefa);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    padding: 0.5rem;
-    border-radius: 8px;
+    width: 100%;
+    text-align: center;
+
 }
 
 .fa-bullseye {

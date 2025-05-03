@@ -10,15 +10,21 @@
 
 </head>
 <body>
-    <!-- <audio id="backgroundMusic" loop autoplay>
+    <audio id="backgroundMusic" loop autoplay>
         <source src="../../audio/background.mp3" type="audio/mpeg">
-    </audio> -->
+    </audio>
 
     <div id="gameCanvasContainer">
         <button id="generateEnemyButton">Generar Enemigo</button>
 
 
         <div class="top-bar-game">
+            <div class="round-bar-container">
+                <i class="fa-solid fa-bullseye"></i>
+                <div class="round-container">
+                    <span id="round">1</span>
+                </div>
+            </div>      
             <div class="gold-bar-container">
                 <i class="fa-solid fa-coins"></i>
                 <div class="gold-container">
@@ -30,13 +36,7 @@
                 <div class="lives-container">
                     <span id="lives">20</span>
                 </div>
-            </div> 
-            <div class="round-bar-container">
-                <i class="fa-solid fa-bullseye"></i>
-                <div class="round-container">
-                    <span id="round">1</span>
-                </div>
-            </div>                     
+            </div>                
             </div>
         </div>
 
@@ -59,26 +59,27 @@
         
          <div id="towerMenu" class="towerMenu">
             <div class="towerOption" id="towerOption1">
-                <img src="../../images/towers/tower1/base.png" alt="Torre 1" data-original-src="../../images/towers/tower1/base.png">
-                <div class="towerPrice">$90</div> 
+                <img src="../../images/projectiles/tower1/projectile.png" alt="Torre 1" data-original-src="../../images/projectiles/tower1/projectile.png">
+                <div class="towerPrice" id="towerPrice1">90</div> 
             </div>
             <div class="towerOption" id="towerOption2">
-                <img src="../../images/towers/tower2/base.png" alt="Torre 2" data-original-src="../../images/towers/tower2/base.png">
-                <div class="towerPrice">$100</div>
+                <img src="../../images/projectiles/tower2/projectile.png" alt="Torre 2" data-original-src="../../images/projectiles/tower2/projectile.png">
+                <div class="towerPrice" id="towerPrice2">100</div> 
             </div>
             <div class="towerOption" id="towerOption3">
-                <img src="../../images/towers/tower3/base.png" alt="Torre 3" data-original-src="../../images/towers/tower3/base.png">
-                <div class="towerPrice">$125</div> 
+                <img src="../../images/projectiles/tower3/projectile_rotated.png" alt="Torre 3" data-original-src="../../images/projectiles/tower3/projectile_rotated.png">
+                <div class="towerPrice" id="towerPrice3">125</div> 
             </div>
             <div class="towerOption" id="towerOption4">
-                <img src="../../images/towers/tower4/base.png" alt="Torre 4" data-original-src="../../images/towers/tower4/base.png">
-                <div class="towerPrice">$150</div> 
+                <img src="../../images/projectiles/tower4/projectile.png" alt="Torre 4" data-original-src="../../images/projectiles/tower4/projectile.png">
+                <div class="towerPrice" id="towerPrice4">150</div> 
             </div>
         </div>
+
         
 
         
-        <div id="towerEditMenu" class="towerMenu">
+        <div id="towerEditMenu" class="towerEditMenu">
             <div class="editOption" id="deleteTower">
                 <img src="../../images/sell.png" alt="Eliminar Torre" data-original-src="../../images/sell.png">
             </div>
