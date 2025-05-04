@@ -25,11 +25,9 @@ async function checkAdminStatus() {
 
 checkAdminStatus().then(isAdmin => {
     if (isAdmin) {
-        console.log("El usuario es admin.");
         document.body.style.display = "block";
 
     } else {
-        console.log("El usuario NO es admin.");
         alert("You are not authorized to access this page.");
         window.location.href = "http://127.0.0.1:8000/www/views/index.html";
     }

@@ -257,27 +257,22 @@ canvas.addEventListener('touchend', () => {
 let lastTime = 0;
 
 function gameLoop(currentTime = 0) {
-    const deltaTime = (currentTime - lastTime) / 1000; // deltaTime en segundos
+    const deltaTime = (currentTime - lastTime) / 1000; 
     lastTime = currentTime;
 
 
-    update(deltaTime);  // Aquí actualizas lógica con deltaTime
-    render(deltaTime);  // Aquí dibujas usando deltaTime
+    update();  
+    render(deltaTime);  
+    updateProjectiles(); 
+    checkAreasWithEnemies(); 
 
     requestAnimationFrame(gameLoop);
 }
 
-function update(deltaTime) {
-    // Puedes mover enemigos aquí si prefieres separar lógica de dibujo
-    
+function update() {
+    updateProjectiles(); 
+    updateImpactParticles();
 
-    updateProjectiles(deltaTime);
-    updateImpactParticles(deltaTime);
-    updateSmokeParticles(deltaTime);
-    for (const enemy of enemies) {
-        moveEnemy(enemy, deltaTime);
-    
-    }
 }
 
 
@@ -286,15 +281,15 @@ function render(deltaTime) {
 
     drawMap();
     drawZones(); 
+    drawPath();
+    drawEnemies(deltaTime); 
     drawProjectiles();
-    drawEnemies(deltaTime);  // Ya no necesita deltaTime si el movimiento está en update()
     drawImpactParticles();
     drawSmokeParticles();
-    drawPath();
 }
 
 
 mapImage.onload = () => {
-    resizeCanvas(1); // Llama a resizeCanvas una vez que la imagen del mapa esté cargada
-    requestAnimationFrame(gameLoop);  // Arranca con timestamp automático
+    resizeCanvas(1); 
+    gameLoop(); 
 };

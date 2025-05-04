@@ -14,7 +14,6 @@ const projectileSizes = {
     4: { width: 25, height: 25 },
 };
 
-
 const impactFramesByType = {};
 
 for (let type = 1; type <= 4; type++) {
@@ -94,10 +93,6 @@ function updateProjectiles() {
                 4: "../../audio/stone.mp3",
                 3: "../../audio/fire.mp3"
             };
-            
-            if (projectileSounds[projectile.type]) {
-                
-            }
     
             const damageMultiplier = getDamageMultiplier(projectile.target.name, projectile.type);
             projectile.target.health -= projectile.damage * damageMultiplier;         
@@ -119,7 +114,6 @@ function updateProjectiles() {
                     enemies[enemyIndex].isDead = true;
                 }
             }
-
             projectiles.splice(index, 1);
         }
     });
@@ -170,8 +164,6 @@ function drawImpactParticles() {
     });
 }
 
-
-
 function updateImpactParticles() {
     impactParticles = impactParticles.filter(p => p.frame < p.maxFrames);
 
@@ -183,3 +175,4 @@ function updateImpactParticles() {
         }
     });
 }
+

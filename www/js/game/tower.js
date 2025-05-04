@@ -46,7 +46,7 @@ let towersDeployed = [];
 
 let towersArea = [];
 
-const projectiles = [];
+let projectiles = [];
 
 let towerMenuVisible = false; 
 let selectedTower = null;
@@ -298,7 +298,6 @@ function previewEditMenuArea(event, towerName, zonePosition) {
 
     towerAreaDiv.style.width = `${range}px`; 
     towerAreaDiv.style.height = `${range}px`;
-    console.log('towerAreaDiv', towerAreaDiv.style.width, towerAreaDiv.style.height);
     towerAreaDiv.style.zIndex = 999;
 
 

@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .then(response => response.json())
     .then(data => {
-        console.log('Avatars:', data);
 
         const active_avatar = data.active_avatar;
 
@@ -108,9 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .then(response => response.json())
         .then(data => {
-            console.log('Active avatar changed:');
             let user = JSON.parse(localStorage.getItem('user'));
-            console.log("hola", user);
             user.avatar = imageUrl;
             localStorage.setItem('user', JSON.stringify(user));
             window.location.href = 'index.html';

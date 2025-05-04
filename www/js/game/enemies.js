@@ -6,7 +6,7 @@ document.getElementById('generateEnemyButton').addEventListener('click', generat
 
 // Propiedades del enemigo
 const enemy_props = [
-    { name: "daggerkin", width: 35, height: 35, speed: 25, maxHealth: 40, totalFrames: 20, offsetX: -12, offsetY: -35, healthBarHeight: 40, lifes: 1 }, // Basico, neutro ante todo
+    { name: "daggerkin", width: 35, height: 35, speed: 80, maxHealth: 40, totalFrames: 20, offsetX: -12, offsetY: -35, healthBarHeight: 40, lifes: 1 }, // Basico, neutro ante todo
     { name: "orcutter", width: 50, height: 50, speed: 15, maxHealth: 60, totalFrames: 20, offsetX: -15, offsetY: -45, healthBarHeight: 50, lifes: 1 }, // "Padre" de daggerkin, neutro ante todo
     { name: "oculom", width: 45, height: 45, speed: 25, maxHealth: 40, totalFrames: 18, offsetX: -25, offsetY: -20, healthBarHeight: 40, lifes: 1 }, // Primer enemigo volador no le afecta el mortero (4)
     { name: "devilOrc", width: 54, height: 54, speed: 12, maxHealth: 90, totalFrames: 20, offsetX: -15, offsetY: -45, healthBarHeight: 50, lifes: 1 }, // Debil ante el fuego (3), fuerte contra hierro (1) y piedra (2) 
@@ -52,8 +52,8 @@ async function generateHorde() {
           height: baseProps.height,
           speed: baseProps.speed,
           lifes: baseProps.lifes,
-          health: enemyData.health,
-          maxHealth: enemyData.health,
+          health: baseProps.maxHealth,
+          maxHealth: baseProps.maxHealth,
           spriteFrame: 0,
           totalFrames: baseProps.totalFrames,
           frameTimer: 0,
@@ -218,7 +218,6 @@ function checkAreasWithEnemies() {
 
             const flyingEnemies = ['oculom', 'hellBat'];
             if (area.isMorter && flyingEnemies.includes(enemy.name)) return false;
-
 
             const towerX = area.x * scale + offsetX;
             const towerY = area.y * scale + offsetY;
