@@ -1,7 +1,8 @@
 const enemyCanvas = document.getElementById("enemyCanvas");
 const enemyCtx = enemyCanvas.getContext("2d");
 
-document.getElementById('generateEnemyButton').addEventListener('click', generateEnemy);
+//document.getElementById('generateEnemyButton').addEventListener('click', generateEnemy);
+document.getElementById('generateEnemyButton').addEventListener('click', generateHorde);
 
 
 // Propiedades del enemigo
@@ -55,6 +56,78 @@ function generateEnemy() {
     console.log('Nuevo enemigo creado:', newEnemy);
 }
 
+async function generateHorde() {
+    try {
+      const response = await fetch(`${serverUrl}/api/hordes/generateHorde/${gameId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+  
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to generate horde');
+      }
+  
+      const data = await response.json();
+      console.log('Horde generated:', data);
+  
+      const baseProps = enemy_props.find(e => e.name === "devilOrc");
+  
+      // Usamos un bucle para crear los enemigos con un retraso de 1 segundo entre cada uno
+      const newEnemies = data.enemies.map((enemyData, index) => {
+        const newEnemy = {
+          name: "devilOrc",
+          x: path[0].x,
+          y: path[0].y,
+          xOffset: baseProps.offsetX,
+          yOffset: baseProps.offsetY,
+          healthBarHeight: baseProps.healthBarHeight || 0,
+          healthBarX: baseProps.healthBarX || 0,
+          width: baseProps.width,
+          height: baseProps.height,
+          speed: baseProps.speed,
+          lifes: baseProps.lifes,
+          health: enemyData.health,
+          maxHealth: enemyData.health,
+          spriteFrame: 0,
+          totalFrames: baseProps.totalFrames,
+          frameTimer: 0,
+          frameDelay: 5,
+          currentPoint: 0,
+          t: 0 , // % de avance entre dos puntos
+          delay: 0,
+          loggedZoneEntry: false,
+          isDead: false,
+          deathTimer: 60,
+          opacity: 1,
+          spriteImages: [] 
+        };
+      
+        // Carga las imágenes del sprite
+        newEnemy.spriteImages = loadEnemyImages(newEnemy.name, newEnemy.totalFrames);
+      
+        // Agregar el nuevo enemigo con un retraso
+        setTimeout(() => {
+          enemies.push(newEnemy);
+          console.log(`Enemigo ${newEnemy.name} añadido con retraso`);
+        }, index * 1000); // Retraso de 1 segundo entre cada enemigo (1000 ms)
+
+        return newEnemy;
+      });
+    } catch (err) {
+      console.error('Error generating horde:', err.message);
+    }
+}
+
+function distance(p1, p2) {
+    const dx = p2.x - p1.x;
+    const dy = p2.y - p1.y;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+  
+  
 
 function moveEnemy(enemy) {
     if (enemy.delay > 0 || enemy.isDead) {
@@ -70,29 +143,40 @@ function moveEnemy(enemy) {
     const dy = nextTarget.y - currentTarget.y;
     const distance = Math.sqrt(dx * dx + dy * dy);
 
-    enemy.x = currentTarget.x + dx * enemy.t;
-    enemy.y = currentTarget.y + dy * enemy.t;
 
-    enemy.t += enemy.speed / distance;
 
-    if (enemy.t >= 1) {
-        enemy.t = 0;
+    const directionX = dx / distance;
+    const directionY = dy / distance;
+    const speed = enemy.speed;
+
+    enemy.x += directionX * speed;
+    enemy.y += directionY * speed;
+
+
+    const progress = Math.sqrt(
+        Math.pow(enemy.x - currentTarget.x, 2) +
+        Math.pow(enemy.y - currentTarget.y, 2)
+    );
+
+    if (progress >= distance) {
         enemy.currentPoint++;
+        enemy.x = nextTarget.x;
+        enemy.y = nextTarget.y;
 
-        let loseSound = new Audio("../../audio/lose.mp3");
-        loseSound.volume = 0.3;
+        //let loseSound = new Audio("../../audio/lose.mp3");
+        //loseSound.volume = 0.3;
 
 
         if (enemy.currentPoint >= path.length - 1) {
         
             try {
-                if (loseSound.paused) {
-                    loseSound.play();
-                } else {
-                    loseSound.pause();
-                    loseSound.currentTime = 0;
-                    loseSound.play();
-                }
+                // if (loseSound.paused) {
+                //     loseSound.play();
+                // } else {
+                //     loseSound.pause();
+                //     loseSound.currentTime = 0;
+                //     loseSound.play();
+                // }
         
                 const index = enemies.indexOf(enemy);
                 if (index > -1) enemies.splice(index, 1);
