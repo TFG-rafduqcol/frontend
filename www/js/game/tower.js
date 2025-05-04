@@ -320,7 +320,7 @@ function previewEditMenuArea(event, towerName, zonePosition) {
 }
     
 
-function resiveTowers() {
+function resizeTowers() {
     towersArea.forEach(state => {
 
         const zone = towerZones.find(z => z.position === state.position);

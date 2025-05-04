@@ -120,15 +120,6 @@ function resizeCanvas() {
     offsetX = (canvas.width - mapImage.width * scale) / 2;
     offsetY = (canvas.height - mapImage.height * scale) / 2;
 
-    drawMap();
-    drawZones(); 
-    updateProjectiles();
-    drawProjectiles();    
-    drawEnemies(1);
-    drawImpactParticles();
-    drawSmokeParticles();
-    drawPath();
-
 }
 
 function limitScroll() {
@@ -210,10 +201,6 @@ canvas.addEventListener('touchmove', (event) => {
         lastY = event.touches[0].clientY;
 
         limitScroll();
-        drawMap();
-        resiveTowers();
-        drawZones();   
-        drawPath();
         
 
     } else if (event.touches.length === 2) {
@@ -237,10 +224,7 @@ canvas.addEventListener('touchmove', (event) => {
         offsetY = centerY - mouseY * scale;
 
         limitScroll();
-        drawMap();
-        resiveTowers();
-        drawZones();   
-        drawPath();
+       
     }
 });
 
