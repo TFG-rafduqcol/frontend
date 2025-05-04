@@ -123,8 +123,8 @@ function resizeCanvas() {
     drawMap();
     drawZones(); 
     updateProjectiles();
-    drawProjectiles();
-    drawEnemies();
+    drawProjectiles();    
+    drawEnemies(1);
     drawImpactParticles();
     drawSmokeParticles();
     drawPath();
@@ -244,25 +244,6 @@ canvas.addEventListener('touchmove', (event) => {
     }
 });
 
-function gameLoop() {
-
-
-
-    drawMap();
-    drawZones();
-    drawPath(); 
-    drawEnemies();
-    
-    checkAreasWithEnemies();
-    updateProjectiles();
-    drawProjectiles();
-
-    updateImpactParticles();
-    drawImpactParticles();
-
-    requestAnimationFrame(gameLoop);
-}
-
 
 window.addEventListener('resize', resizeCanvas);
 
@@ -271,7 +252,49 @@ canvas.addEventListener('touchend', () => {
     isDragging = false;
 });
 
+
+
+let lastTime = 0;
+
+function gameLoop(currentTime = 0) {
+    const deltaTime = (currentTime - lastTime) / 1000; // deltaTime en segundos
+    lastTime = currentTime;
+
+
+    update(deltaTime);  // Aquí actualizas lógica con deltaTime
+    render(deltaTime);  // Aquí dibujas usando deltaTime
+
+    requestAnimationFrame(gameLoop);
+}
+
+function update(deltaTime) {
+    // Puedes mover enemigos aquí si prefieres separar lógica de dibujo
+    
+
+    updateProjectiles(deltaTime);
+    updateImpactParticles(deltaTime);
+    updateSmokeParticles(deltaTime);
+    for (const enemy of enemies) {
+        moveEnemy(enemy, deltaTime);
+    
+    }
+}
+
+
+function render(deltaTime) {
+    enemyCtx.clearRect(0, 0, enemyCanvas.width, enemyCanvas.height);
+
+    drawMap();
+    drawZones(); 
+    drawProjectiles();
+    drawEnemies(deltaTime);  // Ya no necesita deltaTime si el movimiento está en update()
+    drawImpactParticles();
+    drawSmokeParticles();
+    drawPath();
+}
+
+
 mapImage.onload = () => {
-    resizeCanvas();
-    gameLoop(); 
+    resizeCanvas(1); // Llama a resizeCanvas una vez que la imagen del mapa esté cargada
+    requestAnimationFrame(gameLoop);  // Arranca con timestamp automático
 };

@@ -87,7 +87,7 @@ async function generateHorde() {
           healthBarX: baseProps.healthBarX || 0,
           width: baseProps.width,
           height: baseProps.height,
-          speed: baseProps.speed,
+          speed: 100,
           lifes: baseProps.lifes,
           health: enemyData.health,
           maxHealth: enemyData.health,
@@ -129,7 +129,8 @@ function distance(p1, p2) {
   
   
 
-function moveEnemy(enemy) {
+function moveEnemy(enemy, deltaTime) {
+    console.log("deltaTime", deltaTime);
     if (enemy.delay > 0 || enemy.isDead) {
         return;
     }
@@ -143,15 +144,15 @@ function moveEnemy(enemy) {
     const dy = nextTarget.y - currentTarget.y;
     const distance = Math.sqrt(dx * dx + dy * dy);
 
-
-
     const directionX = dx / distance;
     const directionY = dy / distance;
-    const speed = enemy.speed;
+
+    const speed = enemy.speed * deltaTime; 
 
     enemy.x += directionX * speed;
     enemy.y += directionY * speed;
 
+    console.log(enemy.x, enemy.y);
 
     const progress = Math.sqrt(
         Math.pow(enemy.x - currentTarget.x, 2) +
@@ -163,39 +164,22 @@ function moveEnemy(enemy) {
         enemy.x = nextTarget.x;
         enemy.y = nextTarget.y;
 
-        //let loseSound = new Audio("../../audio/lose.mp3");
-        //loseSound.volume = 0.3;
-
-
         if (enemy.currentPoint >= path.length - 1) {
-        
-            try {
-                // if (loseSound.paused) {
-                //     loseSound.play();
-                // } else {
-                //     loseSound.pause();
-                //     loseSound.currentTime = 0;
-                //     loseSound.play();
-                // }
-        
-                const index = enemies.indexOf(enemy);
-                if (index > -1) enemies.splice(index, 1);
-        
-                updateGame(false, 0, enemy.lifes);
-        
-                const gameCanvasContainer = document.getElementById('gameCanvasContainer');
-                gameCanvasContainer.classList.add('red-border');
-                
-                setTimeout(() => {
-                    gameCanvasContainer.classList.remove('red-border');
-                }, 300); 
-            } catch (error) {
-                console.log("Error al reproducir el sonido: ", error);
-            }
+            const index = enemies.indexOf(enemy);
+            if (index > -1) enemies.splice(index, 1);
+
+            updateGame(false, 0, enemy.lifes);
+
+            const gameCanvasContainer = document.getElementById('gameCanvasContainer');
+            gameCanvasContainer.classList.add('red-border');
+            
+            setTimeout(() => {
+                gameCanvasContainer.classList.remove('red-border');
+            }, 300); 
         }
-        
     }
 }
+
 
 function updateAnimation(enemy) {
     if (enemy.isDead) {
@@ -210,10 +194,12 @@ function updateAnimation(enemy) {
 }
 
 
-function drawEnemies() {
+function drawEnemies(deltaTime) {
     enemyCtx.clearRect(0, 0, enemyCanvas.width, enemyCanvas.height);
+
     enemies.forEach((enemy) => {
-        moveEnemy(enemy);      
+        moveEnemy(enemy, deltaTime); // Aquí se mueve el enemigo
+        
         if (enemy.currentPoint < path.length) { 
             updateAnimation(enemy);  
             drawSprite(enemy.x * scale + offsetX, enemy.y * scale + offsetY, enemy); 
@@ -221,6 +207,7 @@ function drawEnemies() {
         }
     });
 }
+
 
 
 function drawSprite(x, y, enemy) {
