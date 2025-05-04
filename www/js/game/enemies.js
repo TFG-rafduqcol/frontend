@@ -1,60 +1,23 @@
 const enemyCanvas = document.getElementById("enemyCanvas");
 const enemyCtx = enemyCanvas.getContext("2d");
 
-//document.getElementById('generateEnemyButton').addEventListener('click', generateEnemy);
 document.getElementById('generateEnemyButton').addEventListener('click', generateHorde);
 
 
 // Propiedades del enemigo
 const enemy_props = [
-    { name: "daggerkin", width: 35, height: 35, speed: 1.2, maxHealth: 40, totalFrames: 20, offsetX: -12, offsetY: -35, healthBarHeight: 40, lifes: 1 }, // Basico, neutro ante todo
-    { name: "orcutter", width: 50, height: 50, speed: 0.65, maxHealth: 60, totalFrames: 20, offsetX: -15, offsetY: -45, healthBarHeight: 50, lifes: 1 }, // "Padre" de daggerkin, neutro ante todo
-    { name: "oculom", width: 45, height: 45, speed: 1.1, maxHealth: 40, totalFrames: 18, offsetX: -25, offsetY: -20, healthBarHeight: 40, lifes: 1 }, // Primer enemigo volador no le afecta el mortero (4)
-    { name: "devilOrc", width: 54, height: 54, speed: 0.65, maxHealth: 80, totalFrames: 20, offsetX: -15, offsetY: -45, healthBarHeight: 50, lifes: 1 }, // Debil ante el fuego (3), fuerte contra hierro (1) y piedra (2) 
-    { name: "graySkull", width: 75, height: 75, speed: 0.5, maxHealth: 140, totalFrames: 20, offsetX: -22, offsetY: -70, healthBarHeight: 65, healthBarX: -2, lifes: 3 }, // Debil contra el mortero (4)
-    { name: "carrionTropper", width: 45, height: 45, speed: 0.7, maxHealth: 90, totalFrames: 20, offsetX: -15, offsetY: -35, healthBarHeight: 45, lifes: 2 }, // Debil fuego (3), fuerte contra el resto (1,2,4)
-    { name: "hellBat", width: 60, height: 60, speed: 0.8, maxHealth: 90, totalFrames: 18, offsetX: -35, offsetY: -40, healthBarHeight: 47, lifes: 2 }, // Segundo enemigo volador, debil ante el mortero (4)
-    { name: "hexLord", width: 50, height: 50, speed: 0.8, maxHealth: 90, totalFrames: 20, offsetX: -15, offsetY: -40, healthBarHeight: 50, lifes: 4 }, // Cura los enemigos cada 10s
-    { name: "darkSeer", width: 70, height: 70, speed: 0.6, maxHealth: 140, totalFrames: 20, offsetX: -30, offsetY: -65, healthBarHeight: 65, healthBarX: -4, lifes: 5 } // Fuerte contra TODO (1,2,3,4)
+    { name: "daggerkin", width: 35, height: 35, speed: 25, maxHealth: 40, totalFrames: 20, offsetX: -12, offsetY: -35, healthBarHeight: 40, lifes: 1 }, // Basico, neutro ante todo
+    { name: "orcutter", width: 50, height: 50, speed: 15, maxHealth: 60, totalFrames: 20, offsetX: -15, offsetY: -45, healthBarHeight: 50, lifes: 1 }, // "Padre" de daggerkin, neutro ante todo
+    { name: "oculom", width: 45, height: 45, speed: 25, maxHealth: 40, totalFrames: 18, offsetX: -25, offsetY: -20, healthBarHeight: 40, lifes: 1 }, // Primer enemigo volador no le afecta el mortero (4)
+    { name: "devilOrc", width: 54, height: 54, speed: 12, maxHealth: 90, totalFrames: 20, offsetX: -15, offsetY: -45, healthBarHeight: 50, lifes: 1 }, // Debil ante el fuego (3), fuerte contra hierro (1) y piedra (2) 
+    { name: "graySkull", width: 75, height: 75, speed: 8, maxHealth: 140, totalFrames: 20, offsetX: -22, offsetY: -70, healthBarHeight: 65, healthBarX: -2, lifes: 3 }, // Debil contra el mortero (4)
+    { name: "carrionTropper", width: 45, height: 45, speed: 14, maxHealth: 90, totalFrames: 20, offsetX: -15, offsetY: -35, healthBarHeight: 45, lifes: 2 }, // Debil fuego (3), fuerte contra el resto (1,2,4)
+    { name: "hellBat", width: 60, height: 60, speed: 17, maxHealth: 90, totalFrames: 18, offsetX: -35, offsetY: -40, healthBarHeight: 47, lifes: 2 }, // Segundo enemigo volador, debil ante el mortero (4)
+    { name: "hexLord", width: 50, height: 50, speed: 17, maxHealth: 90, totalFrames: 20, offsetX: -15, offsetY: -40, healthBarHeight: 50, lifes: 4 }, // Cura los enemigos cada 10s
+    { name: "darkSeer", width: 70, height: 70, speed: 10, maxHealth: 140, totalFrames: 20, offsetX: -30, offsetY: -65, healthBarHeight: 65, healthBarX: -4, lifes: 5 } // Fuerte contra TODO (1,2,3,4)
 ];
 
 
-function generateEnemy() {
-    const baseProps = enemy_props.find(e => e.name === "devilOrc");
-
-    const newEnemy = {
-        name: "devilOrc",  
-        x: 0,
-        y: 0,
-        xOffset: baseProps.offsetX,
-        yOffset: baseProps.offsetY, 
-        healthBarHeight: baseProps.healthBarHeight || 0,
-        healthBarX: baseProps.healthBarX || 0,
-        width: baseProps.width,
-        height: baseProps.height,
-        speed: baseProps.speed,
-        lifes: baseProps.lifes,
-        health: baseProps.maxHealth,
-        maxHealth: baseProps.maxHealth,
-        spriteFrame: 0,
-        totalFrames: baseProps.totalFrames,  
-        frameTimer: 0,
-        frameDelay: 5,
-        currentPoint: 0,
-        t: 0,
-        delay: 0,
-        loggedZoneEntry: false,
-        isDead: false,
-        deathTimer: 60,
-        opacity: 1,
-        spriteImages: []  
-    };
-    
-    newEnemy.spriteImages = loadEnemyImages(newEnemy.name, newEnemy.totalFrames);
-    enemies.push(newEnemy);
-
-    console.log('Nuevo enemigo creado:', newEnemy);
-}
 
 async function generateHorde() {
     try {
@@ -73,12 +36,12 @@ async function generateHorde() {
       const data = await response.json();
       console.log('Horde generated:', data);
   
-      const baseProps = enemy_props.find(e => e.name === "devilOrc");
+      const baseProps = enemy_props.find(e => e.name === "daggerkin");
   
       // Usamos un bucle para crear los enemigos con un retraso de 1 segundo entre cada uno
       const newEnemies = data.enemies.map((enemyData, index) => {
         const newEnemy = {
-          name: "devilOrc",
+          name: baseProps.name,
           x: path[0].x,
           y: path[0].y,
           xOffset: baseProps.offsetX,
@@ -87,7 +50,7 @@ async function generateHorde() {
           healthBarX: baseProps.healthBarX || 0,
           width: baseProps.width,
           height: baseProps.height,
-          speed: 100,
+          speed: baseProps.speed,
           lifes: baseProps.lifes,
           health: enemyData.health,
           maxHealth: enemyData.health,
@@ -112,7 +75,7 @@ async function generateHorde() {
         setTimeout(() => {
           enemies.push(newEnemy);
           console.log(`Enemigo ${newEnemy.name} añadido con retraso`);
-        }, index * 1000); // Retraso de 1 segundo entre cada enemigo (1000 ms)
+        }, index * (50000 / newEnemy.speed));
 
         return newEnemy;
       });
@@ -130,7 +93,6 @@ function distance(p1, p2) {
   
 
 function moveEnemy(enemy, deltaTime) {
-    console.log("deltaTime", deltaTime);
     if (enemy.delay > 0 || enemy.isDead) {
         return;
     }
@@ -147,12 +109,11 @@ function moveEnemy(enemy, deltaTime) {
     const directionX = dx / distance;
     const directionY = dy / distance;
 
-    const speed = enemy.speed * deltaTime; 
+    const speed = enemy.speed * deltaTime; // Distancia recorrida por fotograma
 
     enemy.x += directionX * speed;
     enemy.y += directionY * speed;
 
-    console.log(enemy.x, enemy.y);
 
     const progress = Math.sqrt(
         Math.pow(enemy.x - currentTarget.x, 2) +
