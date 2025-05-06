@@ -16,12 +16,11 @@ const path = [
     { x: 160, y: 600 },
     { x: 260, y: 600 },
     { x: 260, y: 222 },
-    { x: 820, y: 222 },
-
-    { x: 820, y: 130 },
-    { x: 860, y: 130 },
-    { x: 860, y: 110 },
-    { x: 1020, y: 110 },
+    { x: 815, y: 222 },
+    { x: 815, y: 170 },
+    { x: 850, y: 170 },
+    { x: 850, y: 140 },
+    { x: 1020, y: 140 },
     { x: 1020, y: 0 },
 
 ];
@@ -49,12 +48,7 @@ function loadEnemyImages(enemyName, frameCount) {
 }
 
 
-
-let enemies = [ 
-
-];
-
-
+let enemies = [];
 
 
 function drawMap() {
@@ -201,6 +195,11 @@ canvas.addEventListener('touchmove', (event) => {
         lastY = event.touches[0].clientY;
 
         limitScroll();
+        drawMap();
+        drawZones();   
+        drawTowers();  
+        drawPath();
+        
         
 
     } else if (event.touches.length === 2) {
@@ -224,7 +223,10 @@ canvas.addEventListener('touchmove', (event) => {
         offsetY = centerY - mouseY * scale;
 
         limitScroll();
-       
+        drawMap();
+        drawZones();   
+        drawTowers();  
+        drawPath();
     }
 });
 
@@ -244,7 +246,6 @@ function gameLoop(currentTime = 0) {
     const deltaTime = (currentTime - lastTime) / 1000; 
     lastTime = currentTime;
 
-
     update();  
     render(deltaTime);  
     updateProjectiles(); 
@@ -256,7 +257,6 @@ function gameLoop(currentTime = 0) {
 function update() {
     updateProjectiles(); 
     updateImpactParticles();
-
 }
 
 

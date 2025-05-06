@@ -13,16 +13,19 @@ const towerZones = [
     { position: 7, x: 870, y: 70, width: 50, height: 50, occupied: false },
 ];
 
+
+
+
 const towerProperties = {
-    stoneCannon: { cost: 90, fire_rate: 1.5, range: 140, projectile_type: 'stone' },
-    ironCannon: { cost: 100,  fire_rate: 2, range: 120, projectile_type: 'iron' },
-    inferno: { cost: 125,  fire_rate: 3, range: 120, projectile_type: 'fire' },
-    mortar: { cost: 150,  fire_rate: 4, range: 110, projectile_type: 'rock' },
+    stoneCannon: { cost: 90, fire_rate: 1.5, range: 90, projectile_type: 'stone' },
+    ironCannon: { cost: 100,  fire_rate: 2, range: 80, projectile_type: 'iron' },
+    inferno: { cost: 125,  fire_rate: 3, range: 80, projectile_type: 'fire' },
+    mortar: { cost: 150,  fire_rate: 4, range: 95, projectile_type: 'rock' },
 };
 
 const towerStyles = [ 
-    { towerBaseWidth: '60%', towerBaseTop: 0, towerBaseLeft: '23%', frontAndBackLeft: '1%', backHeight: '11%', frontHeight: '14%', backBottom: '-32%', frontBottom: '-31%' },
     { towerBaseWidth: '60%' ,towerBaseTop: 0, towerBaseLeft: '23%', frontAndBackLeft: '0%',backHeight: '14%', frontHeight: '20%', backBottom: '-25%', frontBottom: '-20%' },
+    { towerBaseWidth: '60%', towerBaseTop: 0, towerBaseLeft: '23%', frontAndBackLeft: '1%', backHeight: '11%', frontHeight: '14%', backBottom: '-32%', frontBottom: '-31%' },
     { towerBaseWidth: '60%' ,towerBaseTop: 0, towerBaseLeft: '23%', frontAndBackLeft: '0%',backHeight: '13%', frontHeight: '22%', backBottom: '-20%', frontBottom: '-12%' },
     { towerBaseWidth: '56%' ,towerBaseTop: '10%', towerBaseLeft: '26%',frontAndBackLeft: '4%',backHeight: '14%', frontHeight: '15%', backBottom: '0%', frontBottom: '0%' },
 ]
@@ -138,8 +141,10 @@ function previewTowerArea(menuLeft, menuTop, range, selectedTowerIndex) {
     previewDiv.style.top = `${menuTop}px`;
     previewDiv.style.display = 'block'; 
 
-    previewArea.style.width = `${range}px`; 
-    previewArea.style.height = `${range}px`;
+    const scaledRange = 2*range * scale;
+
+    previewArea.style.width = `${scaledRange}px`; 
+    previewArea.style.height = `${scaledRange}px`;
 
     const towerPath = `../../images/towers/tower${selectedTowerIndex}`;
     towerBase.style.backgroundImage = `url('${towerPath}/base.png')`;
@@ -294,7 +299,7 @@ function previewEditMenuArea(event, towerName, zonePosition) {
     towerDiv.style.display = 'block';
 
     towerOptionMenuVisible = true;
-    range = towerProperties[towerName].range;
+    range = 2*towerProperties[towerName].range * scale;
 
     towerAreaDiv.style.width = `${range}px`; 
     towerAreaDiv.style.height = `${range}px`;
@@ -328,6 +333,7 @@ function resizeTowers() {
         const menuTop = (zone.y + zone.height / 2) * scale + offsetY;
 
         const towerDiv = document.getElementById(`tower${state.position}`);
+        if (!towerDiv) return;
         towerDiv.style.left = `${menuLeft}px`;
         towerDiv.style.top = `${menuTop}px`;
     });
@@ -380,12 +386,14 @@ async function deployTower(towerName, zonePosition) {
             mortar: 4
         }[towerName] || 1;
 
+        const centerX = zone.x + zone.width / 2;
+        const centerY = zone.y + zone.height / 2;         
 
         towersArea.push({
             position: zonePosition,
             range: towerProperties[towerName].range,
-            x: zone.x,
-            y: zone.y,
+            x: centerX,
+            y: centerY,
             damage: towerData.damage,
             fireRate: towerProperties[towerName].fire_rate * 1000,
             towerId: towerData.id,

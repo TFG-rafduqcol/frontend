@@ -4,9 +4,8 @@ const enemyCtx = enemyCanvas.getContext("2d");
 document.getElementById('generateEnemyButton').addEventListener('click', generateHorde);
 
 
-// Propiedades del enemigo
 const enemy_props = [
-    { name: "daggerkin", width: 35, height: 35, speed: 80, maxHealth: 40, totalFrames: 20, offsetX: -12, offsetY: -35, healthBarHeight: 40, lifes: 1 }, // Basico, neutro ante todo
+    { name: "daggerkin", width: 35, height: 35, speed: 30, maxHealth: 40, totalFrames: 20, offsetX: -12, offsetY: -35, healthBarHeight: 40, lifes: 1 }, // Basico, neutro ante todo
     { name: "orcutter", width: 50, height: 50, speed: 15, maxHealth: 60, totalFrames: 20, offsetX: -15, offsetY: -45, healthBarHeight: 50, lifes: 1 }, // "Padre" de daggerkin, neutro ante todo
     { name: "oculom", width: 45, height: 45, speed: 25, maxHealth: 40, totalFrames: 18, offsetX: -25, offsetY: -20, healthBarHeight: 40, lifes: 1 }, // Primer enemigo volador no le afecta el mortero (4)
     { name: "devilOrc", width: 54, height: 54, speed: 12, maxHealth: 90, totalFrames: 20, offsetX: -15, offsetY: -45, healthBarHeight: 50, lifes: 1 }, // Debil ante el fuego (3), fuerte contra hierro (1) y piedra (2) 
@@ -16,8 +15,6 @@ const enemy_props = [
     { name: "hexLord", width: 50, height: 50, speed: 17, maxHealth: 90, totalFrames: 20, offsetX: -15, offsetY: -40, healthBarHeight: 50, lifes: 4 }, // Cura los enemigos cada 10s
     { name: "darkSeer", width: 70, height: 70, speed: 10, maxHealth: 140, totalFrames: 20, offsetX: -30, offsetY: -65, healthBarHeight: 65, healthBarX: -4, lifes: 5 } // Fuerte contra TODO (1,2,3,4)
 ];
-
-
 
 async function generateHorde() {
     try {
@@ -37,9 +34,11 @@ async function generateHorde() {
       console.log('Horde generated:', data);
   
       const baseProps = enemy_props.find(e => e.name === "daggerkin");
+      const enemiesData = data.enemies;
   
-      // Usamos un bucle para crear los enemigos con un retraso de 1 segundo entre cada uno
-      const newEnemies = data.enemies.map((enemyData, index) => {
+      for (let index = 0; index < enemiesData.length; index++) {
+        const enemy = enemiesData[index];
+  
         const newEnemy = {
           name: baseProps.name,
           x: path[0].x,
@@ -50,39 +49,42 @@ async function generateHorde() {
           healthBarX: baseProps.healthBarX || 0,
           width: baseProps.width,
           height: baseProps.height,
-          speed: baseProps.speed,
+          speed: baseProps.speed, // puedes usar enemy.speed si decides variar velocidades
           lifes: baseProps.lifes,
-          health: baseProps.maxHealth,
-          maxHealth: baseProps.maxHealth,
+          health: enemy.health,
+          maxHealth: enemy.health,
+          spawnTime: enemy.spawnTime,
           spriteFrame: 0,
           totalFrames: baseProps.totalFrames,
           frameTimer: 0,
           frameDelay: 5,
           currentPoint: 0,
-          t: 0 , // % de avance entre dos puntos
+          t: 0,
           delay: 0,
           loggedZoneEntry: false,
           isDead: false,
           deathTimer: 60,
           opacity: 1,
-          spriteImages: [] 
+          spriteImages: []
         };
-      
-        // Carga las imágenes del sprite
+  
         newEnemy.spriteImages = loadEnemyImages(newEnemy.name, newEnemy.totalFrames);
-      
-        // Agregar el nuevo enemigo con un retraso
-        setTimeout(() => {
-          enemies.push(newEnemy);
-          console.log(`Enemigo ${newEnemy.name} añadido con retraso`);
-        }, index * (50000 / newEnemy.speed));
-
-        return newEnemy;
-      });
+  
+        // Usar el spawnTime del backend
+        await new Promise(resolve => {
+          setTimeout(() => {
+            enemies.push(newEnemy);
+            resolve();
+          }, 1500); // spawnTime en milisegundos
+        });
+      }
+  
     } catch (err) {
       console.error('Error generating horde:', err.message);
     }
-}
+  }
+  
+  
 
 function distance(p1, p2) {
     const dx = p2.x - p1.x;
@@ -159,7 +161,7 @@ function drawEnemies(deltaTime) {
     enemyCtx.clearRect(0, 0, enemyCanvas.width, enemyCanvas.height);
 
     enemies.forEach((enemy) => {
-        moveEnemy(enemy, deltaTime); // Aquí se mueve el enemigo
+        moveEnemy(enemy, deltaTime); 
         
         if (enemy.currentPoint < path.length) { 
             updateAnimation(enemy);  
@@ -168,7 +170,6 @@ function drawEnemies(deltaTime) {
         }
     });
 }
-
 
 
 function drawSprite(x, y, enemy) {
@@ -185,8 +186,6 @@ function drawSprite(x, y, enemy) {
     enemyCtx.globalAlpha = enemy.opacity;
     enemyCtx.drawImage(currentImage, xCorrected, yCorrected, imageWidth, imageHeight);
     enemyCtx.globalAlpha = 1;
-
-
 }
 
 function drawHealthBar(enemy) {
@@ -210,10 +209,10 @@ function drawHealthBar(enemy) {
 
 
 function checkAreasWithEnemies() {
-    towersArea.forEach(area => {
-     
 
-        const enemiesInArea = enemies.filter( enemy => { 
+    towersArea.forEach(area => {
+    
+        const enemyInArea = enemies.find(enemy => { 
             if (enemy.isDead) return false; 
 
             const flyingEnemies = ['oculom', 'hellBat'];
@@ -223,12 +222,23 @@ function checkAreasWithEnemies() {
             const towerY = area.y * scale + offsetY;
             const enemyX = enemy.x * scale + offsetX;
             const enemyY = enemy.y * scale + offsetY;
-            const scaledRange = area.range * scale;
+
+            // Dibujar punto rojo en enemyX, enemyY
+            enemyCtx.fillStyle = "red";
+            enemyCtx.beginPath();
+            enemyCtx.arc(enemyX, enemyY, 5, 0, Math.PI * 2);
+            enemyCtx.fill();
+
+
+
+            const scaledRange = area.range * scale; 
             const dx = enemyX - towerX;
             const dy = enemyY - towerY;
-    
-            return Math.hypot(dx, dy) <= scaledRange;
+
+            return Math.hypot(dx, dy) < scaledRange;
         });
+
+
         const towerDiv = document.getElementById(`tower${area.position}`);
         if (!towerDiv) return; 
         const towerProjectile = towerDiv.querySelector('.towerProjectile');
@@ -254,9 +264,21 @@ function checkAreasWithEnemies() {
             }
         }
         
-        if (enemiesInArea.length > 0 && !area.animationInProgress) {
-
+        if (enemyInArea  && !area.animationInProgress) {
             if (!area.hasActiveProjectile) {
+                const towerX = area.x * scale + offsetX;
+                const towerY = area.y * scale + offsetY;
+
+                const enemyX = enemyInArea.x * scale + offsetX;
+                const enemyY = enemyInArea.y * scale + offsetY;
+
+                const dx = enemyX - towerX;
+                const dy = enemyY - towerY;
+
+                console.log("Posicion del enemigo: ", enemyInArea.x, enemyInArea.y, "distancia: ", Math.hypot(dx, dy));
+
+                //enemyInArea.speed = 0;
+
                 area.hasActiveProjectile = true;
                 const projectileType = area.towerNumber;
                 const duration = area.fireRate;
@@ -273,7 +295,7 @@ function checkAreasWithEnemies() {
                 setTimeout(() => {
                     towerProjectile.style.display = 'none';
                     towerProjectile.style.animationPlayState = 'running';
-                    createProjectile(area.towerId, enemiesInArea[0], projectileType);
+                    createProjectile(area.towerId, enemyInArea, projectileType);
                 }, duration / 2);
 
                 setTimeout(() => {

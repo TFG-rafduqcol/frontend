@@ -38,9 +38,10 @@ function createProjectile(towerId, targetEnemy, projectileType) {
     const enemyX = targetEnemy.x * scale + offsetX;
     const enemyY = targetEnemy.y * scale + offsetY;
 
+
     const dx = enemyX - towerX;
     const dy = enemyY - towerY;
-    const distance = Math.sqrt(dx * dx + dy * dy);
+    const distance = Math.hypot(dx, dy);
     const directionX = dx / distance;
     const directionY = dy / distance;
 
