@@ -12,11 +12,37 @@ const enemy_props = [
     { name: "graySkull", width: 75, height: 75, speed: 8, maxHealth: 140, totalFrames: 20, offsetX: -22, offsetY: -70, healthBarHeight: 65, healthBarX: -2, lifes: 3 }, // Debil contra el mortero (4)
     { name: "carrionTropper", width: 45, height: 45, speed: 14, maxHealth: 90, totalFrames: 20, offsetX: -15, offsetY: -35, healthBarHeight: 45, lifes: 2 }, // Debil fuego (3), fuerte contra el resto (1,2,4)
     { name: "hellBat", width: 60, height: 60, speed: 17, maxHealth: 90, totalFrames: 18, offsetX: -35, offsetY: -40, healthBarHeight: 47, lifes: 2 }, // Segundo enemigo volador, debil ante el mortero (4)
-    { name: "hexLord", width: 50, height: 50, speed: 17, maxHealth: 90, totalFrames: 20, offsetX: -15, offsetY: -40, healthBarHeight: 50, lifes: 4 }, // Cura los enemigos cada 10s
+    { name: "hexLord", width: 50, height: 50, speed: 17, maxHealth: 90, totalFrames: 20, offsetX: -15, offsetY: -40, healthBarHeight: 50, lifes: 4 }, // Cura los enemigos cada 10s, si da tiempo :)
     { name: "darkSeer", width: 70, height: 70, speed: 10, maxHealth: 140, totalFrames: 20, offsetX: -30, offsetY: -65, healthBarHeight: 65, healthBarX: -4, lifes: 5 } // Fuerte contra TODO (1,2,3,4)
 ];
 
 async function generateHorde() {
+
+    const generateButton = document.getElementById('generateEnemyButton');
+    generateButton.disabled = true;
+    generateButton.style.display = 'none';
+
+    const towerDivs = document.querySelectorAll('.tower');
+    towerDivs.forEach(towerDiv => {
+        towerDiv.style.pointerEvents  = 'none';
+    });
+
+    canvas.removeEventListener("click", showTowerMenu);
+
+    const toweEditMenu = document.getElementById('towerEditMenu');
+    if (toweEditMenu) {
+        toweEditMenu.style.pointerEvents = 'none';
+    }
+
+
+    const roundElement = document.getElementById('round');
+    round++;
+
+    if (roundElement) {
+        roundElement.textContent = `${round}`;
+        roundElement.offsetHeight;
+    } 
+    
     try {
       const response = await fetch(`${serverUrl}/api/hordes/generateHorde/${gameId}`, {
         method: 'POST',
@@ -33,14 +59,16 @@ async function generateHorde() {
       const data = await response.json();
       console.log('Horde generated:', data);
   
-      const baseProps = enemy_props.find(e => e.name === "daggerkin");
       const enemiesData = data.enemies;
   
       for (let index = 0; index < enemiesData.length; index++) {
         const enemy = enemiesData[index];
+        const baseProps = enemy_props.find(e => e.name === enemy.name);
+
+        console.log('Enemy data:', enemy);
   
         const newEnemy = {
-          name: baseProps.name,
+          name: enemy.name,
           x: path[0].x,
           y: path[0].y,
           xOffset: baseProps.offsetX,
@@ -49,7 +77,7 @@ async function generateHorde() {
           healthBarX: baseProps.healthBarX || 0,
           width: baseProps.width,
           height: baseProps.height,
-          speed: baseProps.speed, // puedes usar enemy.speed si decides variar velocidades
+          speed: baseProps.speed,
           lifes: baseProps.lifes,
           health: enemy.health,
           maxHealth: enemy.health,
@@ -70,12 +98,11 @@ async function generateHorde() {
   
         newEnemy.spriteImages = loadEnemyImages(newEnemy.name, newEnemy.totalFrames);
   
-        // Usar el spawnTime del backend
         await new Promise(resolve => {
           setTimeout(() => {
             enemies.push(newEnemy);
             resolve();
-          }, 1500); // spawnTime en milisegundos
+          }, 1500);
         });
       }
   
@@ -140,6 +167,7 @@ function moveEnemy(enemy, deltaTime) {
                 gameCanvasContainer.classList.remove('red-border');
             }, 300); 
         }
+        checkEnemiesAndEnableButtons();
     }
 }
 
@@ -223,14 +251,6 @@ function checkAreasWithEnemies() {
             const enemyX = enemy.x * scale + offsetX;
             const enemyY = enemy.y * scale + offsetY;
 
-            // Dibujar punto rojo en enemyX, enemyY
-            enemyCtx.fillStyle = "red";
-            enemyCtx.beginPath();
-            enemyCtx.arc(enemyX, enemyY, 5, 0, Math.PI * 2);
-            enemyCtx.fill();
-
-
-
             const scaledRange = area.range * scale; 
             const dx = enemyX - towerX;
             const dy = enemyY - towerY;
@@ -266,18 +286,6 @@ function checkAreasWithEnemies() {
         
         if (enemyInArea  && !area.animationInProgress) {
             if (!area.hasActiveProjectile) {
-                const towerX = area.x * scale + offsetX;
-                const towerY = area.y * scale + offsetY;
-
-                const enemyX = enemyInArea.x * scale + offsetX;
-                const enemyY = enemyInArea.y * scale + offsetY;
-
-                const dx = enemyX - towerX;
-                const dy = enemyY - towerY;
-
-                console.log("Posicion del enemigo: ", enemyInArea.x, enemyInArea.y, "distancia: ", Math.hypot(dx, dy));
-
-                //enemyInArea.speed = 0;
 
                 area.hasActiveProjectile = true;
                 const projectileType = area.towerNumber;
@@ -337,3 +345,26 @@ function checkAreasWithEnemies() {
 }
 
 
+function checkEnemiesAndEnableButtons() {
+
+    const remainingEnemies = enemies.filter(enemy => !enemy.isDead);
+
+    if (remainingEnemies.length === 0) {
+        const generateButton = document.getElementById('generateEnemyButton');
+        generateButton.disabled = false;
+        generateButton.style.display = 'flex';
+
+        const towerDivs = document.querySelectorAll('.tower');
+        towerDivs.forEach(towerDiv => {
+            towerDiv.style.pointerEvents = 'auto';
+        });
+
+        canvas.addEventListener("click", showTowerMenu);
+
+        const toweEditMenu = document.getElementById('towerEditMenu');
+        if (toweEditMenu) {
+            toweEditMenu.style.pointerEvents = 'auto';
+        }
+
+    }
+}

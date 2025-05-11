@@ -17,10 +17,10 @@ const towerZones = [
 
 
 const towerProperties = {
-    stoneCannon: { cost: 90, fire_rate: 1.5, range: 90, projectile_type: 'stone' },
-    ironCannon: { cost: 100,  fire_rate: 2, range: 80, projectile_type: 'iron' },
-    inferno: { cost: 125,  fire_rate: 3, range: 80, projectile_type: 'fire' },
-    mortar: { cost: 150,  fire_rate: 4, range: 95, projectile_type: 'rock' },
+    stoneCannon: { cost: 90, fire_rate: 2, range: 90   , projectile_type: 'stone' }, // 10 de daño
+    ironCannon: { cost: 100,  fire_rate: 2.5, range: 80, projectile_type: 'iron' }, // 12 de daño
+    inferno: { cost: 125,  fire_rate: 3, range: 80, projectile_type: 'fire' }, // 13 de daño
+    mortar: { cost: 150,  fire_rate: 4, range: 95, projectile_type: 'rock' }, // 15 de daño
 };
 
 const towerStyles = [ 

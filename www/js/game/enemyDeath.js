@@ -21,6 +21,7 @@ function updateDeathAnimation(enemy) {
         enemy.spriteFrame = (enemy.spriteFrame + 1) % enemy.totalFrames;
         enemy.frameTimer = 0;
     }
+    checkEnemiesAndEnableButtons();
 }
 
 let particles = [];
