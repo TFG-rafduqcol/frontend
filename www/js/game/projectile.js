@@ -52,7 +52,7 @@ function createProjectile(towerId, targetEnemy, projectileType) {
         width: projectileSizes[projectileType].width,
         target: targetEnemy,
         damage: tower.damage,
-        speed: 5,
+        speed: tower.name !== "mortar" ? 5 : 8,
         radius: 5,
         type: projectileType,
         image: new Image(),
@@ -64,6 +64,8 @@ function createProjectile(towerId, targetEnemy, projectileType) {
 
     projectile.image.src = projectileImages[projectileType];
     projectiles.push(projectile);
+    
+
 }
 
 function updateProjectiles() {
@@ -176,4 +178,3 @@ function updateImpactParticles() {
         }
     });
 }
-

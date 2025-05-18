@@ -64,8 +64,6 @@ body {
     -webkit-tap-highlight-color: transparent;
 }
 
-
-
 .avatar-info {
     display: flex;
     flex-direction: column;
@@ -77,11 +75,12 @@ body {
 }
 
 .profile-icons {
-    position: absolute;
-    bottom: 3vh;
+    position: relative;
     display: flex;
-    gap: 4vw;
+    gap: 2vw;
+    top: 2vh;
     justify-content: center;
+    align-items: center;
 }
 
 .profile-icons i {
@@ -122,7 +121,7 @@ body {
     font-weight: bold;
     font-size: 1.8rem;
     font-style: italic;
-    margin-bottom: 9vh;
+    margin-top: 0vh;
     text-align: left;
 }
 
@@ -137,20 +136,34 @@ body {
 .new-game {
     display: flex;
     align-items: center;
+    justify-content: center;
     background: rgba(25, 117, 62, 0.9); 
     width: 24vw;
     height: 22vh;
     padding: 2vh 4vw;
     border-radius: 1vw;
-    font-size: 2rem;
+    font-size: 1.2rem;
+    font-family: 'Segoe UI', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.05rem;
+    text-transform: uppercase;
     color: #FFFF99;
     cursor: pointer;
-    transition: 0.3s;
-    border: 1vh solid #FFFF99;
+    transition: all 0.2s ease-in-out;
+    border: none;
+    outline: 0.4vh solid #FFFF99;
+    box-shadow: 0 0.5vh 1vh rgba(0, 0, 0, 0.3);
 }
 
 .new-game:hover {
-    background: darkgreen;
+    background: #0a4f2f;
+    transform: scale(1.03);
+    box-shadow: 0 1vh 2vh rgba(0, 0, 0, 0.5);
+}
+
+.new-game:active {
+    transform: scale(0.98);
+    box-shadow: 0 0.2vh 0.5vh rgba(0, 0, 0, 0.3);
 }
 
 .bottom-icons {
@@ -158,11 +171,16 @@ body {
     bottom: 5vh;
     display: flex;
     gap: 5vw;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .bottom-icons i {
     font-size: 3rem; 
     color: #FFFF99;
+}
+.bottom-icons i:hover {
+    transform: scale(1.1);
+    opacity: 0.8;
 }
 
 .medal-container {

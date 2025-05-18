@@ -15,7 +15,7 @@ body {
 .container {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: cemter;
     align-items: center;
     width: 80%;
     height: auto;
@@ -32,7 +32,7 @@ body {
 .active-avatar-container:hover {
     transform: scale(1.05);
 }
-.avatars-container {
+.avatars-container, .shop-avatars-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -48,18 +48,35 @@ body {
     overflow: auto;
 }
 
+.shop-avatars-container {
+    background-color: transparent;
+    border-color: transparent;
+    box-shadow: none;
+  
+}
+
 .avatars-container::-webkit-scrollbar {
     display: none;              
 }
-.user-avatar, .active-avatar, .remaining-avatar {
+.user-avatar, .active-avatar, .remaining-avatar, .shop-avatar {
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
     transition: transform 0.3s ease-in-out;
 }
+.shop-avatar {
+  display: flex;
+  flex-direction: column; 
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+  transition: transform 0.3s ease-in-out;
+  cursor: pointer; 
+}
 
-.user-avatar img, .active-avatar img, .remaining-avatar img {
+
+.user-avatar img, .active-avatar img, .remaining-avatar img, .shop-avatar img {
     border-radius: 50%;
     transition: transform 0.2s ease-in-out;
 }
@@ -76,7 +93,12 @@ body {
     height: 20vh;
     border: 0.5vh solid #FFFF99;
 }
-
+.shop-avatar img {
+    margin-top: 1vh;
+    width: 15vh;
+    height: 15vh;
+    border: 0.5vh solid #FFFF99;
+}
 .remaining-avatar img {
     width: 20vh;
     height: 20vh;
@@ -143,4 +165,47 @@ body {
 
 .home-icon:hover {
     transform: scale(1.1);
+}
+
+.shop-avatar {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    position: relative;
+    transition: transform 0.3s ease-in-out;
+    background-color: rgba(22, 105, 55, 0.9);
+    border-radius: 4vh;
+    width: 20vh;
+    height: 30vh;
+}
+
+.price-container {
+    position: absolute;
+    bottom: 5vh;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #FFFF99;
+    border-radius: 2vh;
+    width: 80%;
+    height: 20%;
+    color: #9b111e;
+}
+
+.fa-gem { 
+    color: #9b111e;
+    font-size: 1rem;
+    margin-right: 1.5vw;
+}
+
+.top-bar-shop{
+    position: absolute;
+    top: 2vh;
+    left: 2vw;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 1vh 2vw;
+    border-radius: 0.5vw;
+    font-size: 1rem;
 }

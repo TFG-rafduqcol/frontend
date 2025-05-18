@@ -22,10 +22,6 @@ async function generateHorde() {
     generateButton.disabled = true;
     generateButton.style.display = 'none';
 
-    const towerDivs = document.querySelectorAll('.tower');
-    towerDivs.forEach(towerDiv => {
-        towerDiv.style.pointerEvents  = 'none';
-    });
 
     canvas.removeEventListener("click", showTowerMenu);
 
@@ -156,6 +152,7 @@ function moveEnemy(enemy, deltaTime) {
 
         if (enemy.currentPoint >= path.length - 1) {
             const index = enemies.indexOf(enemy);
+            console.log("Salud final del enemigo " +  enemy.name + " : " + enemy.health);
             if (index > -1) enemies.splice(index, 1);
 
             updateGame(false, 0, enemy.lifes);
@@ -210,7 +207,6 @@ function drawSprite(x, y, enemy) {
 
     const currentImage = enemy.spriteImages[enemy.spriteFrame];
 
-
     enemyCtx.globalAlpha = enemy.opacity;
     enemyCtx.drawImage(currentImage, xCorrected, yCorrected, imageWidth, imageHeight);
     enemyCtx.globalAlpha = 1;
@@ -255,7 +251,7 @@ function checkAreasWithEnemies() {
             const dx = enemyX - towerX;
             const dy = enemyY - towerY;
 
-            return Math.hypot(dx, dy) < scaledRange;
+            return Math.hypot(dx, dy) <= scaledRange;
         });
 
 
