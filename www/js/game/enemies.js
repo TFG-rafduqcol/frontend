@@ -5,19 +5,22 @@ document.getElementById('generateEnemyButton').addEventListener('click', generat
 
 
 const enemy_props = [
-    { name: "daggerkin", width: 35, height: 35, speed: 30, maxHealth: 40, totalFrames: 20, offsetX: -12, offsetY: -35, healthBarHeight: 40, lifes: 1 }, // Basico, neutro ante todo
-    { name: "orcutter", width: 50, height: 50, speed: 15, maxHealth: 60, totalFrames: 20, offsetX: -15, offsetY: -45, healthBarHeight: 50, lifes: 1 }, // "Padre" de daggerkin, neutro ante todo
-    { name: "oculom", width: 45, height: 45, speed: 25, maxHealth: 40, totalFrames: 18, offsetX: -25, offsetY: -20, healthBarHeight: 40, lifes: 1 }, // Primer enemigo volador no le afecta el mortero (4)
-    { name: "devilOrc", width: 54, height: 54, speed: 12, maxHealth: 90, totalFrames: 20, offsetX: -15, offsetY: -45, healthBarHeight: 50, lifes: 1 }, // Debil ante el fuego (3), fuerte contra hierro (1) y piedra (2) 
-    { name: "graySkull", width: 75, height: 75, speed: 8, maxHealth: 140, totalFrames: 20, offsetX: -22, offsetY: -70, healthBarHeight: 65, healthBarX: -2, lifes: 3 }, // Debil contra el mortero (4)
-    { name: "carrionTropper", width: 45, height: 45, speed: 14, maxHealth: 90, totalFrames: 20, offsetX: -15, offsetY: -35, healthBarHeight: 45, lifes: 2 }, // Debil fuego (3), fuerte contra el resto (1,2,4)
-    { name: "hellBat", width: 60, height: 60, speed: 17, maxHealth: 90, totalFrames: 18, offsetX: -35, offsetY: -40, healthBarHeight: 47, lifes: 2 }, // Segundo enemigo volador, debil ante el mortero (4)
-    { name: "hexLord", width: 50, height: 50, speed: 17, maxHealth: 90, totalFrames: 20, offsetX: -15, offsetY: -40, healthBarHeight: 50, lifes: 4 }, // Cura los enemigos cada 10s, si da tiempo :)
-    { name: "darkSeer", width: 70, height: 70, speed: 10, maxHealth: 140, totalFrames: 20, offsetX: -30, offsetY: -65, healthBarHeight: 65, healthBarX: -4, lifes: 5 } // Fuerte contra TODO (1,2,3,4)
+    { name: "daggerkin", width: 35, height: 35, speed: 30, maxHealth: 40, totalFrames: 20, offsetX: -12, offsetY: -35, healthBarHeight: 40, lifes: 1, gold: 10 }, // Básico, neutro ante todo
+    { name: "orcutter", width: 50, height: 50, speed: 15, maxHealth: 60, totalFrames: 20, offsetX: -15, offsetY: -45, healthBarHeight: 50, lifes: 1, gold: 12 }, // "Padre" de daggerkin, neutro ante todo
+    { name: "oculom", width: 45, height: 45, speed: 25, maxHealth: 40, totalFrames: 18, offsetX: -25, offsetY: -20, healthBarHeight: 40, lifes: 1, gold: 10 }, // Primer enemigo volador no le afecta el mortero (4)
+    { name: "devilOrc", width: 54, height: 54, speed: 12, maxHealth: 90, totalFrames: 20, offsetX: -15, offsetY: -45, healthBarHeight: 50, lifes: 1, gold: 15 }, // Débil ante el fuego (3), fuerte contra hierro (1) y piedra (2) 
+    { name: "graySkull", width: 75, height: 75, speed: 8, maxHealth: 140, totalFrames: 20, offsetX: -22, offsetY: -70, healthBarHeight: 65, healthBarX: -2, lifes: 3, gold: 25 }, // Débil contra el mortero (4)
+    { name: "carrionTropper", width: 45, height: 45, speed: 14, maxHealth: 90, totalFrames: 20, offsetX: -15, offsetY: -35, healthBarHeight: 45, lifes: 2, gold: 20 }, // Débil fuego (3), fuerte contra el resto (1,2,4)
+    { name: "hellBat", width: 60, height: 60, speed: 17, maxHealth: 90, totalFrames: 18, offsetX: -35, offsetY: -40, healthBarHeight: 47, lifes: 2, gold: 15 }, // Segundo enemigo volador, débil ante el mortero (4)
+    { name: "hexLord", width: 50, height: 50, speed: 17, maxHealth: 90, totalFrames: 20, offsetX: -15, offsetY: -40, healthBarHeight: 50, lifes: 4, gold: 20 }, // Cura los enemigos cada 10s, si da tiempo :)
+    { name: "darkSeer", width: 70, height: 70, speed: 10, maxHealth: 140, totalFrames: 20, offsetX: -30, offsetY: -65, healthBarHeight: 65, healthBarX: -4, lifes: 5, gold: 30 } // Fuerte contra TODO (1,2,3,4)
 ];
 
 async function generateHorde() {
-
+    
+    enemiesKilled = 0;
+    const roundElement = document.getElementById('round');
+        
     const generateButton = document.getElementById('generateEnemyButton');
     generateButton.disabled = true;
     generateButton.style.display = 'none';
@@ -30,81 +33,98 @@ async function generateHorde() {
         toweEditMenu.style.pointerEvents = 'none';
     }
 
+    if (roundElement.textContent === '0'){
 
-    const roundElement = document.getElementById('round');
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch(`${serverUrl}/api/hordes/generateHorde/${gameId}`, {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    earnedGold: 0,
+                })
+            });
+        
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'Failed to generate horde');
+            }
+        
+            const data = await response.json();
+            console.log('Horde generated:', data);
+        
+            const enemiesData = data.enemies;
+        
+            for (let index = 0; index < enemiesData.length; index++) {
+                const enemy = enemiesData[index];
+                const baseProps = enemy_props.find(e => e.name === enemy.name);
+
+                console.log('Enemy data:', enemy);
+        
+                const newEnemy = {
+                name: enemy.name,
+                x: path[0].x,
+                y: path[0].y,
+                xOffset: baseProps.offsetX,
+                yOffset: baseProps.offsetY,
+                healthBarHeight: baseProps.healthBarHeight || 0,
+                healthBarX: baseProps.healthBarX || 0,
+                width: baseProps.width,
+                height: baseProps.height,
+                speed: baseProps.speed,
+                lifes: baseProps.lifes,
+                gold: baseProps.gold,
+                health: enemy.health,
+                maxHealth: enemy.health,
+                spawnTime: enemy.spawnTime,
+                spriteFrame: 0,
+                totalFrames: baseProps.totalFrames,
+                frameTimer: 0,
+                frameDelay: 5,
+                currentPoint: 0,
+                t: 0,
+                delay: 0,
+                loggedZoneEntry: false,
+                isDead: false,
+                deathTimer: 60,
+                opacity: 1,
+                spriteImages: []
+                };
+        
+                newEnemy.spriteImages = loadEnemyImages(newEnemy.name, newEnemy.totalFrames);
+        
+                await new Promise(resolve => {
+                setTimeout(() => {
+                    enemies.push(newEnemy);
+                    resolve();
+                }, 1500);
+                });
+            }
+        } catch (err) {
+        console.error('Error generating horde:', err.message);
+        }
+    } else { 
+        isHordePrepared = false;
+        console.log("Preparando siguiente horda...");
+        console.log(nextHorde);
+    
+        for (let i = 0; i < nextHorde.length; i++) {
+            const enemy = nextHorde[i];
+            enemies.push(enemy);
+            console.log(`Enemigo añadido: ${enemy.name}`, enemy);
+
+            await new Promise(resolve => setTimeout(resolve, 1500));
+        }
+    }
     round++;
-
     if (roundElement) {
         roundElement.textContent = `${round}`;
         roundElement.offsetHeight;
     } 
-    
-    try {
-      const response = await fetch(`${serverUrl}/api/hordes/generateHorde/${gameId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-  
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Failed to generate horde');
-      }
-  
-      const data = await response.json();
-      console.log('Horde generated:', data);
-  
-      const enemiesData = data.enemies;
-  
-      for (let index = 0; index < enemiesData.length; index++) {
-        const enemy = enemiesData[index];
-        const baseProps = enemy_props.find(e => e.name === enemy.name);
 
-        console.log('Enemy data:', enemy);
-  
-        const newEnemy = {
-          name: enemy.name,
-          x: path[0].x,
-          y: path[0].y,
-          xOffset: baseProps.offsetX,
-          yOffset: baseProps.offsetY,
-          healthBarHeight: baseProps.healthBarHeight || 0,
-          healthBarX: baseProps.healthBarX || 0,
-          width: baseProps.width,
-          height: baseProps.height,
-          speed: baseProps.speed,
-          lifes: baseProps.lifes,
-          health: enemy.health,
-          maxHealth: enemy.health,
-          spawnTime: enemy.spawnTime,
-          spriteFrame: 0,
-          totalFrames: baseProps.totalFrames,
-          frameTimer: 0,
-          frameDelay: 5,
-          currentPoint: 0,
-          t: 0,
-          delay: 0,
-          loggedZoneEntry: false,
-          isDead: false,
-          deathTimer: 60,
-          opacity: 1,
-          spriteImages: []
-        };
-  
-        newEnemy.spriteImages = loadEnemyImages(newEnemy.name, newEnemy.totalFrames);
-  
-        await new Promise(resolve => {
-          setTimeout(() => {
-            enemies.push(newEnemy);
-            resolve();
-          }, 1500);
-        });
-      }
-  
-    } catch (err) {
-      console.error('Error generating horde:', err.message);
-    }
   }
   
   
@@ -341,11 +361,12 @@ function checkAreasWithEnemies() {
 }
 
 
-function checkEnemiesAndEnableButtons() {
+async function checkEnemiesAndEnableButtons() {
 
     const remainingEnemies = enemies.filter(enemy => !enemy.isDead);
 
     if (remainingEnemies.length === 0) {
+        loadStats();
         const generateButton = document.getElementById('generateEnemyButton');
         generateButton.disabled = false;
         generateButton.style.display = 'flex';
@@ -362,5 +383,99 @@ function checkEnemiesAndEnableButtons() {
             toweEditMenu.style.pointerEvents = 'auto';
         }
 
+        if (!isHordePrepared) prepareNextHorde();
+
     }
+}
+
+let nextHorde = []; 
+let isHordePrepared = false;
+async function prepareNextHorde () {
+    isHordePrepared = true;
+
+    if (earnedGold > 0) {
+            const goldElement = document.getElementById('gold');
+            let goldText = goldElement.textContent;
+            if (goldElement) {
+                gold = Number(goldText) + earnedGold;
+                goldText = gold.toString();
+                goldElement.textContent = goldText;
+            }
+        }
+
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${serverUrl}/api/hordes/generateHorde/${gameId}`, {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` 
+            },
+            body: JSON.stringify({
+                earnedGold: earnedGold,
+            })
+    }); 
+  
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to generate horde');
+      }
+  
+      const data = await response.json();
+      console.log('Horde generated:', data);
+  
+      const enemiesData = data.enemies;
+  
+      for (let index = 0; index < enemiesData.length; index++) {
+        const enemy = enemiesData[index];
+        const baseProps = enemy_props.find(e => e.name === enemy.name);
+
+        console.log('Enemy data:', enemy);
+  
+        const newEnemy = {
+            name: enemy.name,
+            x: path[0].x,
+            y: path[0].y,
+            xOffset: baseProps.offsetX,
+            yOffset: baseProps.offsetY,
+            healthBarHeight: baseProps.healthBarHeight || 0,
+            healthBarX: baseProps.healthBarX || 0,
+            width: baseProps.width,
+            height: baseProps.height,
+            speed: baseProps.speed,
+            lifes: baseProps.lifes,
+            gold: baseProps.gold,
+            health: enemy.health,
+            maxHealth: enemy.health,
+            spawnTime: enemy.spawnTime,
+            spriteFrame: 0,
+            totalFrames: baseProps.totalFrames,
+            frameTimer: 0,
+            frameDelay: 5,
+            currentPoint: 0,
+            t: 0,
+            delay: 0,
+            loggedZoneEntry: false,
+            isDead: false,
+            deathTimer: 60,
+            opacity: 1,
+            spriteImages: []
+        };
+  
+        newEnemy.spriteImages = loadEnemyImages(newEnemy.name, newEnemy.totalFrames);
+        nexHorde = [];
+  
+        await new Promise(resolve => {
+            nextHorde.push(newEnemy);
+            resolve();
+        });
+      }
+  
+    } catch (err) {
+      console.error('Error generating horde:', err.message);
+    }
+}
+
+async function loadStats (){
+    console.log("Aqui se actualizan los enemigos que se han matado");
 }

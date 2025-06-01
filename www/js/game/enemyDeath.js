@@ -1,4 +1,5 @@
 function updateDeathAnimation(enemy) {
+
     if (enemy.isDead && !enemy.smokeEffectGenerated) {
         createSmokeEffect(enemy.x, enemy.y);
         enemy.smokeEffectGenerated = true; 

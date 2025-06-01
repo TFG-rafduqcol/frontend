@@ -68,6 +68,9 @@ function createProjectile(towerId, targetEnemy, projectileType) {
 
 }
 
+let enemiesKilled = 0;  
+let earnedGold = 0;
+
 function updateProjectiles() {
     projectiles.forEach((projectile, index) => {
         if (!projectile.target || projectile.target.isDead) {
@@ -114,7 +117,13 @@ function updateProjectiles() {
             if (projectile.target.health <= 0) {
                 const enemyIndex = enemies.findIndex(enemy => enemy === projectile.target);
                 if (enemyIndex !== -1) {
+                    enemiesKilled++;
+
                     enemies[enemyIndex].isDead = true;
+                    console.log("Enemy gold:", enemies[enemyIndex].gold);
+                    earnedGold += enemies[enemyIndex].gold;
+                    console.log("Total gold earned:", earnedGold);
+                    
                 }
             }
             projectiles.splice(index, 1);

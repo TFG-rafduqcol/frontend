@@ -3,9 +3,9 @@ const gameId = params.get('gameId');
 
 const token = localStorage.getItem('token');
 
-let gold = 500;
+let gold = 350;
 let lives = 20;
-let round = 1;
+let round = 0;
 
 const backgroundMusic = document.getElementById('backgroundMusic');
 backgroundMusic.volume = 0.1;  
