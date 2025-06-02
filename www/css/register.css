@@ -117,9 +117,44 @@ input:focus {
     }
 }
 
-::placeholder {
+input::placeholder {
     color: #FFFF99;
-    font-style: italic; 
-    opacity: 0.7; 
+    font-style: italic;
+    opacity: 0.7;
+    font-size: 0.9rem;
+}
+
+input:-ms-input-placeholder { 
+    color: #FFFF99;
+    font-style: italic;
+    opacity: 0.7;
+    font-size: 0.9rem;
+}
+
+input::-ms-input-placeholder { 
+    color: #FFFF99;
+    font-style: italic;
+    opacity: 0.7;
+    font-size: 0.9rem;
+}
+
+input::-webkit-input-placeholder {
+    color: #FFFF99;
+    font-style: italic;
+    opacity: 0.7;
+    font-size: 0.9rem;
+}
+
+input::-moz-placeholder {
+    color: #FFFF99;
+    font-style: italic;
+    opacity: 0.7;
+    font-size: 0.9rem;
+}
+
+input:-moz-placeholder {
+    color: #FFFF99;
+    font-style: italic;
+    opacity: 0.7;
     font-size: 0.9rem;
 }

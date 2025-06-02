@@ -22,7 +22,8 @@
     "enter_password_placeholder": "Introduce tu clave secreta...",
     "new_password_placeholder": "Nueva clave o déjala en blanco para mantenerla...",
     "confirm_password_placeholder": "Vuelve a introducir tu clave secreta...",
-    "save": "Guardar",    "confirm_modal_message": "¿Estás seguro de que quieres cambiar tus datos?",
+    "save": "Guardar",
+    "confirm_modal_message": "¿Estás seguro de que quieres cambiar tus datos?",
     "yes_save": "Sí, guardar",
     "cancel": "Cancelar",
     

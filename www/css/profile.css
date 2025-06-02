@@ -122,16 +122,26 @@ body {
 
 .username {
     text-align: left;
-    font-size: 2vw;
+    font-size: 2.5vw;
     margin-top: 10vh;
     height: auto;
+    font-weight: bold;
 }
 
 .id {
     text-align: left;
-    font-size: 3.5vw;
+    font-size: 3vw;
     height: auto;
     margin-left: 5vw;
+    margin-top: 2vh;
+    font-weight: bold;
+}
+
+.range {
+    font-size: 2vw;
+    font-weight: bold;
+    color: #FFFF99;
+    margin-left: 2.5vw;
 }
 
 .more-user-info {
@@ -140,10 +150,8 @@ body {
     justify-content: flex-start;
     align-items: flex-start;
     height: 100%;
-    width: 3%;
-    gap: 2vh;
-    padding: 1.5vh;
-    border-radius: 12vh;
+    width: 40%;
+    text-align: center;
 }
 
 .medal-container {
@@ -194,15 +202,16 @@ body {
     width: 8vh;
     border-radius: 50%;
     font-size: 2vw;
-    margin-top: 8vh;
+    margin-top: 0;
 }
 
 .stats-container {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     flex-direction: column;
     gap: 4vh;
-    margin-left: 5vw;
-    width: 35%;
+    margin-left: 0;
+    margin-right: 1vw;
+    width: 100%;
 }

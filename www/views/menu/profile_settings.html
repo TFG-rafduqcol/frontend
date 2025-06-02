@@ -7,6 +7,8 @@
     <link rel="icon" type="image/x-icon" href="../../images/logo.png">
     <link rel="stylesheet" href="../../css/profile_settings.css">
     <link rel="stylesheet" href="../../css/home.css">
+    <link rel="stylesheet" href="../../css/languaje.css">
+
 
 
     <title>Profile Settings</title>
@@ -23,12 +25,12 @@
             </a>
         </div>
         <form class="register-form">
-            <input type="text" id="firstname" name="firstname" value="" required data-i18n="first_name_placeholder" maxlength="50">
-            <input type="text" id="lastname" name="lastname" value="" required data-i18n="last_name_placeholder"  maxlength="50">
-            <input type="text" id="username" name="username" value="" required data-i18n="username_placeholder" maxlength="10">
-            <input type="email" id="email" name="email" value="" required data-i18n="email_placeholder">
-            <input type="password" id="password" name="password" value="" required data-i18n="new_password_placeholder">
-            <input type="password" id="confirm-password" name="confirm-password" value="" required data-i18n="confirm_password_placeholder">
+            <input type="text" id="firstname" name="firstname" value=""  placeholder="" required data-i18n="first_name_placeholder" maxlength="50">
+            <input type="text" id="lastname" name="lastname" value=""  placeholder="" required data-i18n="last_name_placeholder"  maxlength="50">
+            <input type="text" id="username" name="username" value=""  placeholder="" required data-i18n="username_placeholder" maxlength="10">
+            <input type="email" id="email" name="email" value=""  placeholder="" required data-i18n="email_placeholder">
+            <input type="password" id="password" name="password" value=""  placeholder="" required data-i18n="new_password_placeholder">
+            <input type="password" id="confirm-password" name="confirm-password" value=""  placeholder="" required data-i18n="confirm_password_placeholder">
             <div class="button-container">
                 <button type="button" class="button-save" data-i18n="save">Save</button>
             </div>       
@@ -37,19 +39,19 @@
 
     <div id="confirm-modal" class="modal">
         <div class="modal-content">
-            <p data-i18n="confirm-modal-message">Are you sure you want to change your data?</p>
+            <p data-i18n="confirm_modal_message">Are you sure you want to change your data?</p>
             <button id="confirm-button" class="button-confirm" data-i18n="yes_save">Yes, Save</button>
             <button id="cancel-button" class="button-cancel" data-i18n="cancel">Cancel</button>
         </div>
     </div>
-
 </body>
 
+<script src="../../js/utils/translations.js" defer></script>
 <script src="../../js/menu/profile_settings.js" defer></script>
 <script src="../../js/utils/config.js" defer></script>
-<script src="../../js/utils/i18n.js" defer></script>
 <script src="../../js/utils/player_auth.js"></script>
 <script src="../../js/utils/modals.js"></script>
+<script src ="../../js/utils/i18n.js" defer></script>
 
 
 </html>

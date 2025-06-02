@@ -19,6 +19,8 @@
     "hiddenStatusBar": true,
     "fullScreen": true,
     "orientation": "landscape",
-    "webContentsDebuggingEnabled": true
+    "webContentsDebuggingEnabled": true,
+    "windowSoftInputMode": "adjustResize",
+    "immersive": true
   }
 }

@@ -164,38 +164,73 @@ input:focus {
 .modal {
     display: none;
     position: fixed;
-    top: 50%; 
-    left: 50%; 
+    top: 50%;
+    left: 50%;
     transform: translate(-50%, -50%);
     border: 2px solid #FFFF99;
-    width: 30vw; 
+    width: 60vw;
+    max-width: 300px;
+    min-width: 160px;
     height: auto;
-    z-index: 1000; 
+    z-index: 1000;
+    box-shadow: 0 8px 32px 0 rgba(0,0,0,0.37);
+    border-radius: 14px;
+    background: rgba(25, 117, 62, 0.98);
+    animation: modalFadeIn 0.3s;
+}
 
+@keyframes modalFadeIn {
+    from { opacity: 0; transform: translate(-50%, -60%) scale(0.95); }
+    to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 }
 
 .modal-content {
     color: #FFFF99;
-    background: rgba(25, 117, 62);
-    padding: 20px;
-    border-radius: 5px;
+    background: transparent;
+    padding: 16px 12px 12px 12px;
+    border-radius: 12px;
     text-align: center;
+    box-shadow: none;
+    font-size: 1rem;
 }
 
+.modal-content p {
+    margin-bottom: 14px;
+    font-size: 1rem;
+    color: #FFFF99;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+}
 
 .button-confirm, .button-cancel {
-    padding: 10px 20px;
-    margin: 10px;
+    padding: 8px 16px;
+    margin: 0 6px;
     border: none;
+    border-radius: 7px;
     cursor: pointer;
+    font-size: 0.97rem;
+    font-weight: 600;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
 }
 
 .button-confirm {
-    background-color: green;
-    color: white;
+    background: linear-gradient(90deg, #1faa50 60%, #19753E 100%);
+    color: #fffbe7;
+}
+
+.button-confirm:hover {
+    background: linear-gradient(90deg, #19753E 60%, #1faa50 100%);
+    color: #FFFF99;
 }
 
 .button-cancel {
-    background-color: #9b111e;
-    color: white;
+    background: linear-gradient(90deg, #9b111e 60%, #c0392b 100%);
+    color: #fffbe7;
 }
+
+.button-cancel:hover {
+    background: linear-gradient(90deg, #c0392b 60%, #9b111e 100%);
+    color: #FFFF99;
+}
+

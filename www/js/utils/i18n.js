@@ -2,18 +2,19 @@ document.addEventListener("DOMContentLoaded", function () {
     const defaultLang = "en"; 
     let currentLang = localStorage.getItem("language") || defaultLang;
     
-    // Usar rutas relativas en lugar de basadas en origin
-    // La ruta debería ser relativa a donde se encuentra la página actual
     function loadLanguage(lang) {
-        // Determinar cuántos niveles de directorios tenemos que subir
         let pathPrefix = "../../";
-        
-        // Si estamos en la raíz, no necesitamos subir niveles
+        // Ajuste para rutas de views/menu y views/auth
         if (window.location.pathname.endsWith('/www/') || window.location.pathname.endsWith('/www/index.html')) {
             pathPrefix = "";
         } 
-        // Si estamos en /views/
-        else if (window.location.pathname.includes('/www/views/') && !window.location.pathname.includes('/www/views/auth/')) {
+        else if (window.location.pathname.includes('/www/views/auth/')) {
+            pathPrefix = "../../";
+        }
+        else if (window.location.pathname.includes('/www/views/menu/')) {
+            pathPrefix = "../../";
+        }
+        else if (window.location.pathname.includes('/www/views/')) {
             pathPrefix = "../";
         }
         
@@ -42,12 +43,17 @@ document.addEventListener("DOMContentLoaded", function () {
         loadLanguage(lang);
     };
 
-    // Usar rutas relativas para cargar el selector de idioma
     let pathPrefix = "../../";
     if (window.location.pathname.endsWith('/www/') || window.location.pathname.endsWith('/www/index.html')) {
         pathPrefix = "";
     } 
-    else if (window.location.pathname.includes('/www/views/') && !window.location.pathname.includes('/www/views/auth/')) {
+    else if (window.location.pathname.includes('/www/views/auth/')) {
+        pathPrefix = "../../";
+    }
+    else if (window.location.pathname.includes('/www/views/menu/')) {
+        pathPrefix = "../../";
+    }
+    else if (window.location.pathname.includes('/www/views/')) {
         pathPrefix = "../";
     }
 

@@ -2,7 +2,7 @@ let modalLoaded = false;
 
 function loadModal() {
     if (!modalLoaded) {
-        url = '/www/views/components/settings_modal.html';
+        url = '/views/components/settings_modal.html';
        
 
         fetch(url)
@@ -48,7 +48,18 @@ function closeModal() {
 
 function logout() {
     localStorage.clear();
-    window.location.href = '/www/views/auth/login'; 
+    let base = window.location.pathname;
+    let loginPath = '';
+    if (base.includes('/views/auth/')) {
+        loginPath = 'login.html';
+    } else if (base.includes('/views/menu/')) {
+        loginPath = '../auth/login.html';
+    } else if (base.includes('/views/')) {
+        loginPath = 'auth/login.html';
+    } else {
+        loginPath = 'views/auth/login.html';
+    }
+    window.location.href = loginPath;
 }
 document.addEventListener('DOMContentLoaded', () => {
     const modalPlaceholder = document.getElementById('modal-placeholder');

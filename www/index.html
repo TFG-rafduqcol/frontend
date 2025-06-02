@@ -7,24 +7,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/index.css">
-    <link rel="stylesheet" href="css/languaje.css">
+    <link rel="stylesheet" href="../css/languaje.css">
     <link rel="icon" type="image/x-icon" href="images/logo.png">
     <title>Aztec Guardians</title>
     
-    <!-- Scripts con manejo de errores -->
-    <script>
-        window.onerror = function(message, source, lineno, colno, error) {
-            console.error('Error en la página:', message, 'en', source, 'línea:', lineno);
-            document.getElementById('error-message').textContent = message;
-            document.getElementById('error-container').style.display = 'block';
-            return true;
-        };
-        
-        // Verificar conexiones de red
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM completamente cargado');
-        });
-    </script>
     
     <script src="js/utils/config.js" defer></script>
     <script src="js/utils/i18n.js" defer></script>
@@ -36,27 +22,7 @@
         <button class="button button-large" onclick="window.location.href='views/auth/login.html'" data-i18n="login">Log-in</button>       
         <button class="button button-small" onclick="window.location.href='views/auth/register.html'" data-i18n="register">Register</button>
     </div>
-    
-    <!-- Contenedor de error oculto -->
-    <div id="error-container" style="display: none; position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255, 0, 0, 0.8); color: white; padding: 10px; text-align: center;">
-        <p>Ha ocurrido un error: <span id="error-message"></span></p>
-        <button onclick="location.reload()">Reintentar</button>
-    </div>
-    
-    <script>
-        // Código para verificar que todo está funcionando correctamente
-        console.log('Aplicación iniciada');
-        
-        // Verificar si serverUrl está definido
-        setTimeout(function() {
-            if (window.serverUrl) {
-                console.log('serverUrl configurado correctamente:', window.serverUrl);
-            } else {
-                console.error('serverUrl no está definido');
-                document.getElementById('error-message').textContent = 'Error de configuración: serverUrl no está definido';
-                document.getElementById('error-container').style.display = 'block';
-            }
-        }, 1000);
-    </script>
+
+
 </body>
 </html>

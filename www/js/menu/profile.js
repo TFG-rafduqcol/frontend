@@ -9,6 +9,8 @@ if (user) {
         document.getElementById("range_url").src = `${user.range_url}`;
         document.getElementById("range").textContent = `${user.range}`;
 
+
+
         async function getStats() {
             const token = localStorage.getItem('token');
 

@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
 
+    loadTranslations();
+
     const user = JSON.parse(localStorage.getItem('user'));  
 
     if (user) {
