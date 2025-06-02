@@ -1,19 +1,24 @@
 {
-  "appId": "com.miempresa.miapp",
-  "appName": "MiApp",
+  "appId": "com.miempresa.towerdefense",
+  "appName": "Tower Defense",
   "webDir": "www",
   "server": {
     "cleartext": true,
     "allowNavigation": [
       "192.168.100.7",
       "192.168.100.7:3000",
-      "192.168.100.7:8000"
+      "192.168.100.7:8000",
+      "localhost",
+      "*"
     ],
-    "androidScheme": "http"
+    "androidScheme": "http",
+    "errorPath": "error.html"
   },
   "android": {
     "allowMixedContent": true,
     "hiddenStatusBar": true,
-    "fullScreen": true
+    "fullScreen": true,
+    "orientation": "landscape",
+    "webContentsDebuggingEnabled": true
   }
 }

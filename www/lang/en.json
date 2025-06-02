@@ -25,7 +25,7 @@
     "save": "Save",
     "confirm_modal_message": "Are you sure you want to change your data?",
     "yes_save": "Yes, Save",
-    "cancel": "Cancel", 
+    "cancel": "Cancel",
 
     
 
@@ -45,9 +45,27 @@
     "searchUser": "User not found with this username or ID.",
     "errorSession": "Error in the request. Verify your session.",
     "enterUsernameOrId": "Please enter a user ID or username.",
-
-
     "email_placeholder_error": "Please enter a valid email address.",
+    "email_required": "Email required!",
+    "invalid_email": "Invalid email!",
+    "password_required": "Password required!",    "password_insecure": "Use 8+ chars, 1 lowercase and 1 number",
+    "email_not_registered": "Email not registered",
+    "invalid_password": "Invalid password",
+    "invalid_credentials": "Invalid credentials",
+    "error_try_again": "An error occurred. Please try again later.",
+    
+    "firstname_required": "First name required!",
+    "firstname_length": "First name must be between 3 and 50 characters!",
+    "lastname_required": "Last name required!",
+    "lastname_length": "Last name must be between 3 and 50 characters!",
+    "email_already_registered": "Email already registered!",
+    
+    "username_required": "Username required!",
+    "username_length": "Username must be between 3 and 9 characters!",
+    "confirm_password_required": "Confirm your password!",
+    "passwords_dont_match": "Passwords do not match!",
+    "registration_failed": "Registration failed",
+    "registration_error": "There was an error registering the user",
 
 
 

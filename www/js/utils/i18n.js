@@ -1,11 +1,29 @@
 document.addEventListener("DOMContentLoaded", function () {
     const defaultLang = "en"; 
     let currentLang = localStorage.getItem("language") || defaultLang;
-    const baseURL = `${window.location.origin}/www/lang/`;
-
+    
+    // Usar rutas relativas en lugar de basadas en origin
+    // La ruta debería ser relativa a donde se encuentra la página actual
     function loadLanguage(lang) {
-        fetch(`${baseURL}${lang}.json`)
-            .then(response => response.json())
+        // Determinar cuántos niveles de directorios tenemos que subir
+        let pathPrefix = "../../";
+        
+        // Si estamos en la raíz, no necesitamos subir niveles
+        if (window.location.pathname.endsWith('/www/') || window.location.pathname.endsWith('/www/index.html')) {
+            pathPrefix = "";
+        } 
+        // Si estamos en /views/
+        else if (window.location.pathname.includes('/www/views/') && !window.location.pathname.includes('/www/views/auth/')) {
+            pathPrefix = "../";
+        }
+        
+        fetch(`${pathPrefix}lang/${lang}.json`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(translations => {
                 document.querySelectorAll("[data-i18n]").forEach(element => {
                     const key = element.getAttribute("data-i18n");
@@ -19,15 +37,27 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
             })
             .catch(error => console.error("Error loading language file:", error));
-    }
-
-    window.changeLanguage = function (lang) {
+    }    window.changeLanguage = function (lang) {
         localStorage.setItem("language", lang);
         loadLanguage(lang);
     };
 
-    fetch(`${window.location.origin}/www/views/components/language-selector.html`)
-    .then(response => response.text())
+    // Usar rutas relativas para cargar el selector de idioma
+    let pathPrefix = "../../";
+    if (window.location.pathname.endsWith('/www/') || window.location.pathname.endsWith('/www/index.html')) {
+        pathPrefix = "";
+    } 
+    else if (window.location.pathname.includes('/www/views/') && !window.location.pathname.includes('/www/views/auth/')) {
+        pathPrefix = "../";
+    }
+
+    fetch(`${pathPrefix}views/components/language-selector.html`)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.text();
+    })
     .then(html => {
         const languageSelector = document.createElement("div");
         languageSelector.innerHTML = html;

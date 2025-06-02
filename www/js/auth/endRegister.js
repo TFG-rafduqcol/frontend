@@ -4,6 +4,27 @@ document.addEventListener("DOMContentLoaded", function () {
     let password = document.getElementById("password");
     let confirmPassword = document.getElementById("confirm-password");
 
+    // Cargar traducciones para los mensajes de error
+    const loadTranslations = () => {
+        const lang = localStorage.getItem("language") || "en";
+        // Usar rutas relativas en lugar de basadas en origin
+        fetch(`../../lang/${lang}.json`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(translations => {
+                window.translations = translations;
+            })
+            .catch((error) => {
+                console.error("Error loading language file:", error);
+            });
+    };
+
+    loadTranslations();
+
     document.querySelector(".button-save").addEventListener("click", function () {
         console.log("hola");
         let valid = true;
@@ -18,32 +39,30 @@ document.addEventListener("DOMContentLoaded", function () {
             input.classList.add("error");
             input.style.color = "";
             input.style.setProperty("--placeholder-color", "#9b111e");
-        }
-
-        if (username.value.trim() === "") {
-            setError(username, "Username required!");
+        }        if (username.value.trim() === "") {
+            setError(username, window.translations?.username_required || "Username required!");
             valid = false;
         } else if (username.value.trim().length < 3 || username.value.trim().length > 10) {
             username.value = "";
-            setError(username, "Username must be between 3 and 9 characters!");
+            setError(username, window.translations?.username_length || "Username must be between 3 and 9 characters!");
             valid = false;
         }
 
         if (password.value.trim() === "") {
-            setError(password, "Password required!");
+            setError(password, window.translations?.password_required || "Password required!");
             valid = false;
         } else if (!isPasswordSecure(password.value.trim())) {
             password.value = "";
-            setError(password, "Use 8+ chars 1 lowercase and 1 number.");
+            setError(password, window.translations?.password_insecure || "Use 8+ chars 1 lowercase and 1 number.");
             valid = false;
         }
 
         if (confirmPassword.value.trim() === "") {
-            setError(confirmPassword, "Confirm your password!");
+            setError(confirmPassword, window.translations?.confirm_password_required || "Confirm your password!");
             valid = false;
         } else if (confirmPassword.value.trim() !== password.value.trim()) {
             confirmPassword.value = "";
-            setError(confirmPassword, "Passwords do not match!");
+            setError(confirmPassword, window.translations?.passwords_dont_match || "Passwords do not match!");
             valid = false;
         }
 
@@ -71,13 +90,12 @@ document.addEventListener("DOMContentLoaded", function () {
                     });
                 }
                 return response.json();  
-            })
-            .then(data => {
+            })            .then(data => {
                 if (data.error) {
                     if (data.error === "EmailDuplicate") {
-                        alert(`Registration failed: ${data.message}`);
+                        alert(`${window.translations?.registration_failed || "Registration failed"}: ${data.message}`);
                     } else {
-                        alert(`Registration failed: ${data.error} - ${data.message}`);
+                        alert(`${window.translations?.registration_failed || "Registration failed"}: ${data.error} - ${data.message}`);
                     }
                 } else {
                     console.log("Success:", data);
@@ -89,17 +107,36 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .catch(error => {
                 console.error("Error caught in catch block:", error);
-                alert("There was an error registering the user: " + (error.message || error));
+                alert(`${window.translations?.registration_error || "There was an error registering the user"}: ${error.message || error}`);
             });
         }
-    });
-
-    function isPasswordSecure(password) {
+    });    function isPasswordSecure(password) {
         const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
         return passwordPattern.test(password);
     }
 
     let style = document.createElement("style");
-    style.innerHTML = "input::placeholder { color: var(--placeholder-color, #FFFF99); }";
+    style.innerHTML = `
+        input::placeholder { 
+            color: var(--placeholder-color, #FFFF99); 
+            opacity: 1; /* Para Firefox */
+        }
+        input::-webkit-input-placeholder { 
+            color: var(--placeholder-color, #FFFF99); 
+            opacity: 1;
+        }
+        input:-moz-placeholder { 
+            color: var(--placeholder-color, #FFFF99); 
+            opacity: 1;
+        }
+        input::-moz-placeholder { 
+            color: var(--placeholder-color, #FFFF99); 
+            opacity: 1;
+        }
+        input:-ms-input-placeholder { 
+            color: var(--placeholder-color, #FFFF99); 
+            opacity: 1;
+        }
+    `;
     document.head.appendChild(style);
 });

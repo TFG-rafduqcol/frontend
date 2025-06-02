@@ -1,7 +1,30 @@
 document.addEventListener("DOMContentLoaded", function () {
 
     const email = document.getElementById("email");
-    const password = document.getElementById("password");
+    const password = document.getElementById("password");    const setInitialPlaceholders = () => {
+        const lang = localStorage.getItem("language") || "en";
+        // Usar rutas relativas en lugar de basadas en origin
+        fetch(`../../lang/${lang}.json`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(translations => {
+                email.placeholder = translations.enter_email_placeholder || "Enter your email";
+                password.placeholder = translations.enter_password_placeholder || "Enter your password";
+                
+                window.translations = translations;
+            })
+            .catch((error) => {
+                console.error("Error loading language file:", error);
+                email.placeholder = "Enter your email";
+                password.placeholder = "Enter your password";
+            });
+    };
+
+    setInitialPlaceholders();
 
     document.querySelector(".button-go").addEventListener("click", function () {
     
@@ -17,26 +40,24 @@ document.addEventListener("DOMContentLoaded", function () {
             input.classList.add("error");
             input.style.color = "";
             input.style.setProperty("--placeholder-color", "#9b111e");
-        }
-
-        if (email.value.trim() === "") {
-            setError(email, "Email required!");
+        }        if (email.value.trim() === "") {
+            setError(email, window.translations?.email_required || "Email required!");
             valid = false;
         }
 
         let emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         if (!emailPattern.test(email.value.trim())) {
             email.value = "";
-            setError(email, "Invalid email!");
+            setError(email, window.translations?.invalid_email || "Invalid email!");
             valid = false;
         }
 
         if (password.value.trim() === "") {
-            setError(password, "Password required!");
+            setError(password, window.translations?.password_required || "Password required!");
             valid = false;
         } else  if (!isPasswordSecure(password.value.trim())) {
             password.value = "";
-            setError(password, "Use 8+ chars, 1 lowercase and 1 number");
+            setError(password, window.translations?.password_insecure || "Use 8+ chars, 1 lowercase and 1 number");
             valid = false;
         }
 
@@ -51,23 +72,21 @@ document.addEventListener("DOMContentLoaded", function () {
                     password: password.value.trim()
                 })
             })
-                .then(response => {
-
-                    if (response.status === 404) {
+                .then(response => {                    if (response.status === 404) {
                         return response.json().then(data => {
                             email.value = "";
-                            setError(email, data.message || "Email not registered");
+                            setError(email, data.message || window.translations?.email_not_registered || "Email not registered");
                         });
                     } else if (response.status === 401) {
                         return response.json().then(data => {
                             password.value = "";    
-                            setError(password, "Invalid password");
+                            setError(password, window.translations?.invalid_password || "Invalid password");
                         });
                     } else if (response.ok) {
                         return response.json();
                     } else {
                         return response.json().then(data => {
-                            setError(email, data.message || "Invalid credentials");
+                            setError(email, data.message || window.translations?.invalid_credentials || "Invalid credentials");
                         });
                     }
                 })
@@ -81,10 +100,9 @@ document.addEventListener("DOMContentLoaded", function () {
                         window.location = "../menu/index.html";
                         }
                     }
-                })
-                .catch(error => {
+                })                .catch(error => {
                     console.error("Error:", error);
-                    alert("An error occurred. Please try again later.");
+                    alert(window.translations?.error_try_again || "An error occurred. Please try again later.");
                 });
         }
     });
@@ -92,10 +110,29 @@ document.addEventListener("DOMContentLoaded", function () {
     function isPasswordSecure(password) {
         const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
         return passwordPattern.test(password);
-    }
-
-    let style = document.createElement("style");
-    style.innerHTML = "input::placeholder { color: var(--placeholder-color, #FFFF99); }";
+    }    let style = document.createElement("style");
+    style.innerHTML = `
+        input::placeholder { 
+            color: var(--placeholder-color, #FFFF99); 
+            opacity: 1; /* Para Firefox */
+        }
+        input::-webkit-input-placeholder { 
+            color: var(--placeholder-color, #FFFF99); 
+            opacity: 1;
+        }
+        input:-moz-placeholder { 
+            color: var(--placeholder-color, #FFFF99); 
+            opacity: 1;
+        }
+        input::-moz-placeholder { 
+            color: var(--placeholder-color, #FFFF99); 
+            opacity: 1;
+        }
+        input:-ms-input-placeholder { 
+            color: var(--placeholder-color, #FFFF99); 
+            opacity: 1;
+        }
+    `;
     document.head.appendChild(style);
     
 });

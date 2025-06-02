@@ -3,6 +3,27 @@ document.addEventListener("DOMContentLoaded", function () {
     let lastName = document.getElementById("last-name");
     let email = document.getElementById("email");
 
+    // Cargar traducciones para los mensajes de error
+    const loadTranslations = () => {
+        const lang = localStorage.getItem("language") || "en";
+        // Usar rutas relativas en lugar de basadas en origin
+        fetch(`../../lang/${lang}.json`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(translations => {
+                window.translations = translations;
+            })
+            .catch((error) => {
+                console.error("Error loading language file:", error);
+            });
+    };
+
+    loadTranslations();
+
     if (localStorage.getItem("firstName")) {
         firstName.value = localStorage.getItem("firstName");
     }
@@ -25,33 +46,30 @@ document.addEventListener("DOMContentLoaded", function () {
             input.placeholder = message;
             input.classList.add("error");
             input.style.setProperty("--placeholder-color", "#9b111e");
-        }
-
-        if (firstName.value.trim() === "") {
-            setError(firstName, "First name required!");
+        }        if (firstName.value.trim() === "") {
+            setError(firstName, window.translations?.firstname_required || "First name required!");
             valid = false;
         } else if (firstName.value.trim().length < 3 || firstName.value.trim().length > 50) {
             firstName.value = "";
-            setError(firstName, "First name must be between 3 and 50 characters!");
+            setError(firstName, window.translations?.firstname_length || "First name must be between 3 and 50 characters!");
             valid = false;
         }
 
         if (lastName.value.trim() === "") {
-            setError(lastName, "Last name required!");
+            setError(lastName, window.translations?.lastname_required || "Last name required!");
             valid = false;
         } else if (lastName.value.trim().length < 3 || lastName.value.trim().length > 50) {
             lastName.value = "";
-            setError(lastName, "Last name must be between 3 and 50 characters!");
+            setError(lastName, window.translations?.lastname_length || "Last name must be between 3 and 50 characters!");
             valid = false;
         }
 
         let emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         if (email.value.trim() === "") {
-            setError(email, "Email required!");
-            valid = false;
-        } else if (!emailPattern.test(email.value.trim())) {
+            setError(email, window.translations?.email_required || "Email required!");
+            valid = false;        } else if (!emailPattern.test(email.value.trim())) {
             email.value = "";
-            setError(email, "Invalid email!");
+            setError(email, window.translations?.invalid_email || "Invalid email!");
             valid = false;
         }
 
@@ -71,7 +89,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (response.ok) {
                 if (data.exists) {
                     email.value = "";
-                    setError(email, "Email already registered!");
+                    setError(email, window.translations?.email_already_registered || "Email already registered!");
                     valid = false;
                     return;
                 }
@@ -92,10 +110,30 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelector(".button-back").addEventListener("click", function () {
         localStorage.removeItem("firstName");
         localStorage.removeItem("lastName");
-        localStorage.removeItem("email");
-    });
+        localStorage.removeItem("email");    });
 
     let style = document.createElement("style");
-    style.innerHTML = "input::placeholder { color: var(--placeholder-color, #FFFF99); }";
+    style.innerHTML = `
+        input::placeholder { 
+            color: var(--placeholder-color, #FFFF99); 
+            opacity: 1;
+        }
+        input::-webkit-input-placeholder { 
+            color: var(--placeholder-color, #FFFF99); 
+            opacity: 1;
+        }
+        input:-moz-placeholder { 
+            color: var(--placeholder-color, #FFFF99); 
+            opacity: 1;
+        }
+        input::-moz-placeholder { 
+            color: var(--placeholder-color, #FFFF99); 
+            opacity: 1;
+        }
+        input:-ms-input-placeholder { 
+            color: var(--placeholder-color, #FFFF99); 
+            opacity: 1;
+        }
+    `;
     document.head.appendChild(style);
 });

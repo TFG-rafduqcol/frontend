@@ -6,9 +6,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="../../css/menu.css">
     <link rel="stylesheet" href="../../css/modal.css">
-    <link rel="stylesheet" href="../../css/topBar.css">
-
-    <link rel="icon" type="image/x-icon" href="../../images/logo.png">
+    <link rel="stylesheet" href="../../css/topBar.css">    <link rel="icon" type="image/x-icon" href="../../images/logo.png">
+    <script src="../../js/utils/config.js" defer></script>
     <title>Game Menu</title>
 </head>
 
@@ -42,11 +41,9 @@
             <div class="profile-icons">
                 <button class="button-profile" onclick="window.location.href = 'social.html'">
                     <i class="fa-solid fa-users"></i>
-                </button>                <button class="button-profile" onclick="window.location.href = 'profile_settings.html'">
+                </button>              
+                <button class="button-profile" onclick="window.location.href = 'profile_settings.html'">
                     <i class="fa-solid fa-user-edit"></i>
-                </button>
-                <button class="button-profile" onclick="window.location.href = '../diagnostico.html'" title="Diagnóstico de conexión">
-                    <i class="fa-solid fa-wifi"></i>
                 </button>
             </div>
         </div>
@@ -67,17 +64,21 @@
         <a href="./book.html">    
             <i class="fa-solid fa-book"></i>  
         </a>
+    </div>    <div class="language-selector">
+        <button class="language-button" onclick="changeLanguage('en')" title="English" style="background-image: url('../../images/flags/gb.png');"></button>
+        <button class="language-button" onclick="changeLanguage('es')" title="Español" style="background-image: url('../../images/flags/es.png');"></button>
     </div>
+
     <i class="fa-solid fa-gear settings-icon" onclick="openModal()"></i>
     <div id="modal-placeholder"></div>
 </body>
 
 
+<script src="../../js/utils/config.js"></script>
 <script src="../../js/utils/modals.js"></script>
 <script src="../../js/menu/index.js"></script>
 <script src="../../js/utils/i18n.js"></script>
 <script src="../../js/utils/player_auth.js"></script>
-<script src="../../js/utils/config.js"></script>
 
 
 </html>
