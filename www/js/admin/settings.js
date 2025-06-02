@@ -148,5 +148,5 @@ function isPasswordSecure(password) {
 
 function logout() {
     localStorage.clear();
-    window.location.href = 'http://127.0.0.1:8000/www/views/auth/login'; 
+    window.location.href = '/www/views/auth/login'; 
 }

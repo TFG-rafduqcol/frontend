@@ -2,7 +2,7 @@ let modalLoaded = false;
 
 function loadModal() {
     if (!modalLoaded) {
-        url = 'http://127.0.0.1:8000/www/views/components/settings_modal.html';
+        url = '/www/views/components/settings_modal.html';
        
 
         fetch(url)
@@ -48,7 +48,7 @@ function closeModal() {
 
 function logout() {
     localStorage.clear();
-    window.location.href = 'http://127.0.0.1:8000/www/views/auth/login'; 
+    window.location.href = '/www/views/auth/login'; 
 }
 document.addEventListener('DOMContentLoaded', () => {
     const modalPlaceholder = document.getElementById('modal-placeholder');
@@ -65,4 +65,3 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error("The modal container is not available.");
     }
 });
- 

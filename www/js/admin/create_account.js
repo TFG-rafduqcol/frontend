@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const isAdmin = localStorage.getItem('isAdmin') === 'true';
     if (!isAdmin) {
         alert("You are not authorized to access this page.");
-        window.location.href = "http://127.0.0.1:8000/www/views/index.html"; 
+        window.location.href = "/www/views/index.html"; 
     }
     else {
         document.body.style.display = "block";
@@ -161,6 +161,6 @@ function isPasswordSecure(password) {
     const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
     return passwordPattern.test(password);
 }
- 
-  
+
+
 

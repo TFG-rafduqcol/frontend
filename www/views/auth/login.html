@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link rel="icon" type="image/x-icon" href="../../images/logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">    <link rel="icon" type="image/x-icon" href="../../images/logo.png">
     <link rel="stylesheet" href="../../css/index.css">
     <link rel="stylesheet" href="../../css/register.css">
+    <link rel="stylesheet" href="../../css/diagnostico.css">
+    <script src="../../js/utils/config.js"></script>
+    <script src="../../js/utils/ipLogger.js" defer></script>
     <title data-i18n="login_title">Login</title>
 </head>
 <body>
@@ -15,12 +17,10 @@
         <img src="../../images/logo.png" alt="Game Icon" class="logo">
         <form class="register-form">
             <input type="email" id="email" name="email" data-i18n="enter_email_placeholder" required>
-            <input type="password" id="password" name="password" data-i18n="enter_password_placeholder" required>
-            <div class="button-group">
+            <input type="password" id="password" name="password" data-i18n="enter_password_placeholder" required>            <div class="button-group">
                 <a href="../index.html" class="button-back" data-i18n="back">&lt; Back</a>
                 <button type="button" class="button-go" data-i18n="go">Go!</button>
-            </div>       
-        </form>
+            </div>
     </div>
 
 </body>

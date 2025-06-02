@@ -1,0 +1,19 @@
+{
+  "appId": "com.miempresa.miapp",
+  "appName": "MiApp",
+  "webDir": "www",
+  "server": {
+    "cleartext": true,
+    "allowNavigation": [
+      "192.168.100.7",
+      "192.168.100.7:3000",
+      "192.168.100.7:8000"
+    ],
+    "androidScheme": "http"
+  },
+  "android": {
+    "allowMixedContent": true,
+    "hiddenStatusBar": true,
+    "fullScreen": true
+  }
+}
