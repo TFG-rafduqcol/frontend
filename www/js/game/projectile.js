@@ -136,7 +136,8 @@ function getDamageMultiplier(enemyName, towerType) {
         devilOrc: { 1: 0.5, 2: 0.5, 3: 2.0 },
         graySkull: { 4: 2.0 },
         carrionTropper: { 1: 0.5, 2: 0.5,  3: 2.0, 4: 0.5 },
-        darkSeer: { 1: 0.5, 2: 0.5, 3: 0.5, 4: 0.75 }
+        darkSeer: { 1: 0.5, 2: 0.5, 3: 0.5, 4: 0.75 },
+        hellBat: { 1: 1, 2: 1, 3: 0.5 },   
     };
 
     if (enemyName in damageMultipler && towerType in damageMultipler[enemyName]) {

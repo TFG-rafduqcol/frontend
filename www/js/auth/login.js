@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
             valid = false;
         } else  if (!isPasswordSecure(password.value.trim())) {
             password.value = "";
-            setError(password, window.translations?.password_insecure || "Use 8+ chars, 1 lowercase and 1 number");
+            setError(password, window.translations?.password_insecure || "Use 8+ chars, 1 uppercase and 1 number");
             valid = false;
         }
 
@@ -108,7 +108,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     function isPasswordSecure(password) {
-        const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+        const passwordPattern = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
         return passwordPattern.test(password);
     }    let style = document.createElement("style");
     style.innerHTML = `

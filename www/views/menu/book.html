@@ -8,9 +8,9 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         html, body { width: 100%; height: 100%; }
         body {
-            font-family: sans-serif;
+            font-family: 'Roboto', sans-serif;
             background: linear-gradient(135deg, #14532D 0%, #19753E 100%);
-            color: #2E2E2E;
+            color: #FFFFF6;
             line-height: 1.5;
             padding: 1rem;
         }
@@ -20,45 +20,68 @@
         }
         header h1 {
             font-size: 2.5rem;
-            color: #FFFF99;
-            text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+            color: #FFFFF6;
+            text-shadow: 2px 2px 8px #19753E, 0 0 8px #19753E;
             margin-bottom: 0.5rem;
+            letter-spacing: 2px;
         }
         header p {
-            font-size: 1rem;
-            color: #FFF;
-            opacity: 0.85;
+            font-size: 1.1rem;
+            color: #e0e0e0;
+            opacity: 0.95;
         }
         nav {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 0.75rem;
+            gap: 1.2rem;
             margin-bottom: 2rem;
+            background: linear-gradient(90deg, #14532D 60%, #19753E 100%);
+            border-radius: 22px;
+            box-shadow: 0 4px 16px rgba(20,83,45,0.18);
+            padding: 1rem 0.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
         nav a {
-            background: rgba(255,255,153,0.8);
-            color: #14532D;
-            padding: 0.5rem 0.75rem;
-            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(25,117,62,0.98);
+            color: #FFFF99;
+            padding: 0.6rem 1.2rem;
+            border-radius: 24px;
             text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: background 0.3s, transform 0.3s;
+            font-weight: 700;
+            font-size: 1.05rem;
+            box-shadow: 0 2px 8px rgba(25,117,62,0.10);
+            border: 2px solid #7fffd4;
+            transition: background 0.3s, transform 0.2s, color 0.2s, border 0.2s;
+            position: relative;
         }
-        nav a:hover {
-            background: rgba(255,255,153,1);
-            transform: translateY(-2px);
+        nav a:hover, nav a.active {
+            background: #19753E;
+            color: #14532D;
+            border-color: #FFFF99;
+            transform: translateY(-2px) scale(1.04);
+        }
+        .nav-icon {
+            font-size: 1.3em;
+            filter: drop-shadow(0 1px 2px #19753E66);
+        }
+        .nav-label {
+            letter-spacing: 0.5px;
         }
         section {
             max-width: 1000px;
-            background: rgba(255,255,255,0.85);
+            background: rgba(25, 117, 62, 0.97);
             border-radius: 12px;
             margin: 1.5rem auto;
             padding: 1.5rem;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+            box-shadow: 0 6px 12px rgba(20,83,45,0.22);
+            color: #FFFFF6;
             transition: box-shadow 0.3s, transform 0.3s;
-            color: #19753E;
         }
         section:hover {
             box-shadow: 0 10px 20px rgba(0,0,0,0.3);
@@ -68,8 +91,10 @@
             font-size: 1.8rem;
             color: #FFFF99;
             margin-bottom: 1rem;
+            letter-spacing: 1px;
+            text-shadow: 0 1px 8px #14532D;
         }
-            .card-list {
+        .card-list {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1rem;
@@ -78,170 +103,269 @@
             margin-left: auto;
             margin-right: auto;
         }
-
         .card, .card-oculom {
-            background: rgba(255,255,255,0.9);
+            background: linear-gradient(135deg, #14532D 60%, #19753E 100%);
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 8px rgba(25,117,62,0.18);
             transition: transform 0.3s, box-shadow 0.3s;
+            border: 2px solid #FFFF99;
+            position: relative;
         }
-
         .card:hover, .card-oculom:hover {
             transform: scale(1.02);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 16px rgba(20,83,45,0.32);
+            border-color: #FFFF99;
         }
-      .card img {
-            width: 50%;
+        .card img {
+            width: 60%;
             height: auto;
             object-fit: contain;
             display: block;
-            margin: 1rem auto 0  5rem;            
+            margin: 1rem auto 0 auto;
+            filter: drop-shadow(0 2px 8px #19753E33);
+            border-radius: 8px;
+            border: none;
+            padding: 0.3rem;
+            background: #14532D;
         }
         .card.oculom img {
-             width: 45%;
+            width: 45%;
             height: auto;
             object-fit: contain;
             display: block;
             margin: 3.5rem auto 1rem  4rem;            
+            filter: drop-shadow(0 2px 8px #19753E33);
+            border-radius: 8px;
+            border: none;
+            padding: 0.3rem;
         }
-
         .card-content, .card-oculom {
             padding: 0.75rem;
             text-align: center;
         }
         .card-content h3, .card-oculom h3 {
             font-size: 1.2rem;
-            color: #19753E;
+            color: #FFFF99;
             margin-bottom: 0.4rem;
+            text-shadow: 0 1px 8px #14532D;
         }
         .card-content p, .card-oculom p {
             font-size: 0.9rem;
-            color: #555;
+            color: #e0e0e0;
             line-height: 1.3;
+        }
+        .card:after {
+            content: '';
+            display: block;
+            position: absolute;
+            left: 0; right: 0; bottom: 0;
+            height: 8px;
+            background: linear-gradient(90deg, #7fffd4 0%, #19753E 100%);
+            opacity: 0.13;
         }
         footer {
             text-align: center;
             margin-top: 3rem;
-            color: #FFF;
+            color: #7fffd4;
             font-size: 0.8rem;
             opacity: 0.8;
         }
-       
+        .home-icon-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.7rem;
+            background: none;
+            border: none;
+            box-shadow: none;
+            padding: 0;
+            transition: transform 0.2s;
+        }
+        .home-icon-container:hover .home-icon {
+            color: #7fffd4;
+            transform: scale(1.12);
+        }
+        .home-icon {
+            font-size: 1.5em;
+            color: #FFFF99;
+            transition: color 0.2s, transform 0.2s;
+        }
+        @media (max-width: 600px) {
+            .home-icon {
+                font-size: 1.2em;
+            }
+            .home-icon-container {
+                margin-right: 0.3rem;
+            }
+        }
+        @media (min-width: 700px) {
+            #torres .card-list {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (min-width: 1000px) {
+            #torres .card-list {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 699px) {
+            #torres .card-list {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="../../js/utils/player_auth.js"></script>
+
 </head>
 <body>
     <nav>
-        <a href="#como-jugar">Cómo Jugar</a>
-        <a href="#enemigos">Enemigos</a>
-        <a href="#torres">Torres</a>
+        <a href="index.html" class="home-icon-container" title="Inicio" style="margin-right:1.2rem;">
+            <i class="fa-solid fa-house home-icon"></i>
+        </a>
+        <a href="#como-jugar" data-i18n="how_to_play"><span class="nav-icon">🎮</span> <span class="nav-label">Cómo Jugar</span></a>
+        <a href="#enemigos" data-i18n="enemies"><span class="nav-icon">👾</span> <span class="nav-label">Enemigos</span></a>
+        <a href="#torres" data-i18n="towers"><span class="nav-icon">🏹</span> <span class="nav-label">Torres</span></a>
     </nav>
     <section id="como-jugar">
         <h2>Cómo Jugar</h2>
-        <p>Construye, mejora y coloca torres estratégicamente para detener oleadas de invasores. Gestiona tu oro con sabiduría y adapta tu defensa a cada tipo de enemigo para proteger el templo azteca.</p>
+        <p>
+            Construye, mejora y coloca torres estratégicamente para detener oleadas de invasores. Gestiona tu oro con sabiduría y adapta tu defensa a cada tipo de enemigo para proteger el templo azteca.<br><br>
+            <strong>Modos de dificultad:</strong><br>
+            • <b>Normal Mode</b>: Un modo más rápido gracias a un algoritmo eficiente, aunque menos preciso en los cálculos de trayectoria y colisiones.<br>
+            • <b>Hard Mode</b>: Un desafío avanzado con un algoritmo más preciso y exigente, donde cada error cuenta.<br><br>
+            <strong>Rangos y logros:</strong><br>
+            • Para obtener el rango <span style="color:#FFFF99;font-weight:bold">Gold</span>, debes llegar a la ronda 50 en Normal Mode.<br>
+            • Para alcanzar el rango <span style="color:#7fffd4;font-weight:bold">Master</span>, deberás superar la ronda 50 en ambos modos: Normal Mode y Hard Mode.<br>
+        </p>
     </section>
     <section id="enemigos">
-        <h2>Enemigos</h2>
+        <h2 data-i18n="enemies">Enemigos</h2>
         <div class="card-list">
             <div class="card">
-                <img src="../../images/enemies/daggerkin/walk_1.png" alt="Guerrero Jaguar">
+                <img src="../../images/enemies/daggerkin/walk_1.png" alt="Daggerkin">
                 <div class="card-content">
-                    <h3>Guerrero Jaguar</h3>
-                    <p>Velocidad media y salud baja. Su agilidad complica su derrota.</p>
+                    <h3 data-i18n="enemy_daggerkin">Daggerkin</h3>
+                    <p>Un explorador ágil y escurridizo. Su baja salud se compensa con una velocidad vertiginosa, ideal para poner a prueba tus reflejos defensivos.<br>Salud: 40.<br>Velocidad: Muy rápida.</p>
                 </div>
             </div>
             <div class="card">
-                <img src="../../images/enemies/orcutter/walk_1.png" alt="Chamán Serpiente">
+                <img src="../../images/enemies/orcutter/walk_1.png" alt="Orcutter">
                 <div class="card-content">
-                    <h3>Chamán Serpiente</h3>
-                    <p>Salud media y ralentiza tus torres con hechizos venenosos.</p>
+                    <h3 data-i18n="enemy_orcutter">Orcutter</h3>
+                    <p>Un guerrero robusto y testarudo. Aunque lento, su resistencia le permite avanzar bajo el fuego enemigo sin vacilar.<br>Salud: 60.<br>Velocidad: Lenta.</p>
                 </div>
             </div>
             <div class="card oculom">
-                <img src="../../images/enemies/oculom_book.png" alt="Chamán Serpiente">
+                <img src="../../images/enemies/oculom_book.png" alt="Oculom">
                 <div class="card-content">
-                    <h3>Chamán Serpiente</h3>
-                    <p>Salud media y ralentiza tus torres con hechizos venenosos.</p>
-                </div>
-            </div>
-
-            <div class="card">
-                <img src="../../images/enemies/devilOrc/walk_1.png" alt="Chamán Serpiente">
-                <div class="card-content">
-                    <h3>Chamán Serpiente</h3>
-                    <p>Salud media y ralentiza tus torres con hechizos venenosos.</p>
+                    <h3 data-i18n="enemy_oculom">Oculom</h3>
+                    <p>Un ojo volador que surca los cielos. Es inmune a los ataques del mortero y desafía tus defensas desde el aire.<br>Salud: 40.<br>Velocidad: Rápida.</p>
                 </div>
             </div>
             <div class="card">
-                <img src="../../images/enemies/graySkull/walk_1.png" alt="Chamán Serpiente">
+                <img src="../../images/enemies/devilOrc/walk_1.png" alt="Devil Orc">
                 <div class="card-content">
-                    <h3>Chamán Serpiente</h3>
-                    <p>Salud media y ralentiza tus torres con hechizos venenosos.</p>
+                    <h3 data-i18n="enemy_devilorc">Devil Orc</h3>
+                    <p>Un orco infernal, lento pero temible. Resiste la piedra y el hierro, pero teme el fuego que puede consumirlo.<br>Salud: 90.<br>Velocidad: Muy lenta.</p>
                 </div>
             </div>
             <div class="card">
-                <img src="../../images/enemies/carrionTropper/walk_1.png" alt="Chamán Serpiente">
+                <img src="../../images/enemies/graySkull/walk_1.png" alt="Gray Skull">
                 <div class="card-content">
-                    <h3>Chamán Serpiente</h3>
-                    <p>Salud media y ralentiza tus torres con hechizos venenosos.</p>
+                    <h3 data-i18n="enemy_grayskull">Gray Skull</h3>
+                    <p>Un coloso de hueso y magia oscura. Su enorme vitalidad solo es superada por su debilidad ante el mortero de roca.<br>Salud: 140.<br>Velocidad: Muy lenta.</p>
                 </div>
             </div>
             <div class="card">
-                <img src="../../images/enemies/hellBat/walk_1.png" alt="Chamán Serpiente">
+                <img src="../../images/enemies/carrionTropper/walk_1.png" alt="Carrion Tropper">
                 <div class="card-content">
-                    <h3>Chamán Serpiente</h3>
-                    <p>Salud media y ralentiza tus torres con hechizos venenosos.</p>
+                    <h3 data-i18n="enemy_carriontropper">Carrion Tropper</h3>
+                    <p>Un guerrero putrefacto, resistente a casi todo salvo al fuego. Su avance lento es una amenaza constante.<br>Salud: 90.<br>Velocidad: Lenta.</p>
                 </div>
             </div>
             <div class="card">
-                <img src="../../images/enemies/hexLord/walk_1.png" alt="Chamán Serpiente">
+                <img src="../../images/enemies/hellBat/walk_1.png" alt="Hell Bat">
                 <div class="card-content">
-                    <h3>Chamán Serpiente</h3>
-                    <p>Salud media y ralentiza tus torres con hechizos venenosos.</p>
+                    <h3 data-i18n="enemy_hellbat">Hell Bat</h3>
+                    <p>Murciélago infernal que ataca desde el aire. Solo el mortero de roca puede derribarlo antes de que cause estragos.<br>Salud: 90.<br>Velocidad: Media.</p>
                 </div>
             </div>
             <div class="card">
-                <img src="../../images/enemies/darkSeer/walk_1.png" alt="Chamán Serpiente">
+                <img src="../../images/enemies/hexLord/walk_1.png" alt="Hex Lord">
                 <div class="card-content">
-                    <h3>Chamán Serpiente</h3>
-                    <p>Salud media y ralentiza tus torres con hechizos venenosos.</p>
+                    <h3>Hex Lord</h3>
+                    <p>Un hechicero oscuro que sana a sus aliados. Su presencia prolonga la batalla y pone a prueba tu estrategia.<br>Salud: 90.<br>Velocidad: Media.</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="../../images/enemies/darkSeer/walk_1.png" alt="Dark Seer">
+                <div class="card-content">
+                    <h3>Dark Seer</h3>
+                    <p>El azote de los aztecas: resistente a piedra, hierro, fuego y roca. Su avance lento es imparable si no usas todo tu ingenio.<br>Salud: 140.<br>Velocidad: Muy lenta.</p>
                 </div>
             </div>
     </div>
     </section>
     <section id="torres">
-        <h2>Torres</h2>
-        <div class="card-list">
-            <div class="card">
-                <img src="../../images/towers/tower1/base.png" alt="Torre de Flechas">
-                <div class="card-content">
-                    <h3>Torre de Flechas</h3>
-                    <p>Alto alcance y disparos rápidos. Perfecta contra enemigos lentos.</p>
+            <h2>Torres</h2>
+            <div class="card-list">
+                <div class="card">
+                    <img src="../../images/towers/tower1/base.png" alt="Torre de Flechas">
+                    <div class="card-content">
+                        <h3>Torre de Flechas</h3>
+                        <p>
+                            Torre básica de largo alcance y disparo rápido. Perfecta para eliminar enemigos veloces y débiles en las primeras rondas.<br>
+                            <span style="color:#FFFF99;font-weight:bold">Dispara cada:</span> 2 segundos<br>
+                            <span style="color:#FFFF99;font-weight:bold">Daño por impacto:</span> 10<br>
+                            <span style="color:#FFFF99;font-weight:bold">Precio:</span> 90 oro<br>
+                            <span style="color:#FFFF99;font-weight:bold">Rango:</span> 90
+                        </p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="../../images/towers/tower2/base.png" alt="Torre de Cargas">
+                    <div class="card-content">
+                        <h3>Torre de Cargas</h3>
+                        <p>
+                            Lanza pesadas piedras de hierro que causan daño. Ideal para romper defensas resistentes.<br>
+                            <span style="color:#FFFF99;font-weight:bold">Dispara cada:</span> 2.5 segundos<br>
+                            <span style="color:#FFFF99;font-weight:bold">Daño por impacto:</span> 12<br>
+                            <span style="color:#FFFF99;font-weight:bold">Precio:</span> 100 oro<br>
+                            <span style="color:#FFFF99;font-weight:bold">Rango:</span> 80
+                        </p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="../../images/towers/tower3/base.png" alt="Torre de Fuego">
+                    <div class="card-content">
+                        <h3>Torre de Fuego</h3>
+                        <p>
+                            Lanza proyectiles ígneos que queman a los enemigos, causando mucho daño. Muy efectiva contra enemigos con alta defensa.<br>
+                            <span style="color:#FFFF99;font-weight:bold">Dispara cada:</span> 3 segundos<br>
+                            <span style="color:#FFFF99;font-weight:bold">Daño por impacto:</span> 13<br>
+                            <span style="color:#FFFF99;font-weight:bold">Precio:</span> 125 oro<br>
+                            <span style="color:#FFFF99;font-weight:bold">Rango:</span> 80
+                        </p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="../../images/towers/tower4/base.png" alt="Mortero de Roca" style="margin-top: 25vh;">
+                    <div class="card-content">
+                        <h3>Mortero de Roca</h3>
+                        <p>
+                            Dispara rocas masivas que explotan al impactar, causando gran daño. Es la mejor opción para eliminar enemigos muy resistentes.<br>
+                            <span style="color:#FFFF99;font-weight:bold">Dispara cada:</span> 4 segundos<br>
+                            <span style="color:#FFFF99;font-weight:bold">Daño por impacto:</span> 14.5<br>
+                            <span style="color:#FFFF99;font-weight:bold">Precio:</span> 150 oro<br>
+                            <span style="color:#FFFF99;font-weight:bold">Rango:</span> 95
+                        </p>
+                    </div>
                 </div>
             </div>
-            <div class="card">
-                <img src="../../images/towers/tower2/base.png" alt="Torre de Cargas">
-                <div class="card-content">
-                    <h3>Torre de Cargas</h3>
-                    <p>Daño de área con piedras pesadas. Ideal para grupos densos.</p>
-                </div>
-            </div>
-            <div class="card">
-                <img src="../../images/towers/tower3/base.png" alt="Torre de Fuego">
-                <div class="card-content">
-                    <h3>Torre de Fuego</h3>
-                    <p>Inflige daño por quemadura continuo. Efectiva contra enemigos con alta defensa.</p>
-                </div>
-            </div>
-            <div class="card">
-                <img src="../../images/towers/tower4/base.png" alt="Torre de Rayo">
-                <div class="card-content">
-                    <h3>Torre de Rayo</h3>
-                    <p>Descarga eléctrica en cadena. Ideal para eliminar enemigos agrupados.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+        </section>
 
 </body>
+
 </html>

@@ -48,7 +48,7 @@
     "email_placeholder_error": "Please enter a valid email address.",
     "email_required": "Email required!",
     "invalid_email": "Invalid email!",
-    "password_required": "Password required!",    "password_insecure": "Use 8+ chars, 1 lowercase and 1 number",
+    "password_required": "Password required!",    "password_insecure": "Use 8+ chars, 1 uppercase and 1 number",
     "email_not_registered": "Email not registered",
     "invalid_password": "Invalid password",
     "invalid_credentials": "Invalid credentials",

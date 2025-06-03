@@ -82,8 +82,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 lockImage.src = '../../images/lock.png';
 
                 lockIcon.appendChild(lockImage);
-                remainingAvatar.appendChild(avatarImage);
-                remainingAvatar.appendChild(lockIcon);
+                remainingAvatar.appendChild(lockIcon); 
+                remainingAvatar.appendChild(avatarImage); 
 
                 remainingAvatarContainer.appendChild(remainingAvatar);
             });

@@ -30,7 +30,7 @@
     "email_placeholder_error": "Por favor, introduce un correo electrónico válido.",
     "email_required": "¡Correo electrónico requerido!",
     "invalid_email": "¡Correo electrónico inválido!",
-    "password_required": "¡Contraseña requerida!",    "password_insecure": "Usa 8+ caracteres, 1 minúscula y 1 número",
+    "password_required": "¡Contraseña requerida!",    "password_insecure": "Usa 8+ caracteres, 1 mayús y 1 número",
     "email_not_registered": "Correo electrónico no registrado",
     "invalid_password": "Contraseña inválida",
     "invalid_credentials": "Credenciales inválidas",  

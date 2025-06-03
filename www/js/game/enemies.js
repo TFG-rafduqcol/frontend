@@ -11,8 +11,8 @@ const enemy_props = [
     { name: "devilOrc", width: 54, height: 54, speed: 12, maxHealth: 90, totalFrames: 20, offsetX: -15, offsetY: -45, healthBarHeight: 50, lifes: 1, gold: 15 }, // Débil ante el fuego (3), fuerte contra hierro (1) y piedra (2) 
     { name: "graySkull", width: 75, height: 75, speed: 8, maxHealth: 140, totalFrames: 20, offsetX: -22, offsetY: -70, healthBarHeight: 65, healthBarX: -2, lifes: 3, gold: 25 }, // Débil contra el mortero (4)
     { name: "carrionTropper", width: 45, height: 45, speed: 14, maxHealth: 90, totalFrames: 20, offsetX: -15, offsetY: -35, healthBarHeight: 45, lifes: 2, gold: 20 }, // Débil fuego (3), fuerte contra el resto (1,2,4)
-    { name: "hellBat", width: 60, height: 60, speed: 17, maxHealth: 90, totalFrames: 18, offsetX: -35, offsetY: -40, healthBarHeight: 47, lifes: 2, gold: 15 }, // Segundo enemigo volador, débil ante el mortero (4)
-    { name: "hexLord", width: 50, height: 50, speed: 17, maxHealth: 90, totalFrames: 20, offsetX: -15, offsetY: -40, healthBarHeight: 50, lifes: 4, gold: 20 }, // Cura los enemigos cada 10s, si da tiempo :)
+    { name: "hellBat", width: 60, height: 60, speed: 17, maxHealth: 90, totalFrames: 18, offsetX: -35, offsetY: -40, healthBarHeight: 47, lifes: 2, gold: 15 }, // Segundo enemigo volador, no le afecta el mortero (4)
+    { name: "hexLord", width: 50, height: 50, speed: 17, maxHealth: 90, totalFrames: 20, offsetX: -15, offsetY: -40, healthBarHeight: 50, lifes: 4, gold: 20 }, // Neutro ante todo
     { name: "darkSeer", width: 70, height: 70, speed: 10, maxHealth: 140, totalFrames: 20, offsetX: -30, offsetY: -65, healthBarHeight: 65, healthBarX: -4, lifes: 5, gold: 30 } // Fuerte contra TODO (1,2,3,4)
 ];
 

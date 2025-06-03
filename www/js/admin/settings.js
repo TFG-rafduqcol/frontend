@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (password.value.trim() !== "" && !isPasswordSecure(password.value.trim())) {
             password.value = "";
-            setError(password, "Use 8+ chars, 1 lowercase, 1 uppercase and 1 number");
+            setError(password, "Use 8+ chars, 1 uppercase, 1 uppercase and 1 number");
             valid = false;
         }
 
@@ -141,7 +141,7 @@ function updateAdminProfile() {
 });
 
 function isPasswordSecure(password) {
-    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    const passwordPattern = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
     return passwordPattern.test(password);
 }
 
