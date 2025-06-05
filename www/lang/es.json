@@ -74,5 +74,10 @@
     "user-title": "Usuario",
     "previous-page": "Anterior",
     "next-page": "Siguiente ",
-    "action-title": "Acción"
+    "action-title": "Acción",
+    "shop_error_insufficient_gems": "No tienes suficientes gemas para comprar este avatar.",
+    "shop_error_generic": "Ocurrió un error al intentar comprar el avatar.",
+    "shop_confirm_modal_message": "¿Estás seguro que quieres comprar este avatar?",
+    "shop_yes_buy": "Sí, comprar",
+    "shop_cancel": "Cancelar"
 }

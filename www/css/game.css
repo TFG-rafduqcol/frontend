@@ -477,3 +477,24 @@ body {
     pointer-events: none;
     cursor: not-allowed;
 }
+
+.upgrade-cost-info {
+    display: block;
+    position: static;
+    background: linear-gradient(90deg, #ffe066 60%, #7fffd4 100%);
+    color: #19753E;
+    font-weight: bold;
+    font-size: 1.2vh;
+    border-radius: 1vh;
+    padding: 0.2vh 1.2vw;
+    margin-top: 0vh;
+    margin-left: 0.5vw;
+    box-shadow: 0 0.3vh 1vh rgba(0,0,0,0.10);
+    letter-spacing: 0.03em;
+    border: 0.3vh solid #ffe066;
+    text-align: center;
+    width: max-content;
+    min-width: 3vw;
+    max-width: 7vw;
+    height: auto;
+}

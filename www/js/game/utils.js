@@ -44,12 +44,27 @@ function changeDeleteTowerIcon() {
     deleteIcon.src = '../../images/tick.jpeg';
 }
 
+function changeUpgradeTowerIcon() {
+    const upgradeTowerImg = document.getElementById('upgradeTower');
+    const upgradeIcon = upgradeTowerImg.querySelector('img');
+    upgradeIcon.src = '../../images/tick.jpeg';
+}
+
+
 function resetDeleteTowerIcon() {   
     const deleteTowerImg = document.getElementById('deleteTower');
     const deleteIcon = deleteTowerImg.querySelector('img');
     deleteIcon.src = deleteIcon.getAttribute('data-original-src');
     deleteClickedOnce = false;
     deleteClickHandler = null;
+}
+
+function resetUpgradeTowerIcon() {
+    const upgradeTowerImg = document.getElementById('upgradeTower');
+    const upgradeIcon = upgradeTowerImg.querySelector('img');
+    upgradeIcon.src = upgradeIcon.getAttribute('data-original-src');
+    upgradeClickedOnce = false;
+    upgradeClickHandler = null;
 }
 
 function restartAnimation(element, isMorter, duration) {

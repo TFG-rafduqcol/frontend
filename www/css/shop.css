@@ -1,0 +1,296 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    background: url('../images/menu.png') no-repeat center center/cover;
+    height: 100vh;
+    color: #333;
+    overflow: hidden;
+}
+
+
+.home-icon-container {
+    position: absolute;
+    top: 2vh;
+    left: 2vw;
+    font-size: 2rem;
+    color: #FFF;
+    transition: color 0.3s ease;
+}
+
+.home-icon-container:hover {
+    color: #FFFF99;
+}
+
+.home-icon {
+    font-size: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.home-icon:hover {
+    transform: scale(1.1);
+}
+
+.shop-avatars-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 2.5vh 2vw;
+    margin: 10vh auto 0 auto;
+    width: 90%;
+    max-width: 700px;
+    background: rgba(25, 117, 62, 0.92); 
+    border: 2px solid #ffe066;
+    border-radius: 2.5vh;
+    box-shadow: 0 8px 32px 0 rgba(0,0,0,0.18);
+    padding: 3vh 2vw 4vh 2vw;
+    min-height: 40vh;
+    margin-top: 14vh !important;
+    overflow-y: auto;
+}
+
+.shop-avatar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    background: none;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0;
+    margin: 2vh 2vw 2vh 2vw;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    min-width: unset;
+    max-width: unset;
+    min-height: unset;
+    position: relative;
+    margin-bottom: 2.5vh;
+}
+
+.shop-avatar img {
+    width: 18vh;
+    height: 18vh;
+    border-radius: 50%;
+    border: 0.7vh solid #FFFF99;
+    background: #19753E;
+    object-fit: cover;
+    margin-bottom: 1.2vh;
+    box-shadow: 0 0 18px 4px rgba(255,255,153,0.28);
+    transition: transform 0.2s;
+}
+
+.shop-avatar:hover img {
+    border-color: #fffbe7;
+    box-shadow: 0 0 24px 8px rgba(255,255,153,0.38);
+}
+
+.price-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.7vw;
+    margin-top: 1.2vh;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #fffbe7;
+    background: linear-gradient(45deg, #9b111e, #d4af37);
+    border-radius: 1.2vh;
+    padding: 0.5vh 1vw;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+    width: 7vw;
+    height: 5vh;
+    position: relative;
+    border: none;
+}
+
+.price-container .fa-gem {
+    color: #9b111e;
+    font-size: 1.5rem;
+    margin-right: 0.5vw;
+    filter: drop-shadow(0 1px 2px #fffbe7);
+}
+
+.price-container span {
+    font-size: 1.15rem;
+    font-weight: bold;
+    color: #fffbe7;
+    letter-spacing: 0.03em;
+    text-shadow: 0 1px 2px #9b111e, 0 0px 2px #d4af37;
+}
+
+#confirmModal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 2px solid #FFFF99;
+    width: 60vw;
+    max-width: 300px;
+    min-width: 160px;
+    height: auto;
+    z-index: 1000;
+    box-shadow: 0 8px 32px 0 rgba(0,0,0,0.37);
+    border-radius: 14px;
+    background: rgba(25, 117, 62, 0.98);
+    animation: modalFadeIn 0.3s;
+    justify-content: center;
+    align-items: center;
+}
+
+@keyframes modalFadeIn {
+    from { opacity: 0; transform: translate(-50%, -60%) scale(0.95); }
+    to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+#confirmModal .modal-content, #confirmModal > div {
+    color: #FFFF99;
+    background: transparent;
+    padding: 16px 12px 12px 12px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: none;
+    font-size: 1rem;
+}
+
+#confirmModal p {
+    margin-bottom: 14px;
+    font-size: 1rem;
+    color: #FFFF99;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+}
+
+#confirmBuyBtn, #cancelBuyBtn {
+    padding: 8px 16px;
+    margin: 0 6px;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 0.97rem;
+    font-weight: 600;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+}
+
+#confirmBuyBtn {
+    background: linear-gradient(90deg, #1faa50 60%, #19753E 100%);
+    color: #fffbe7;
+}
+#confirmBuyBtn:hover {
+    background: linear-gradient(90deg, #19753E 60%, #1faa50 100%);
+    color: #FFFF99;
+}
+
+#cancelBuyBtn {
+    background: linear-gradient(90deg, #9b111e 60%, #c0392b 100%);
+    color: #fffbe7;
+}
+#cancelBuyBtn:hover {
+    background: linear-gradient(90deg, #c0392b 60%, #9b111e 100%);
+    color: #FFFF99;
+}
+
+.shop-error-popup {
+    position: fixed;
+    top: 16vh;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(90deg, #9b111e 60%, #c0392b 100%);
+    color: #fffbe7;
+    padding: 1.2vh 2vw;
+    border-radius: 1.2vh;
+    font-size: 1.1rem;
+    font-weight: 600;
+    z-index: 9999;
+    box-shadow: 0 4px 16px 0 rgba(0,0,0,0.18);
+    display: none;
+    min-width: 180px;
+    text-align: center;
+    letter-spacing: 0.02em;
+    animation: shopErrorFadeIn 0.3s;
+    pointer-events: none;
+}
+
+.shop-error-popup[data-i18n]::before {
+    content: attr(data-i18n-text);
+    display: none;
+}
+
+@keyframes shopErrorFadeIn {
+    from { opacity: 0; top: 12vh; }
+    to { opacity: 1; top: 16vh; }
+}
+
+.empty-shop-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 200px;
+    padding: 1.5rem;
+    background: rgba(20, 83, 45, 0.8);
+    border-radius: 16px;
+    border: 2px solid #FFFF99;
+    margin: 1rem auto;
+    max-width: 90%;
+    width: 100%;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.empty-shop-container i {
+    font-size: 3rem;
+    color: #FFFF99;
+    margin-bottom: 1rem;
+    text-shadow: 0 0 10px rgba(255, 255, 153, 0.6);
+}
+
+.empty-shop-container h2 {
+    font-size: 1.5rem;
+    color: #FFFFFF;
+    margin-bottom: 0.8rem;
+    font-weight: bold;
+}
+
+.empty-shop-container p {
+    font-size: 1rem;
+    color: #e0e0e0;
+    margin-bottom: 0.6rem;
+    line-height: 1.4;
+}
+
+.empty-shop-container p:last-child {
+    color: #7fffd4;
+    font-style: italic;
+}
+
+@media (max-height: 700px) {
+    .empty-shop-container {
+        min-height: 160px;
+        padding: 1rem;
+    }
+    
+    .empty-shop-container i {
+        font-size: 2.5rem;
+        margin-bottom: 0.7rem;
+    }
+    
+    .empty-shop-container h2 {
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .empty-shop-container p {
+        font-size: 0.9rem;
+        margin-bottom: 0.4rem;
+    }
+}
+
+

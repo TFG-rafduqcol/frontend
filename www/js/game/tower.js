@@ -13,11 +13,8 @@ const towerZones = [
     { position: 7, x: 870, y: 70, width: 50, height: 50, occupied: false },
 ];
 
-
-
-
 const towerProperties = {
-    stoneCannon: { cost: 90, fire_rate: 2, range: 90   , projectile_type: 'stone' }, // 10 de daño
+    stoneCannon: { cost: 90, fire_rate: 2, range: 90, projectile_type: 'stone' }, // 10 de daño
     ironCannon: { cost: 100,  fire_rate: 2.5, range: 80, projectile_type: 'iron' }, // 12 de daño
     inferno: { cost: 125,  fire_rate: 3, range: 80, projectile_type: 'fire' }, // 13 de daño
     mortar: { cost: 150,  fire_rate: 4, range: 95, projectile_type: 'rock' }, // 15 de daño
@@ -141,7 +138,7 @@ function previewTowerArea(menuLeft, menuTop, range, selectedTowerIndex) {
     previewDiv.style.top = `${menuTop}px`;
     previewDiv.style.display = 'block'; 
 
-    const scaledRange = 2*range * scale;
+    const scaledRange = 2 * range * scale;
 
     previewArea.style.width = `${scaledRange}px`; 
     previewArea.style.height = `${scaledRange}px`;
@@ -267,13 +264,15 @@ function drawTowers() {
 
 
 let towerOptionMenuVisible = false;
+let editClickHandler = null;
+let editClickedOnce = false;
 let deleteClickHandler = null;
 let deleteClickedOnce = false;
 
 function previewEditMenuArea(event, towerName, zonePosition) {
+
     const towerDiv = document.getElementById('towerEditMenu');
     const towerAreaDiv = document.getElementById('towerArea');
-    
 
     const deleteTowerDiv = document.getElementById('deleteTower');
     const upgradeTowerDiv = document.getElementById('upgradeTower');
@@ -293,16 +292,16 @@ function previewEditMenuArea(event, towerName, zonePosition) {
     const editMenuLeft = (editTower.x + editTower.width / 2) * scale + offsetX;
     const editMenuTop = (editTower.y + editTower.height / 2) * scale + offsetY;
 
-
     towerDiv.style.left = `${editMenuLeft}px`;
     towerDiv.style.top = `${editMenuTop}px`;
     towerDiv.style.display = 'block';
 
     towerOptionMenuVisible = true;
-    range = 2*towerProperties[towerName].range * scale;
+    range = towersArea.find(tower => tower.position === zonePosition).range;
+    scaledRange = 2 * range * scale;
 
-    towerAreaDiv.style.width = `${range}px`; 
-    towerAreaDiv.style.height = `${range}px`;
+    towerAreaDiv.style.width = `${scaledRange}px`; 
+    towerAreaDiv.style.height = `${scaledRange}px`;
     towerAreaDiv.style.zIndex = 999;
 
 
@@ -313,6 +312,14 @@ function previewEditMenuArea(event, towerName, zonePosition) {
     deleteClickedOnce = false;
     resetDeleteTowerIcon();
     deleteClickHandler = function () {
+        if (upgradeClickHandler) {
+            upgradeTowerDiv.removeEventListener('click', upgradeClickHandler);   
+            towerAreaDiv.style.width = `${scaledRange}px`; 
+            towerAreaDiv.style.height = `${scaledRange}px`;
+            upgradeClickedOnce = false;
+            resetUpgradeTowerIcon();
+        }
+
         if (!deleteClickedOnce) {
             deleteClickedOnce = true;
             changeDeleteTowerIcon();
@@ -321,7 +328,45 @@ function previewEditMenuArea(event, towerName, zonePosition) {
         }
     };
 
+    if (editClickHandler) {
+        upgradeTowerDiv.removeEventListener('click', editClickHandler);
+    }
+
+    editClickedOnce = false;
+    resetUpgradeTowerIcon();
+    editClickHandler = function () {
+            rangeBoost = range + towersArea.find(tower => tower.position === zonePosition).upgradeRangeBoost;
+            boostRange = 2 * rangeBoost * scale;
+
+        if (deleteClickHandler) {
+            deleteTowerDiv.removeEventListener('click', deleteClickHandler);
+            deleteClickedOnce = false;
+            resetDeleteTowerIcon();
+        }
+
+        if (!editClickedOnce) {
+            editClickedOnce = true;
+            changeUpgradeTowerIcon();
+            towerAreaDiv.style.width = `${boostRange}px`; 
+            towerAreaDiv.style.height = `${boostRange}px`;
+        } else {
+            upgradeTower(towerName, zonePosition);
+        }
+    }
+
     deleteTowerDiv.addEventListener('click', deleteClickHandler);
+    upgradeTowerDiv.addEventListener('click', editClickHandler);
+
+    let upgradeCostInfo = upgradeTowerDiv.querySelector('.upgrade-cost-info');
+    if (!upgradeCostInfo) {
+        upgradeCostInfo = document.createElement('span');
+        upgradeCostInfo.className = 'upgrade-cost-info';
+        upgradeTowerDiv.appendChild(upgradeCostInfo);
+    }
+    const towerData = towersArea.find(tower => tower.position === zonePosition);
+    if (towerData) {
+        upgradeCostInfo.textContent = towerData.upgradeCost;
+    }
 }
     
 
@@ -370,9 +415,10 @@ async function deployTower(towerName, zonePosition) {
         const responseData = await response.json();
 
         const { gameId, projectileId, ...towerData } = responseData.tower;
+        const upgradeData = responseData.upgrade;
         towersDeployed.push(towerData);
 
-        console.log('Torre desplegada:', towersDeployed);
+        console.log('Torres desplegadas:', towersDeployed);
 
         const zone = towerZones.find(z => z.position === zonePosition);
         if (zone) {
@@ -401,6 +447,12 @@ async function deployTower(towerName, zonePosition) {
             towerNumber: towerNumber,
             hasActiveProjectile: false,
             animationInProgress: false,
+            upgradeCost: upgradeData.cost,
+            upgradeDamageBoost: upgradeData.damage_boost,
+            upgradeRangeBoost: upgradeData.range_boost,
+            upgradeFireRateBoost: upgradeData.fire_rate_boost,
+            towerLevel: 1,
+
         });
 
         console.log('Torre desplegada en TowerArea:', towersArea);
@@ -444,7 +496,9 @@ async function deleteTower(zonePosition) {
         previewDiv.style.display = 'none'; 
         towerOptionMenuVisible = false;
 
-        updateGame(false, towerProperties[towerDeployed.name].cost / 2, undefined);
+        let totalCost = towerProperties[towerDeployed.name].cost;
+        let roundedCost = Math.ceil((totalCost / 2) / 5) * 5;
+        updateGame(false, roundedCost, undefined);
         drawTowers(); 
     }
     else {
@@ -464,7 +518,6 @@ async function updateGame(newRound, towerPrice, minusLives) {
             livesElement.textContent = `${lives}`;
         }
     }
-
 
     try {
         const response = await fetch(`${serverUrl}/api/games/updateGame/${gameId}`, {
@@ -504,5 +557,83 @@ async function updateGame(newRound, towerPrice, minusLives) {
         return updatedGame;
     } catch (error) {
         console.error('Fetch error:', error);
+    }
+}
+
+
+async function upgradeTower(towerName, zonePosition) {
+    const token = localStorage.getItem('token');
+    const towerDeployed = towersDeployed.find(tower => tower.position === zonePosition);
+    const towerId = towerDeployed.id;
+    const towerData = towersArea.find(tower => tower.position === zonePosition);
+    const upgradeCost = towerData.upgradeCost;
+    const towerLevel = towerData.towerLevel;
+
+    if (gold < upgradeCost) {
+        alert('No tienes suficiente oro para mejorar esta torre.');
+        return;
+    }
+
+    if (towerLevel >= 10) {
+        alert('Esta torre ya está en su nivel máximo.');
+        return;
+    }
+
+    try {
+        const response = await fetch(`${serverUrl}/api/towers/upgradeTower/${towerId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                name: towerName,
+                position: zonePosition
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('Error en la respuesta del servidor: ' + response.statusText);
+        }
+
+        const previewDiv = document.getElementById('towerEditMenu');
+        previewDiv.style.display = 'none'; 
+        towerOptionMenuVisible = false;
+
+        const responseData = await response.json();
+        const upgradedTower = responseData.tower;
+        const upgradeData = responseData.tower;
+
+
+        Object.assign(towerDeployed, upgradedTower);
+
+        const towerIndex = towersArea.findIndex(t => t.position === zonePosition);
+        if (towerIndex !== -1) {
+            towersArea[towerIndex].damage = upgradeData.damage;
+            towersArea[towerIndex].range = upgradeData.range;
+            towersArea[towerIndex].fireRate = upgradeData.fire_rate * 1000;
+            towersArea[towerIndex].towerLevel += 1;
+        }
+
+        towersDeployed = towersDeployed.map(tower => {
+            if (tower.position === zonePosition) {
+                return {
+                    ...tower,
+                    damage: upgradeData.damage,
+                    range: upgradeData.range,
+                    fireRate: upgradeData.fire_rate * 1000,
+                    towerLevel: towerLevel + 1
+                };
+            }
+            return tower;
+        });
+
+        drawTowers(); 
+
+        updateGame(false, -upgradeCost, undefined); 
+
+    } catch (error) {
+        console.error('Error al mejorar la torre:', error);
+        alert('Hubo un problema al mejorar la torre. Inténtalo de nuevo.');
     }
 }

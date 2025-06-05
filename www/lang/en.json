@@ -73,6 +73,11 @@
     "user-title": "User",
     "previous-page": "Previous",
     "next-page": "Next ",
-    "action-title": "Action"
+    "action-title": "Action",
+    "shop_error_insufficient_gems": "You don't have enough gems to buy this avatar.",
+    "shop_error_generic": "An error occurred while trying to buy the avatar.",
+    "shop_confirm_modal_message": "Are you sure you want to buy this avatar?",
+    "shop_yes_buy": "Yes, Buy",
+    "shop_cancel": "Cancel"
     
 }

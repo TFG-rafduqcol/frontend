@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     
     function loadLanguage(lang) {
         let pathPrefix = "../../";
-        // Ajuste para rutas de views/menu y views/auth
+
         if (window.location.pathname.endsWith('/www/') || window.location.pathname.endsWith('/www/index.html')) {
             pathPrefix = "";
         } 
