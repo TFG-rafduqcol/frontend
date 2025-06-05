@@ -484,17 +484,17 @@ body {
     background: linear-gradient(90deg, #ffe066 60%, #7fffd4 100%);
     color: #19753E;
     font-weight: bold;
-    font-size: 1.2vh;
-    border-radius: 1vh;
-    padding: 0.2vh 1.2vw;
-    margin-top: 0vh;
-    margin-left: 0.5vw;
-    box-shadow: 0 0.3vh 1vh rgba(0,0,0,0.10);
+    font-size: 0.95em;
+    border-radius: 8px;
+    padding: 1px 7px;
+    margin-top: 0px;
+    margin-left: -5px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
     letter-spacing: 0.03em;
-    border: 0.3vh solid #ffe066;
+    border: 2px solid #ffe066;
     text-align: center;
     width: max-content;
-    min-width: 3vw;
-    max-width: 7vw;
+    min-width: 28px;
+    max-width: 50px;
     height: auto;
 }
