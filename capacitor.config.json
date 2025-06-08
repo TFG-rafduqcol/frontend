@@ -3,15 +3,16 @@
   "appName": "Aztek Guardians",
   "webDir": "www",
   "server": {
-    "cleartext": true,
+    "cleartext": false,
     "allowNavigation": [
       "192.168.100.7",
-      "192.168.100.7:3000",
-      "192.168.100.7:8000",
+      "192.168.100.7:3443",
+      "192.168.100.7:8443",
       "localhost",
-      "*"
+      "localhost:3443",
+      "localhost:8443"
     ],
-    "androidScheme": "http",
+    "androidScheme": "https",
     "errorPath": "error.html"
   },
   "android": {
