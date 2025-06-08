@@ -520,6 +520,19 @@ async function updateGame(newRound, towerPrice, minusLives) {
         if (livesElement) {
             livesElement.textContent = `${lives}`;
         }
+        
+        if (lives <= 0) {
+            const userRank = localStorage.getItem('userRank') || 'Bronce';
+            
+            if (typeof window.showEndgameModal === 'function') {
+                window.showEndgameModal(round, userRank);
+            }
+            
+            const generateButton = document.getElementById('generateEnemyButton');
+            if (generateButton) generateButton.disabled = true;
+            
+            return; 
+        }
     }
 
     try {
@@ -611,7 +624,7 @@ async function upgradeTower(towerName, zonePosition) {
         Object.assign(towerDeployed, upgradedTower);
 
         const towerIndex = towersArea.findIndex(t => t.position === zonePosition);
-        
+
         towersArea[towerIndex].damage = upgradeData.damage;
         towersArea[towerIndex].range = upgradeData.range;
         towersArea[towerIndex].fireRate = upgradeData.fire_rate * 1000;

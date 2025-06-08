@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mapa Tower Defense</title>
-    <link rel="stylesheet" href="../../css/topBar.css">
+    <title>Mapa Tower Defense</title>    <link rel="stylesheet" href="../../css/topBar.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="../../css/game.css">
     <link rel="stylesheet" href="../../css/modal.css">
+    <link rel="stylesheet" href="../../css/endgame-modal.css">
 
 
 </head>
@@ -104,11 +104,37 @@
     <script src="../../js/game/index.js"></script>
     <script src="../../js/game/utils.js"></script>
     <script src="../../js/game/tower.js"></script>
-    <script src="../../js/game/map.js"></script>
-    <script src="../../js/game/enemies.js"></script>
+    <script src="../../js/game/map.js"></script>    <script src="../../js/game/enemies.js"></script>
     <script src="../../js/game/enemyDeath.js"></script>
     <script src="../../js/game/projectile.js"></script>
-
+    <script src="../../js/game/endgame-modal.js"></script>    <div id="endgame-modal" class="endgame-modal-overlay" style="display: none;">
+        <div class="endgame-modal">
+            <div class="endgame-modal-header">
+                <span data-i18n="endgame_title">¡Fin de la Batalla!</span>
+            </div>
+            <div class="endgame-modal-body">
+                <div class="endgame-stat">
+                    <span class="endgame-stat-label" data-i18n="round_reached">Ronda alcanzada:</span>
+                    <span id="endgame-round" class="endgame-stat-value">0</span>
+                </div>
+                <div class="endgame-stat">
+                    <span class="endgame-stat-label" data-i18n="xp_earned">Experiencia ganada:</span>
+                    <span id="endgame-xp" class="endgame-stat-value">0</span>
+                </div>
+                <div class="endgame-stat">
+                    <span class="endgame-stat-label" data-i18n="gems_earned">Gemas ganadas:</span>
+                    <span id="endgame-gems" class="endgame-stat-value">0</span>
+                </div>
+                <div id="rank-up-message" class="rank-up-message">
+                    <span data-i18n="rank_up_congrats">¡Felicidades! Has conseguido un nuevo rango:</span><br>
+                    <span id="new-rank">Plata</span>
+                </div>
+                <div class="endgame-modal-buttons">
+                    <button id="main-menu-button" class="endgame-button main-menu-button" data-i18n="main_menu">Menú Principal</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </body>
 </html>
