@@ -277,3 +277,39 @@ mapImage.onload = () => {
     resizeCanvas(1); 
     gameLoop(); 
 };
+
+function centerMapOnPoint(pointIndex = 2) {
+    if (pointIndex < 0 || pointIndex >= path.length) {
+        pointIndex = 0;
+    }
+    
+    const targetPoint = path[pointIndex];
+    
+    offsetX = (canvas.width / 2) - (targetPoint.x * scale);
+    offsetY = (canvas.height / 2) - (targetPoint.y * scale);
+    
+    limitScroll();
+    
+    drawMap();
+    drawZones();
+    drawTowers();
+    drawPath();
+}
+
+function centerMapOnCoordinates(x, y) {
+    offsetX = (canvas.width / 2) - (x * scale);
+    offsetY = (canvas.height / 2) - (y * scale);
+    
+    limitScroll();
+    
+    drawMap();
+    drawZones();
+    drawTowers();
+    drawPath();
+}
+
+window.centerMapOnCoordinates = centerMapOnCoordinates;
+
+
+
+window.centerMapOnPoint = centerMapOnPoint;

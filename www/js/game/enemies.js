@@ -1,4 +1,38 @@
+function initBlockingOverlay() {
+    let blockingOverlay = document.getElementById('blocking-overlay');
+    if (!blockingOverlay) {
+        blockingOverlay = document.createElement('div');
+        blockingOverlay.id = 'blocking-overlay';
+        document.body.appendChild(blockingOverlay);
+        
+        blockingOverlay.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        }, { passive: false });
+        
+        blockingOverlay.addEventListener('touchmove', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        }, { passive: false });
+        
+        blockingOverlay.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        }, { passive: false });
+        
+        blockingOverlay.style.display = 'none';
+    }
+    return blockingOverlay;
+}
+
+document.addEventListener('DOMContentLoaded', initBlockingOverlay);
+
 const enemyCanvas = document.getElementById("enemyCanvas");
+
+document.getElementById('generateEnemyButton').addEventListener('click', generateHorde);
 const enemyCtx = enemyCanvas.getContext("2d");
 
 document.getElementById('generateEnemyButton').addEventListener('click', generateHorde);
@@ -16,7 +50,45 @@ const enemy_props = [
     { name: "darkSeer", width: 70, height: 70, speed: 10, maxHealth: 140, totalFrames: 20, offsetX: -30, offsetY: -65, healthBarHeight: 65, healthBarX: -4, lifes: 5, gold: 30 } // Fuerte contra TODO (1,2,3,4)
 ];
 
+
 async function generateHorde() {
+
+    let blockingOverlay = document.getElementById('blocking-overlay');
+    if (!blockingOverlay) {
+        blockingOverlay = document.createElement('div');
+        blockingOverlay.id = 'blocking-overlay';
+        
+        blockingOverlay.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        }, { passive: false });
+        
+        blockingOverlay.addEventListener('touchmove', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        }, { passive: false });
+        
+        blockingOverlay.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        }, { passive: false });
+        
+        document.body.appendChild(blockingOverlay);
+    }
+      blockingOverlay.style.display = 'block';
+    
+    document.body.classList.add('no-scroll');
+    
+    if (typeof window.centerMapOnCoordinates === 'function') {
+        window.centerMapOnCoordinates(460, 370);
+    } else if (typeof window.centerMapOnPoint === 'function') {
+        window.centerMapOnPoint(2);
+    }
+    
+    canvas.removeEventListener("click", showTowerMenu);
     
     enemiesKilled = 0;
     const roundElement = document.getElementById('round');
@@ -32,6 +104,20 @@ async function generateHorde() {
     if (toweEditMenu) {
         toweEditMenu.style.pointerEvents = 'none';
     }
+
+    towerEditMenu.style.display = 'none';
+
+    const towersDivs = document.querySelectorAll('.tower');
+
+    towersDivs.forEach(towerDiv => {
+        towerDiv.addEventListener('click', towerClickHandler);
+    });
+
+    towersDivs.forEach(towerDiv => {
+        towerDiv.removeEventListener('click', towerClickHandler);
+    });
+
+
 
     if (roundElement.textContent === '0'){
 
@@ -127,7 +213,15 @@ async function generateHorde() {
 
   }
   
-  
+function towerClickHandler(event) {
+    const towerDiv = event.currentTarget;
+    const name = towerDiv.dataset.name;
+    const position = towerDiv.dataset.position;
+
+    previewEditMenuArea(event, name, position);
+    event.stopPropagation();
+}
+
 
 function distance(p1, p2) {
     const dx = p2.x - p1.x;
@@ -367,21 +461,41 @@ async function checkEnemiesAndEnableButtons() {
 
     if (remainingEnemies.length === 0) {
         loadStats();
+        const blockingOverlay = document.getElementById('blocking-overlay');
+        if (blockingOverlay) {
+            blockingOverlay.style.display = 'none';
+        }
+        
         const generateButton = document.getElementById('generateEnemyButton');
         generateButton.disabled = false;
         generateButton.style.display = 'flex';
 
+        document.body.classList.remove('no-scroll');
+        
+        canvas.addEventListener("click", showTowerMenu);
+        
         const towerDivs = document.querySelectorAll('.tower');
         towerDivs.forEach(towerDiv => {
             towerDiv.style.pointerEvents = 'auto';
         });
+        const towersDivs = document.querySelectorAll('.tower');
 
-        canvas.addEventListener("click", showTowerMenu);
+        towersDivs.forEach(towerDiv => {
+            towerDiv.addEventListener('click', function(event) {
+                const name = towerDiv.dataset.name;
+                const position = towerDiv.dataset.position;
 
+                previewEditMenuArea(event, name, position);
+                event.stopPropagation();
+            });
+        })
         const toweEditMenu = document.getElementById('towerEditMenu');
         if (toweEditMenu) {
             toweEditMenu.style.pointerEvents = 'auto';
         }
+
+
+            
 
         if (!isHordePrepared) prepareNextHorde();
 
@@ -423,6 +537,10 @@ async function prepareNextHorde () {
   
       const data = await response.json();
       console.log('Horde generated:', data);
+
+        const generateButton = document.getElementById('generateEnemyButton');
+        generateButton.disabled = false;
+        generateButton.style.display = 'flex';
   
       const enemiesData = data.enemies;
   

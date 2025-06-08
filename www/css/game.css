@@ -101,7 +101,7 @@ body {
 
 }
 #towerPrice3 {
-    top: 50%;
+    top: 51%;
     left: 29%;
 
 }
@@ -484,17 +484,39 @@ body {
     background: linear-gradient(90deg, #ffe066 60%, #7fffd4 100%);
     color: #19753E;
     font-weight: bold;
-    font-size: 0.95em;
+    font-size: 2.5vh;
     border-radius: 8px;
-    padding: 1px 7px;
     margin-top: 0px;
-    margin-left: -5px;
+    margin-left: 6px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.10);
     letter-spacing: 0.03em;
     border: 2px solid #ffe066;
     text-align: center;
-    width: max-content;
-    min-width: 28px;
-    max-width: 50px;
-    height: auto;
+    width: 5.5vh;
+    height: 3vh;
+}
+
+#blocking-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: transparent;
+    z-index: 99999;
+    pointer-events: all;
+    touch-action: none;
+    -webkit-touch-callout: none; 
+    -webkit-user-select: none; 
+    -khtml-user-select: none; 
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+body.no-scroll {
+    overflow: hidden !important;
+    position: fixed;
+    width: 100%;
+    height: 100%;
 }

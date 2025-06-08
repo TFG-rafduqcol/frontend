@@ -1,9 +1,14 @@
 document.addEventListener("DOMContentLoaded", function () {
+    const user = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
+    if (user && token) {
+        window.location.href = "../menu/index.html";
+        return;
+    }
 
     const email = document.getElementById("email");
     const password = document.getElementById("password");    const setInitialPlaceholders = () => {
         const lang = localStorage.getItem("language") || "en";
-        // Usar rutas relativas en lugar de basadas en origin
         fetch(`../../lang/${lang}.json`)
             .then(response => {
                 if (!response.ok) {

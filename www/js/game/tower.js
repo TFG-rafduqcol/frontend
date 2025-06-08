@@ -104,8 +104,7 @@ function showTowerMenu(event) {
         const towerGold = parseInt(price);
 
         if (towerGold > gold) {
-            option.classList.add('disabled-tower');
-            
+            option.classList.add('disabled-tower');    
         }
         else {
             option.addEventListener('click', towerOptionClickHandler);
@@ -289,6 +288,9 @@ function previewEditMenuArea(event, towerName, zonePosition) {
 
     if (!editTower) return;
     
+    resetDeleteTowerIcon();
+    resetUpgradeTowerIcon();
+
     const editMenuLeft = (editTower.x + editTower.width / 2) * scale + offsetX;
     const editMenuTop = (editTower.y + editTower.height / 2) * scale + offsetY;
 
@@ -335,8 +337,8 @@ function previewEditMenuArea(event, towerName, zonePosition) {
     editClickedOnce = false;
     resetUpgradeTowerIcon();
     editClickHandler = function () {
-            rangeBoost = range + towersArea.find(tower => tower.position === zonePosition).upgradeRangeBoost;
-            boostRange = 2 * rangeBoost * scale;
+        rangeBoost = range + towersArea.find(tower => tower.position === zonePosition).upgradeRangeBoost;
+        boostRange = 2 * rangeBoost * scale;
 
         if (deleteClickHandler) {
             deleteTowerDiv.removeEventListener('click', deleteClickHandler);
@@ -346,16 +348,17 @@ function previewEditMenuArea(event, towerName, zonePosition) {
 
         if (!editClickedOnce) {
             editClickedOnce = true;
-            changeUpgradeTowerIcon();
             towerAreaDiv.style.width = `${boostRange}px`; 
             towerAreaDiv.style.height = `${boostRange}px`;
+            changeUpgradeTowerIcon();
+
         } else {
             upgradeTower(towerName, zonePosition);
         }
     }
 
-    deleteTowerDiv.addEventListener('click', deleteClickHandler);
     upgradeTowerDiv.addEventListener('click', editClickHandler);
+    deleteTowerDiv.addEventListener('click', deleteClickHandler);
 
     let upgradeCostInfo = upgradeTowerDiv.querySelector('.upgrade-cost-info');
     if (!upgradeCostInfo) {
@@ -608,12 +611,12 @@ async function upgradeTower(towerName, zonePosition) {
         Object.assign(towerDeployed, upgradedTower);
 
         const towerIndex = towersArea.findIndex(t => t.position === zonePosition);
-        if (towerIndex !== -1) {
-            towersArea[towerIndex].damage = upgradeData.damage;
-            towersArea[towerIndex].range = upgradeData.range;
-            towersArea[towerIndex].fireRate = upgradeData.fire_rate * 1000;
-            towersArea[towerIndex].towerLevel += 1;
-        }
+        
+        towersArea[towerIndex].damage = upgradeData.damage;
+        towersArea[towerIndex].range = upgradeData.range;
+        towersArea[towerIndex].fireRate = upgradeData.fire_rate * 1000;
+        towersArea[towerIndex].towerLevel += 1;
+        
 
         towersDeployed = towersDeployed.map(tower => {
             if (tower.position === zonePosition) {
@@ -627,6 +630,8 @@ async function upgradeTower(towerName, zonePosition) {
             }
             return tower;
         });
+
+        console.log('Torre mejorada:', upgradedTower);
 
         drawTowers(); 
 
