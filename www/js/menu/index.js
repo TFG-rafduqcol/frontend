@@ -18,30 +18,32 @@ if (user) {
     document.getElementById("avatar").src = user.avatar || "";
     document.getElementById("range").src = user.range_url || "";
 
-    newGameButton = document.getElementById("new-game");
-    newGameButton.addEventListener("click", function() {
-        
+    const normalModeBtn = document.getElementById('normal-mode-btn');
+    const hardModeBtn = document.getElementById('hard-mode-btn');
+
+    function startGame(hardMode) {
         try {
-            const token =localStorage.getItem('token');
+            const token = localStorage.getItem('token');
             fetch(`${serverUrl}/api/games/createGame`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`,    
+                    "Authorization": `Bearer ${token}`,
                 },
-                body: JSON.stringify({  
-                    path: "game.html",             
+                body: JSON.stringify({
+                    path: "game.html",
+                    hardMode: hardMode
                 }),
             })
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
-                return response.json(); 
+                return response.json();
             })
             .then(data => {
                 console.log("Game created successfully:", data);
-                window.location.href = "../game/index.html?gameId=" + data.id; 
+                window.location.href = "../game/index.html?gameId=" + data.id;
             })
             .catch(error => {
                 console.error("Error creating game:", error);
@@ -49,8 +51,16 @@ if (user) {
         } catch (error) {
             console.error("Unexpected error:", error);
         }
-        
-    });
+    }
+
+    if (normalModeBtn && hardModeBtn) {
+        normalModeBtn.addEventListener('click', function() {
+            startGame(false);
+        });
+        hardModeBtn.addEventListener('click', function() {
+            startGame(true);
+        });
+    }
 
 } else {
     console.log("User data not found");

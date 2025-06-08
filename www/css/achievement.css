@@ -1,25 +1,38 @@
 .achievement {
-    border-radius: 10px;
-    padding: 1rem;
-    width: 80%;
-    background-color: #19753E;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-    margin: 1rem auto;
-  }
-  
-  .achievement-title {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, #256d3a 60%, #1e5631 100%);
+    border-radius: 18px;
+    box-shadow: 0 4px 18px 0 rgba(0,0,0,0.13), 0 1.5px 6px 0 rgba(0,0,0,0.10);
+    border: 2px solid #ffe066;
+    margin: 1.2em 0 1.2em 0;
+    padding: 1.2em 1.5em 1.2em 1.5em;
+    transition: box-shadow 0.2s, border 0.2s;
+    position: relative;
+    overflow: hidden;
+    max-width: 540px;
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.achievement:hover {
+    box-shadow: 0 8px 32px 0 rgba(0,0,0,0.18), 0 2.5px 10px 0 rgba(0,0,0,0.13);
+    border-color: #ffd700;
+}
+.achievement-title {
+    color: #ffe066;
+    font-weight: bold;
+    font-size: 1.45em;
+    margin-bottom: 0.2em;
+    letter-spacing: 0.5px;
     text-align: left;
     margin-left: 2vw;
-  }
-  
-  .achievement-description {
-    font-size: 1rem;
-    margin-bottom: 1rem;
-    color: #FFFF99;
-  }
-  .progress-container {
+}
+.achievement-description {
+    color: #f7f7c6;
+    font-size: 1.08em;
+    margin-bottom: 0.7em;
+    margin-top: 0.1em;
+}
+.progress-container {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -42,6 +55,9 @@
 }
 
 .achievement-stars {
+    margin-top: 0.2em;
+    font-size: 1.25em;
+    text-align: right;
     position: absolute;
     right: 6vw; 
     display: flex;
@@ -53,4 +69,8 @@
     color: gold;
     font-size: 1.5rem;
     margin-left: 0.2rem;
+}
+
+.achievement-icon {
+    filter: drop-shadow(0 1px 2px #0008);
 }

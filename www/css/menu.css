@@ -230,3 +230,68 @@ body {
     transform: scale(1.1);
     opacity: 0.8;
 }
+
+.game-mode-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin: 18px 0 16px 0;
+  background: rgba(25, 117, 62, 0.10);
+  border: 2.5px solid #d4af37;
+  border-radius: 28px;
+  box-shadow: 0 2px 12px 0 rgba(212,175,55,0.10), 0 1.5px 6px 0 rgba(0,0,0,0.06);
+  padding: 10px 0 10px 0;
+  width: 200px;
+  max-width: 90vw;
+  min-width: 120px;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+@media (max-width: 600px) {
+  .game-mode-buttons {
+    width: 90vw;
+    min-width: 0;
+    padding: 6px 0 6px 0;
+  }
+}
+.mode-btn {
+  width: 180px;
+  min-width: 120px;
+  max-width: 260px;
+  padding: 10px 0;
+  font-size: 1em;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.18s, transform 0.18s, box-shadow 0.18s;
+  box-shadow: 0 2px 8px 0 rgba(25,117,62,0.12), 0 1.5px 6px 0 rgba(0,0,0,0.08);
+  letter-spacing: 0.03em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  outline: 1.5px solid #19753E;
+}
+.mode-btn i {
+  font-size: 1em;
+  margin-right: 7px;
+}
+.normal-mode-btn {
+  background: linear-gradient(90deg, #19753E 0%, #2ecc40 100%);
+  color: #FFFF99;
+}
+.normal-mode-btn:hover {
+  background: linear-gradient(90deg, #14532d 0%, #27ae60 100%);
+  transform: translateY(-1px) scale(1.03);
+}
+.hard-mode-btn {
+  background: linear-gradient(90deg, #9b111e 0%, #e74c3c 100%);
+  color: #FFFF99;
+}
+.hard-mode-btn:hover {
+  background: linear-gradient(90deg, #7a0d16 0%, #9b111e 100%);
+  transform: translateY(-1px) scale(1.03);
+}

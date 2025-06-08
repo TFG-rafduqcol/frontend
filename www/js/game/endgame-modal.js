@@ -1,7 +1,9 @@
+const { useReducer } = require("react");
+
 const RANKS = {
-    SILVER: 'Plata',
-    GOLD: 'Oro',
-    MASTER: 'Master'
+    SILVER: "Plata",
+    GOLD: "Oro",
+    MASTER: "Master"
 };
 
 const translations = {
@@ -62,18 +64,15 @@ function showEndgameModal(round, userRank) {
     const rankUpMessage = document.getElementById('rank-up-message');
     if (round >= 50 && userRank !== RANKS.MASTER) {
         let newRank;
-        switch(userRank) {
-            case RANKS.SILVER:
-                user.range = RANKS.GOLD;
-                user.range_url = '../../images/master.png';
-            case RANKS.GOLD:
-                user.range = RANKS.MASTER;
-                user.range_url = '../../images/master.png';
-                break;
-            default:
-                newRank = RANKS.SILVER; 
+
+        if (userRank === RANKS.SILVER) {
+            newRank = RANKS.GOLD;
+            user.avatar_url = "../../images/master.png";
+        } else if (isHardMode && userRank === RANKS.SILVER) {
+            newRank == RANKS.MASTER;
+            user.avatar_url = "../../images/master.png";
         }
-        
+        user.rank = newRank;
         document.getElementById('new-rank').textContent = newRank;
         rankUpMessage.classList.add('show');
     } else {
@@ -82,7 +81,6 @@ function showEndgameModal(round, userRank) {
     
     document.getElementById('endgame-modal').style.display = 'flex';
     
-    // Aplicar traducciones al mostrar el modal
     applyEndgameTranslations();
     
     // saveEndgameData(round, xpEarned, gemsEarned, userRank);
