@@ -57,24 +57,7 @@ function drawMap() {
 }
 
 function drawZones() {
-    ctx.fillStyle = "rgba(0, 255, 0, 0.2)"; 
-    ctx.font = "16px Arial";
-    ctx.fillStyle = "rgba(0, 255, 0, 0.2)"; 
-
     towerZones.forEach((zone) => {
-        const zoneX = zone.x * scale + offsetX;
-        const zoneY = zone.y * scale + offsetY;
-        const zoneW = zone.width * scale;
-        const zoneH = zone.height * scale;
-
-        ctx.fillRect(zoneX, zoneY, zoneW, zoneH);
-
-        ctx.fillStyle = "black";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText(zone.position, zoneX + zoneW / 2, zoneY + zoneH / 2);
-
-        ctx.fillStyle = "rgba(0, 255, 0, 0.2)";
     });
 }
 
@@ -90,11 +73,6 @@ function drawPath() {
         const pointY = path[i].y * scale + offsetY;
         ctx.lineTo(pointX, pointY);
     }
-
-    ctx.strokeStyle = 'blue';
-    ctx.lineWidth = 3;
-    ctx.stroke();
-    ctx.closePath();
 }
 
 

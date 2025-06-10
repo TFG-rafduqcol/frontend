@@ -1,8 +1,6 @@
-const { useReducer } = require("react");
-
 const RANKS = {
-    SILVER: "Plata",
-    GOLD: "Oro",
+    SILVER: "Silver",
+    GOLD: "Gold",
     MASTER: "Master"
 };
 
@@ -48,9 +46,11 @@ function applyEndgameTranslations() {
 }
 
 function showEndgameModal(round, userRank) {
+    gameEnded = true;
     const xpEarned = round * 20;
     const gemsEarned = round * 1;
-    const user = JSON.parse(localStorage.getItem('user'));  
+    const user = JSON.parse(localStorage.getItem('user'));
+    const isHardMode = localStorage.getItem('isHardMode') === 'true';
     user.gems += gemsEarned;
     console.log(user.experience, "experience before");
     user.experience += xpEarned;
@@ -63,18 +63,22 @@ function showEndgameModal(round, userRank) {
     
     const rankUpMessage = document.getElementById('rank-up-message');
     if (round >= 50 && userRank !== RANKS.MASTER) {
-        let newRank;
+        let newRank = null;
 
-        if (userRank === RANKS.SILVER) {
+        if (userRank === RANKS.SILVER && !isHardMode) {
             newRank = RANKS.GOLD;
             user.avatar_url = "../../images/master.png";
         } else if (isHardMode && userRank === RANKS.SILVER) {
-            newRank == RANKS.MASTER;
+            newRank = RANKS.MASTER;
             user.avatar_url = "../../images/master.png";
         }
-        user.rank = newRank;
-        document.getElementById('new-rank').textContent = newRank;
-        rankUpMessage.classList.add('show');
+        if (newRank) {
+            user.rank = newRank;
+            document.getElementById('new-rank').textContent = newRank;
+            rankUpMessage.classList.add('show');
+        } else {
+            rankUpMessage.classList.remove('show');
+        }
     } else {
         rankUpMessage.classList.remove('show');
     }
@@ -83,44 +87,21 @@ function showEndgameModal(round, userRank) {
     
     applyEndgameTranslations();
     
-    // saveEndgameData(round, xpEarned, gemsEarned, userRank);
+    fetch(`${serverUrl}/api/games/endGame/${gameId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log('Fin de partida guardado en backend:', data);
+    })
+    .catch(err => {
+        console.error('Error guardando fin de partida en backend:', err);
+    });
 }
-
-// async function saveEndgameData(round, xp, gems, currentRank) {
-//     try {
-//         const token = localStorage.getItem('token');
-//         if (!token) {
-//             console.error('No se encontró token de autenticación');
-//             return;
-//         }
-        
-//         const response = await fetch(`${serverUrl}/api/games/endgame`, {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 'Authorization': `Bearer ${token}`
-//             },
-//             body: JSON.stringify({
-//                 gameId: gameId,
-//                 round: round,
-//                 xpEarned: xp,
-//                 gemsEarned: gems,
-//                 currentRank: currentRank
-//             })
-//         });
-        
-//         if (!response.ok) {
-//             const error = await response.json();
-//             throw new Error(error.error || 'Error al guardar los datos de fin de partida');
-//         }
-        
-//         const data = await response.json();
-//         console.log('Datos de fin de partida guardados:', data);
-        
-//     } catch (err) {
-//         console.error('Error guardando datos de fin de partida:', err.message);
-//     }
-// }
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -129,10 +110,8 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = '../../views/menu/index.html';
     });
     
-    // Aplicar traducciones cuando el DOM está listo
     applyEndgameTranslations();
     
-    // Escuchar por cambios de idioma
     window.addEventListener('languageChanged', applyEndgameTranslations);
 });
 

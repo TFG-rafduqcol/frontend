@@ -39,6 +39,7 @@ if (user) {
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
+                localStorage.setItem("isHardMode", hardMode);
                 return response.json();
             })
             .then(data => {

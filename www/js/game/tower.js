@@ -475,108 +475,6 @@ async function deployTower(towerName, zonePosition) {
     }
 }
 
-
-
-async function deleteTower(zonePosition) {
-    const token = localStorage.getItem('token');
-    const towerDeployed = towersDeployed.find(tower => tower.position === zonePosition);
-    const towerId = towerDeployed.id;
-    const response = await fetch(`${serverUrl}/api/towers/deleteTower/${towerId}`, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
-    });
-
-    if (response.ok) {
-        towersDeployed = towersDeployed.filter(tower => tower.position !== zonePosition);
-        const zone = towerZones.find(z => z.position === zonePosition);
-        if (zone) {
-            zone.occupied = false;
-        }
-        const previewDiv = document.getElementById('towerEditMenu');
-        previewDiv.style.display = 'none'; 
-        towerOptionMenuVisible = false;
-
-        let totalCost = towerProperties[towerDeployed.name].cost;
-        let roundedCost = Math.ceil((totalCost / 2) / 5) * 5;
-        updateGame(false, roundedCost, undefined);
-        drawTowers(); 
-    }
-    else {
-        console.error('Error al eliminar la torre:', response.statusText);
-        alert('Hubo un problema al eliminar la torre. Inténtalo de nuevo.');
-    }
-}
-
-async function updateGame(newRound, towerPrice, minusLives) {
-    const token = localStorage.getItem('token');
-    const gameId = params.get('gameId');
-
-    if (minusLives !== undefined) {
-        lives -= minusLives;
-        const livesElement = document.getElementById('lives');
-        if (livesElement) {
-            livesElement.textContent = `${lives}`;
-        }
-        
-        if (lives <= 0) {
-            const userRank = localStorage.getItem('userRank') || 'Bronce';
-            
-            if (typeof window.showEndgameModal === 'function') {
-                window.showEndgameModal(round, userRank);
-            }
-            
-            const generateButton = document.getElementById('generateEnemyButton');
-            if (generateButton) generateButton.disabled = true;
-            
-            return; 
-        }
-    }
-
-    try {
-        const response = await fetch(`${serverUrl}/api/games/updateGame/${gameId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({
-                round: newRound ? round + 1 : undefined,
-                gold: gold + towerPrice, 
-                lives: minusLives !== undefined ? lives - minusLives : undefined
-            })
-        });
-
-        if (!response.ok) {
-            const errorData = await response.json();
-            console.error('Error updating game:', errorData);
-            return;
-        }
-
-        const updatedGame = await response.json();
-        console.log('Game updated successfully:', updatedGame);
-
-        const goldElement = document.getElementById('gold');
-        gold = updatedGame.gold;
-        if (goldElement) {
-            goldElement.textContent = `${updatedGame.gold}`; 
-        }
-
-        const roundElement = document.getElementById('round');
-        round = updatedGame.round;
-        if (roundElement) {
-            roundElement.textContent = `${updatedGame.round}`; 
-        }
-        
-        return updatedGame;
-    } catch (error) {
-        console.error('Fetch error:', error);
-    }
-}
-
-
 async function upgradeTower(towerName, zonePosition) {
     const token = localStorage.getItem('token');
     const towerDeployed = towersDeployed.find(tower => tower.position === zonePosition);
@@ -655,3 +553,106 @@ async function upgradeTower(towerName, zonePosition) {
         alert('Hubo un problema al mejorar la torre. Inténtalo de nuevo.');
     }
 }
+
+
+async function deleteTower(zonePosition) {
+    const token = localStorage.getItem('token');
+    const towerDeployed = towersDeployed.find(tower => tower.position === zonePosition);
+    const towerId = towerDeployed.id;
+    const response = await fetch(`${serverUrl}/api/towers/deleteTower/${towerId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+    });
+
+    if (response.ok) {
+        towersDeployed = towersDeployed.filter(tower => tower.position !== zonePosition);
+        const zone = towerZones.find(z => z.position === zonePosition);
+        if (zone) {
+            zone.occupied = false;
+        }
+        const previewDiv = document.getElementById('towerEditMenu');
+        previewDiv.style.display = 'none'; 
+        towerOptionMenuVisible = false;
+
+        let totalCost = towerProperties[towerDeployed.name].cost;
+        let roundedCost = Math.ceil((totalCost / 2) / 5) * 5;
+        updateGame(false, roundedCost, undefined);
+        drawTowers(); 
+    }
+    else {
+        console.error('Error al eliminar la torre:', response.statusText);
+        alert('Hubo un problema al eliminar la torre. Inténtalo de nuevo.');
+    }
+}
+
+async function updateGame(newRound, towerPrice, minusLives) {
+    const token = localStorage.getItem('token');
+    const gameId = params.get('gameId');
+
+    if (minusLives !== undefined) {
+        lives -= minusLives;
+        const livesElement = document.getElementById('lives');
+        if (livesElement) {
+            livesElement.textContent = `${lives}`;
+        }
+        
+        if (lives <= 0) {
+            const user = JSON.parse(localStorage.getItem('user'));
+            const userRange = user.range;
+            console.log("USERRANGE", userRange);
+            
+            if (typeof window.showEndgameModal === 'function') {
+                window.showEndgameModal(round, userRange);
+            }
+            
+            const generateButton = document.getElementById('generateEnemyButton');
+            if (generateButton) generateButton.disabled = true;
+            
+            return; 
+        }
+    }
+
+    try {
+        const response = await fetch(`${serverUrl}/api/games/updateGame/${gameId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                round: newRound ? round + 1 : undefined,
+                gold: gold + towerPrice, 
+                lives: minusLives !== undefined ? lives - minusLives : undefined
+            })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Error updating game:', errorData);
+            return;
+        }
+
+        const updatedGame = await response.json();
+        console.log('Game updated successfully:', updatedGame);
+
+        const goldElement = document.getElementById('gold');
+        gold = updatedGame.gold;
+        if (goldElement) {
+            goldElement.textContent = `${updatedGame.gold}`; 
+        }
+
+        const roundElement = document.getElementById('round');
+        round = updatedGame.round;
+        if (roundElement) {
+            roundElement.textContent = `${updatedGame.round}`; 
+        }
+        
+        return updatedGame;
+    } catch (error) {
+        console.error('Fetch error:', error);
+    }
+}
+

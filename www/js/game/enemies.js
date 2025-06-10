@@ -90,7 +90,6 @@ async function generateHorde() {
     
     canvas.removeEventListener("click", showTowerMenu);
     
-    enemiesKilled = 0;
     const roundElement = document.getElementById('round');
         
     const generateButton = document.getElementById('generateEnemyButton');
@@ -131,7 +130,8 @@ async function generateHorde() {
                 },
                 body: JSON.stringify({
                     earnedGold: 0,
-                    lostedLives: 0
+                    lostedLives: 0, 
+                    enemiesKilled: 0
                 })
             });
         
@@ -455,12 +455,12 @@ function checkAreasWithEnemies() {
     });
 }
 
-
+let gameEnded = false;
 async function checkEnemiesAndEnableButtons() {
 
     const remainingEnemies = enemies.filter(enemy => !enemy.isDead);
 
-    if (remainingEnemies.length === 0) {
+    if (remainingEnemies.length === 0 && !gameEnded) {
         loadStats();
         const blockingOverlay = document.getElementById('blocking-overlay');
         if (blockingOverlay) {
@@ -528,7 +528,8 @@ async function prepareNextHorde () {
             },
             body: JSON.stringify({
                 earnedGold: earnedGold,
-                lostedLives: lostedLives
+                lostedLives: lostedLives,
+                enemiesKilled: enemiesKilled
             })
     }); 
   
@@ -539,6 +540,8 @@ async function prepareNextHorde () {
   
       earnedGold = 0;
       lostedLives = 0;
+      enemiesKilled = 0;
+
       const data = await response.json();
       console.log('Horde generated:', data);
 

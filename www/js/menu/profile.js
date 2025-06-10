@@ -5,8 +5,8 @@ const translations = {
         games_played: "Partidas jugadas:",
         achievement_enemies_killed_title: "Cazador de Enemigos",
         achievement_enemies_killed_desc: "Mata enemigos para obtener estrellas.",
-        achievement_towers_placed_title: "Arquitecto Estratégico",
-        achievement_towers_placed_desc: "Coloca torres para mejorar tu defensa.",
+        achievement_towers_deployed_title: "Arquitecto Estratégico",
+        achievement_towers_deployed_desc: "Coloca torres para mejorar tu defensa.",
         achievement_towers_upgraded_title: "Maestro de la Mejora",
         achievement_towers_upgraded_desc: "Mejora tus torres para aumentar su poder.",
         achievement_gold_earned_title: "Acumulador de Oro",
@@ -24,8 +24,8 @@ const translations = {
         games_played: "Games played:",
         achievement_enemies_killed_title: "Enemy Hunter",
         achievement_enemies_killed_desc: "Kill enemies to earn stars.",
-        achievement_towers_placed_title: "Strategic Architect",
-        achievement_towers_placed_desc: "Place towers to improve your defense.",
+        achievement_towers_deployed_title: "Strategic Architect",
+        achievement_towers_deployed_desc: "Place towers to improve your defense.",
         achievement_towers_upgraded_title: "Upgrade Master",
         achievement_towers_upgraded_desc: "Upgrade your towers to increase their power.",
         achievement_gold_earned_title: "Gold Hoarder",
@@ -85,7 +85,7 @@ if (user) {
 
         if (stats.max_round) {
             const maxRoundEl = document.getElementById('max-round');
-            if (maxRoundEl) maxRoundEl.textContent = stats.max_round;
+            if (maxRoundEl) maxRoundEl.textContent = stats.rounds_passed;
         }
         if (stats.games_played) {
             const gamesPlayedEl = document.getElementById('games-played');
@@ -96,37 +96,44 @@ if (user) {
             enemies_killed: {
                 title: t("achievement_enemies_killed_title"),
                 description: t("achievement_enemies_killed_desc"),
-                thresholds: [1000, 2500, 5000]
+                thresholds: [1000, 2500, 5000],
+                desc_template: "Mata {n} enemigos para obtener estrellas."
             },
-            towers_placed: {
-                title: t("achievement_towers_placed_title"),
-                description: t("achievement_towers_placed_desc"),
-                thresholds: [50, 150, 300]
+            towers_deployed: {
+                title: t("achievement_towers_deployed_title"),
+                description: t("achievement_towers_deployed_desc"),
+                thresholds: [100, 300, 500],
+                desc_template: "Coloca {n} torres para obtener estrellas."
             },
-            towers_uograded: {
+            towers_upgraded: {
                 title: t("achievement_towers_upgraded_title"),
                 description: t("achievement_towers_upgraded_desc"),
-                thresholds: [10, 25, 50]
+                thresholds: [100, 200, 300],
+                desc_template: "Mejora {n} torres para obtener estrellas."
             },
             gold_earned: {
                 title: t("achievement_gold_earned_title"),
                 description: t("achievement_gold_earned_desc"),
-                thresholds: [10000, 25000, 50000]
+                thresholds: [10000, 25000, 50000],
+                desc_template: "Gana {n} de oro para obtener estrellas."
             },
             gems_earned: {
                 title: t("achievement_gems_earned_title"),
                 description: t("achievement_gems_earned_desc"),
-                thresholds: [1000, 2500, 5000]
+                thresholds: [1000, 2500, 5000],
+                desc_template: "Gana {n} gemas para obtener estrellas."
             },
             rounds_passed: {
                 title: t("achievement_rounds_passed_title"),
                 description: t("achievement_rounds_passed_desc"),
-                thresholds: [50, 100, 200]
+                thresholds: [50, 100, 200],
+                desc_template: "Supera {n} rondas para obtener estrellas."
             },
             games_played: {
                 title: t("achievement_games_played_title"),
                 description: t("achievement_games_played_desc"),
-                thresholds: [10, 25, 50]
+                thresholds: [100, 250, 500],
+                desc_template: "Juega {n} partidas para obtener estrellas."
             }
         };
 
@@ -153,8 +160,8 @@ if (user) {
 
                 const icons = {
                     enemies_killed: '<span class="achievement-icon" title="Enemigos derrotados" style="font-size:2.1em;vertical-align:middle;margin-right:0.5em;">⚔️</span>',
-                    towers_placed: '<span class="achievement-icon" title="Torres colocadas" style="font-size:2.1em;vertical-align:middle;margin-right:0.5em;">🏹</span>',
-                    towers_uograded: '<span class="achievement-icon" title="Torres mejoradas" style="font-size:2.1em;vertical-align:middle;margin-right:0.5em;">🔧</span>',
+                    towers_deployed: '<span class="achievement-icon" title="Torres colocadas" style="font-size:2.1em;vertical-align:middle;margin-right:0.5em;">🏹</span>',
+                    towers_upgraded: '<span class="achievement-icon" title="Torres mejoradas" style="font-size:2.1em;vertical-align:middle;margin-right:0.5em;">🔧</span>',
                     gold_earned: '<span class="achievement-icon" title="Oro ganado" style="font-size:2.1em;vertical-align:middle;margin-right:0.5em;">💰</span>',
                     gems_earned: '<span class="achievement-icon" title="Gemas ganadas" style="font-size:2.1em;vertical-align:middle;margin-right:0.5em;">💎</span>',
                     rounds_passed: '<span class="achievement-icon" title="Rondas superadas" style="font-size:2.1em;vertical-align:middle;margin-right:0.5em;">🛡️</span>',
@@ -169,15 +176,11 @@ if (user) {
                 else level = 0;
                 let nextMsg = '';
                 if (stars < 3) {
-                    if (stars === 0) {
-                        nextMsg = `Kill ${config.thresholds[0]} enemies to earn a star.`;
-                    } else if (stars === 1) {
-                        nextMsg = `Kill ${config.thresholds[1]} enemies to earn a star.`;
-                    } else if (stars === 2) {
-                        nextMsg = `Kill ${config.thresholds[2]} enemies to earn a star.`;
-                    }
+                    let nextThreshold = config.thresholds[stars];
+                    let template = config.desc_template || t('achievement_' + key + '_desc', config.description);
+                    nextMsg = template.replace('{n}', nextThreshold);
                 } else {
-                    nextMsg = `<span style='color:#ffe066'>Achievement completed!</span>`;
+                    nextMsg = `<span style='color:#ffe066'>${t('achievement_completed', '¡Logro completado!')}</span>`;
                 }
                 const descriptionWithThresholds = `<span style='font-size:0.98em;color:#f7f7c6;'>${nextMsg}</span>`;
 

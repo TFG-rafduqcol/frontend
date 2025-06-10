@@ -129,7 +129,6 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('../images/textures/gold-pattern.png');
     background-size: contain;
     opacity: 0.1;
     z-index: 0;
