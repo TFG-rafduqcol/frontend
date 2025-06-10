@@ -97,15 +97,18 @@ document.addEventListener("DOMContentLoaded", function () {
                 })
                 .then(data => {
                     if (data && data.token) {
+                        console.log("hola")
                         localStorage.setItem("token", data.token);
                         localStorage.setItem("user", JSON.stringify(data.user));
-                        if (data.user.isAdmin) {
+                        console.log(data)
+                        if (data.user.isAdmin === true) {
                             window.location = "../admin/index.html";
                         } else {
-                        window.location = "../menu/index.html";
+                            localStorage.setItem("isAdmin", "false");
+                            window.location = "../menu/index.html";
                         }
                     }
-                })                .catch(error => {
+                }).catch(error => {
                     console.error("Error:", error);
                     alert(window.translations?.error_try_again || "An error occurred. Please try again later.");
                 });

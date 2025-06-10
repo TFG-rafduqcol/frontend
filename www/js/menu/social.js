@@ -6,9 +6,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const translations = {
     en: {
+      friends_title: "Friends List",
       find_user: "Find User",
       your_friends: "Your Friends",
       requests: "Friend Requests",
+      your_friends_header: "Your Friends",
+      friend_requests_header: "Friend Requests",
+      no_friends: "List of friends will appear here.",
+      no_requests: "Friend requests will appear here.",
+      search_placeholder: "Enter username or ID",
       pending: "Pending",
       accept: "Accept",
       addFriend: "Send Request",
@@ -18,12 +24,23 @@ document.addEventListener("DOMContentLoaded", () => {
       goodRequest: "Request sent successfully.",
       deleteSucess: "Friend removed successfully.",
       rejected: "Rejected",
-      user_not_found: "User not found."
+      user_not_found: "User not found.",
+      error_request: "Error in the request.",
+      error_fetching_friends: "Error fetching friends.",
+      please_enter_user: "Please enter a user ID or username.",
+      no_data_found: "User not found.",
+      no_friends_yet: "You have no friends yet."
     },
     es: {
+      friends_title: "Lista de Amigos",
       find_user: "Buscar Jugador",
       your_friends: "Tus amigos",
       requests: "Solicitudes de Amistad",
+      your_friends_header: "Tus Amigos",
+      friend_requests_header: "Solicitudes de Amistad",
+      no_friends: "La lista de amigos aparecerá aquí.",
+      no_requests: "Las solicitudes de amistad aparecerán aquí.",
+      search_placeholder: "Introduce nombre o ID...",
       pending: "Pendiente",
       accept: "Aceptar",
       addFriend: "Enviar Solicitud",
@@ -33,7 +50,12 @@ document.addEventListener("DOMContentLoaded", () => {
       goodRequest: "Solicitud enviada correctamente.", 
       deleteSucess: "Amigo eliminado correctamente.",
       rejected: "Rechazado",
-      user_not_found: "Jugador no encontrado."
+      user_not_found: "Jugador no encontrado.",
+      error_request: "Error en la solicitud.",
+      error_fetching_friends: "Error al obtener amigos.",
+      please_enter_user: "Por favor ingresa un ID o nombre de usuario.",
+      no_data_found: "Jugador no encontrado.",
+      no_friends_yet: "Aún no tienes amigos."
     }
   };
 
@@ -140,8 +162,13 @@ document.addEventListener("DOMContentLoaded", () => {
     if (items.length === 0) {
       const noData = document.createElement("div");
       noData.classList.add("no-data");
-      noData.textContent = containerId === "find-user" ? "User not found." : "You have no friends yet.";
+      if (containerId === "find-user") {
+        noData.setAttribute("data-i18n", "no_data_found");
+      } else {
+        noData.setAttribute("data-i18n", "no_friends_yet");
+      }
       container.appendChild(noData);
+      applyTranslations(translations, lang);
       return;
     }
 
@@ -335,5 +362,21 @@ document.addEventListener("DOMContentLoaded", () => {
       el.textContent = translations[lang][key] || key; 
     });
   };
+
+  function applyAllTranslations() {
+    const lang = localStorage.getItem("language") || "en";
+    document.title = translations[lang].friends_title || document.title;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (translations[lang][key]) {
+        if (el.placeholder !== undefined) {
+          el.placeholder = translations[lang][key];
+        } else {
+          el.textContent = translations[lang][key];
+        }
+      }
+    });
+  }
+  applyAllTranslations();
 
 });

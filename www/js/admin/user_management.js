@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
 
+  document.body.style.display = "block";
+
 
   let currentPage = 1;
   let selectedUserId = null;
@@ -11,7 +13,6 @@ document.addEventListener("DOMContentLoaded", function () {
   async function fetchUsers() {
     try {
       const token = localStorage.getItem('token');
-      console.log(token);
       const response = await fetch(`${serverUrl}/api/admin/getAllUsers`, {
           method: 'GET',
           headers: {

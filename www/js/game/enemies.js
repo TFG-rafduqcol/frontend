@@ -131,6 +131,7 @@ async function generateHorde() {
                 },
                 body: JSON.stringify({
                     earnedGold: 0,
+                    lostedLives: 0
                 })
             });
         
@@ -527,6 +528,7 @@ async function prepareNextHorde () {
             },
             body: JSON.stringify({
                 earnedGold: earnedGold,
+                lostedLives: lostedLives
             })
     }); 
   
@@ -535,6 +537,8 @@ async function prepareNextHorde () {
         throw new Error(error.error || 'Failed to generate horde');
       }
   
+      earnedGold = 0;
+      lostedLives = 0;
       const data = await response.json();
       console.log('Horde generated:', data);
 

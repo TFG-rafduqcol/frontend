@@ -70,6 +70,7 @@ function createProjectile(towerId, targetEnemy, projectileType) {
 
 let enemiesKilled = 0;  
 let earnedGold = 0;
+let lostedLives = 0;
 
 function updateProjectiles() {
     projectiles.forEach((projectile, index) => {
@@ -120,9 +121,9 @@ function updateProjectiles() {
                     enemiesKilled++;
 
                     enemies[enemyIndex].isDead = true;
-                    console.log("Enemy gold:", enemies[enemyIndex].gold);
                     earnedGold += enemies[enemyIndex].gold;
-                    console.log("Total gold earned:", earnedGold);
+
+                    lostedLives += enemies[enemyIndex].livesLost;
                     
                 }
             }

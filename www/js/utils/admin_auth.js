@@ -29,6 +29,7 @@ checkAdminStatus().then(isAdmin => {
 
     } else {
         alert("You are not authorized to access this page.");
+        localStorage.clear(); 
         window.location.href = "/www/views/index.html";
     }
 });
