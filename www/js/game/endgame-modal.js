@@ -92,7 +92,10 @@ function showEndgameModal(round, userRank) {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
+        }, 
+        body: JSON.stringify({
+            round: round,
+        })
     })
     .then(res => res.json())
     .then(data => {
