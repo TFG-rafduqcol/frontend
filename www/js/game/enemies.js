@@ -347,10 +347,16 @@ function drawHealthBar(enemy) {
 }
 
 
-function checkAreasWithEnemies() {
+const areaMovementSounds = {};
 
+function checkAreasWithEnemies() {
     towersArea.forEach(area => {
-    
+        if (!areaMovementSounds[area.position]) {
+            areaMovementSounds[area.position] = new Audio("../../audio/movement.mp3");
+            areaMovementSounds[area.position].volume = 1;
+        }
+        const movementSound = areaMovementSounds[area.position];
+
         const enemyInArea = enemies.find(enemy => { 
             if (enemy.isDead) return false; 
 
@@ -379,15 +385,12 @@ function checkAreasWithEnemies() {
         const towerStick1 = towerDiv.querySelector('.towerStick1');
         const towerStick2 = towerDiv.querySelector('.towerStick2');
 
-        //const movementSound = new Audio("../../audio/movement.mp3");
-
         function playSound() {
             if (movementSound.paused) {
-                movementSound.volume = 0.2;
+                movementSound.currentTime = 0;
                 movementSound.play();
             }
         }
-        
         function stopSound() {
             if (!movementSound.paused) {
                 movementSound.pause();
@@ -401,7 +404,7 @@ function checkAreasWithEnemies() {
                 area.hasActiveProjectile = true;
                 const projectileType = area.towerNumber;
                 const duration = area.fireRate;
-                //playSound();
+                playSound();
  
                 if (!area.isMorter) {
                     [towerBack, towerFront, towerProjectile].forEach(el => restartAnimation(el, false, duration));
@@ -419,7 +422,7 @@ function checkAreasWithEnemies() {
 
                 setTimeout(() => {
                     towerProjectile.style.display = 'block';
-                    //stopSound();
+                    stopSound();
                     area.hasActiveProjectile = false;
                   
                 }, duration);
@@ -435,7 +438,7 @@ function checkAreasWithEnemies() {
                     towerBack.style.animationPlayState = 'paused';
                     towerFront.style.animationPlayState = 'paused';
                     towerProjectile.style.animationPlayState = 'paused';
-                    //stopSound();
+                    stopSound();
                     area.animationInProgress = false; 
                 }, { once: true });
                 
@@ -444,7 +447,7 @@ function checkAreasWithEnemies() {
                     towerStick1.style.animationPlayState = 'paused';
                     towerStick2.style.animationPlayState = 'paused';
                     towerProjectile.style.animationPlayState = 'paused';
-                    //stopSound();
+                    stopSound();
                     area.animationInProgress = false; 
 
                 }, { once: true });
@@ -461,45 +464,36 @@ async function checkEnemiesAndEnableButtons() {
     const remainingEnemies = enemies.filter(enemy => !enemy.isDead);
 
     if (remainingEnemies.length === 0 && !gameEnded) {
-        loadStats();
+
         const blockingOverlay = document.getElementById('blocking-overlay');
-        if (blockingOverlay) {
-            blockingOverlay.style.display = 'none';
-        }
-        
-        const generateButton = document.getElementById('generateEnemyButton');
-        generateButton.disabled = false;
-        generateButton.style.display = 'flex';
-
-        document.body.classList.remove('no-scroll');
-        
-        canvas.addEventListener("click", showTowerMenu);
-        
-        const towerDivs = document.querySelectorAll('.tower');
-        towerDivs.forEach(towerDiv => {
-            towerDiv.style.pointerEvents = 'auto';
-        });
-        const towersDivs = document.querySelectorAll('.tower');
-
-        towersDivs.forEach(towerDiv => {
-            towerDiv.addEventListener('click', function(event) {
-                const name = towerDiv.dataset.name;
-                const position = towerDiv.dataset.position;
-
-                previewEditMenuArea(event, name, position);
-                event.stopPropagation();
+            if (blockingOverlay) {
+                blockingOverlay.style.display = 'none';
+            }
+          
+            document.body.classList.remove('no-scroll');
+            canvas.addEventListener("click", showTowerMenu);
+            const towerDivs = document.querySelectorAll('.tower');
+            towerDivs.forEach(towerDiv => {
+                towerDiv.style.pointerEvents = 'auto';
             });
-        })
-        const toweEditMenu = document.getElementById('towerEditMenu');
-        if (toweEditMenu) {
-            toweEditMenu.style.pointerEvents = 'auto';
+            const towersDivs = document.querySelectorAll('.tower');
+            towersDivs.forEach(towerDiv => {
+                towerDiv.addEventListener('click', function(event) {
+                    const name = towerDiv.dataset.name;
+                    const position = towerDiv.dataset.position;
+                    previewEditMenuArea(event, name, position);
+                    event.stopPropagation();
+                });
+            });
+            const toweEditMenu = document.getElementById('towerEditMenu');
+            if (toweEditMenu) {
+                toweEditMenu.style.pointerEvents = 'auto';
+            }
+
+        if (!isHordePrepared) {
+            await prepareNextHorde();
         }
-
-
-            
-
-        if (!isHordePrepared) prepareNextHorde();
-
+    
     }
 }
 
@@ -545,9 +539,9 @@ async function prepareNextHorde () {
       const data = await response.json();
       console.log('Horde generated:', data);
 
-        const generateButton = document.getElementById('generateEnemyButton');
-        generateButton.disabled = false;
-        generateButton.style.display = 'flex';
+    const generateButton = document.getElementById('generateEnemyButton');
+    generateButton.disabled = false;
+    generateButton.style.display = 'flex';
   
       const enemiesData = data.enemies;
   
@@ -601,6 +595,3 @@ async function prepareNextHorde () {
     }
 }
 
-async function loadStats (){
-    console.log("Aqui se actualizan los enemigos que se han matado");
-}

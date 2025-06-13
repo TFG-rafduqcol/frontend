@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", function () {
     loadTranslations();
 
     document.querySelector(".button-save").addEventListener("click", function () {
-        console.log("hola");
         let valid = true;
 
         [username, password, confirmPassword].forEach(input => {

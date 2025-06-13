@@ -4,19 +4,18 @@ const gameId = params.get('gameId');
 const token = localStorage.getItem('token');
 
 let gold = 350;
-let lives = 1;
-let round = 50;
+let lives = 20;
+let round = 1;
 
-const backgroundMusic = document.getElementById('backgroundMusic');
-backgroundMusic.volume = 0.1;  
-
-
-function ensureBackgroundMusic() {
-    if (backgroundMusic.paused) {
-        backgroundMusic.play().catch(error => {
-            console.log("No se pudo reproducir la música de fondo:", error);
-        });
+document.addEventListener('DOMContentLoaded', function() {
+    const bgMusic = document.getElementById('background-music');
+    if (bgMusic) {
+        bgMusic.volume = 0.15;
+        document.body.addEventListener('click', () => {
+            if (bgMusic.paused) bgMusic.play();
+        }, { once: true });
     }
-}
+});
 
-ensureBackgroundMusic();
+
+

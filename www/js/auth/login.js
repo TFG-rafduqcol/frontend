@@ -97,7 +97,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 })
                 .then(data => {
                     if (data && data.token) {
-                        console.log("hola")
                         localStorage.setItem("token", data.token);
                         localStorage.setItem("user", JSON.stringify(data.user));
                         console.log(data)

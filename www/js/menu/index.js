@@ -66,3 +66,13 @@ if (user) {
 } else {
     console.log("User data not found");
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const bgMusic = document.getElementById('background-music');
+    if (bgMusic) {
+        bgMusic.volume = 0.15;
+        document.body.addEventListener('click', () => {
+            if (bgMusic.paused) bgMusic.play();
+        }, { once: true });
+    }
+});

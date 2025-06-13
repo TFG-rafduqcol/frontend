@@ -52,9 +52,9 @@ function showEndgameModal(round, userRank) {
     const user = JSON.parse(localStorage.getItem('user'));
     const isHardMode = localStorage.getItem('isHardMode') === 'true';
     user.gems += gemsEarned;
-    console.log(user.experience, "experience before");
     user.experience += xpEarned;
-    console.log(user.experience, "experience after");
+    if (user.gems > 999) user.gems = 999;
+    if (user.experience > 31700) user.experience = 31700;
     localStorage.setItem('user', JSON.stringify(user));
     
     document.getElementById('endgame-round').textContent = round;

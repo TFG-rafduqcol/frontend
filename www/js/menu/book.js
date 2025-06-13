@@ -13,15 +13,20 @@ document.addEventListener("DOMContentLoaded", () => {
             master_rank_desc: "Para alcanzar el rango Master, deberás superar la ronda 50 en ambos modos: Normal Mode y Hard Mode.",
             enemies: "Enemigos",
             towers: "Torres",
+            upgrades_title: "Mejoras de Torres",
             // Torres
             tower_arrows: "Torre de Flechas",
             tower_arrows_desc_main: "Torre básica de largo alcance y disparo rápido. Perfecta para eliminar enemigos veloces y débiles en las primeras rondas.",
+            tower_arrows_upgrade: "Mejora: +1 daño, +10 rango, +0.1 velocidad de disparo. Coste: 100.",
             tower_iron: "Torre de Cargas",
             tower_iron_desc_main: "Lanza pesadas piedras de hierro que causan daño. Ideal para romper defensas resistentes.",
+            tower_iron_upgrade: "Mejora: +2 daño, +10 rango, +0.1 velocidad de disparo. Coste: 125.",
             tower_fire: "Torre de Fuego",
             tower_fire_desc_main: "Lanza proyectiles ígneos que queman a los enemigos, causando mucho daño. Muy efectiva contra enemigos con alta defensa.",
+            tower_fire_upgrade: "Mejora: +2 daño, +10 rango, +0.1 velocidad de disparo. Coste: 150.",
             tower_rock: "Mortero de Roca",
             tower_rock_desc_main: "Dispara rocas masivas que explotan al impactar, causando gran daño. Es la mejor opción para eliminar enemigos muy resistentes.",
+            tower_rock_upgrade: "Mejora: +3 daño, +10 rango, +0.1 velocidad de disparo. Coste: 120.",
             fires_every: "Dispara cada:",
             damage_per_hit: "Daño por impacto:",
             price: "Precio:",
@@ -59,15 +64,20 @@ document.addEventListener("DOMContentLoaded", () => {
             master_rank_desc: "To achieve the Master rank, you must surpass round 50 in both modes: Normal Mode and Hard Mode.",
             enemies: "Enemies",
             towers: "Towers",
+            upgrades_title: "Tower Upgrades",
             // Towers
             tower_arrows: "Arrow Tower",
             tower_arrows_desc_main: "Basic tower with long range and fast shooting. Perfect for eliminating fast and weak enemies in early rounds.",
+            tower_arrows_upgrade: "Upgrade: +1 damage, +10 range, +0.1 fire rate. Cost: 100.",
             tower_iron: "Iron Tower",
             tower_iron_desc_main: "Throws heavy iron stones that deal damage. Ideal for breaking tough defenses.",
+            tower_iron_upgrade: "Upgrade: +2 damage, +10 range, +0.1 fire rate. Cost: 125.",
             tower_fire: "Fire Tower",
             tower_fire_desc_main: "Launches fiery projectiles that burn enemies, causing high damage. Very effective against high-defense enemies.",
+            tower_fire_upgrade: "Upgrade: +2 damage, +10 range, +0.1 fire rate. Cost: 150.",
             tower_rock: "Rock Mortar",
             tower_rock_desc_main: "Fires massive rocks that explode on impact, causing great damage. The best option for eliminating very tough enemies.",
+            tower_rock_upgrade: "Upgrade: +3 damage, +10 range, +0.1 fire rate. Cost: 120.",
             fires_every: "Fires every:",
             damage_per_hit: "Damage per hit:",
             price: "Price:",
@@ -156,10 +166,19 @@ document.addEventListener("DOMContentLoaded", () => {
             'tower_fire_desc_main',
             'tower_rock_desc_main'
         ];
-        
         towerMainDescIds.forEach(key => {
             const el = document.querySelector(`[data-i18n="${key}"]`);
             if (el) el.innerHTML = t(key, el.innerHTML);
+            const upgradeKey = key.replace('_desc_main', '_upgrade');
+            if (el && translations[getLang()][upgradeKey]) {
+                let upgradeEl = el.parentNode.querySelector('.tower-upgrade-container');
+                if (!upgradeEl) {
+                    upgradeEl = document.createElement('div');
+                    upgradeEl.className = 'tower-upgrade-container';
+                    el.parentNode.appendChild(upgradeEl);
+                }
+                upgradeEl.innerHTML = `<div class="tower-upgrade tower-stat"><strong>${t(upgradeKey)}</strong></div>`;
+            }
         });
         
         const towerStatsIds = [
@@ -176,6 +195,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     applyBookTranslations();
+    
+  
     
     window.addEventListener('languageChanged', applyBookTranslations);
 });

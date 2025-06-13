@@ -100,6 +100,12 @@ function updateProjectiles() {
                 4: "../../audio/stone.mp3",
                 3: "../../audio/fire.mp3"
             };
+
+            if (projectileSounds[projectile.type]) {
+                const impactSound = new Audio(projectileSounds[projectile.type]);
+                impactSound.volume = 0.5;
+                impactSound.play();
+            }
     
             const damageMultiplier = getDamageMultiplier(projectile.target.name, projectile.type);
             projectile.target.health -= projectile.damage * damageMultiplier;         
@@ -122,6 +128,9 @@ function updateProjectiles() {
 
                     enemies[enemyIndex].isDead = true;
                     earnedGold += enemies[enemyIndex].gold;
+                    const deadSound = new Audio("../../audio/enemy_dead.mp3");
+                    deadSound.volume = 0.5;
+                    deadSound.play();
 
                     lostedLives += enemies[enemyIndex].livesLost;
                     
