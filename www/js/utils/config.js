@@ -1,6 +1,6 @@
-const serverUrl = 'http://192.168.100.7:3000'; 
+const serverUrl = 'https://backend-production-c59c.up.railway.app'; 
   
 window.serverUrl = serverUrl;
-    
+
 
 

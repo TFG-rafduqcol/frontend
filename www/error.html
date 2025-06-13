@@ -67,14 +67,12 @@
     </div>
     
     <script>
-        // Intentar obtener información del error de la URL
         document.addEventListener('DOMContentLoaded', function() {
             try {
                 const urlParams = new URLSearchParams(window.location.search);
                 const errorMessage = urlParams.get('error') || 'Error desconocido';
                 document.getElementById('errorMessage').textContent = errorMessage;
                 
-                // Log para depuración
                 console.error('Error en la aplicación:', errorMessage);
             } catch (e) {
                 console.error('Error al procesar detalles del error:', e);
