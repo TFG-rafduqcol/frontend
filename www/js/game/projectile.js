@@ -129,7 +129,7 @@ function updateProjectiles() {
                     enemies[enemyIndex].isDead = true;
                     earnedGold += enemies[enemyIndex].gold;
                     const deadSound = new Audio("../../audio/enemy_dead.mp3");
-                    deadSound.volume = 0.5;
+                    deadSound.volume = 0.7;
                     deadSound.play();
 
                     lostedLives += enemies[enemyIndex].livesLost;

@@ -350,14 +350,14 @@ function drawHealthBar(enemy) {
 const areaMovementSounds = {};
 
 function checkAreasWithEnemies() {
-    towersArea.forEach(area => {
+    towersArea.forEach(area => {       // Añadimos el sonido de animación de disparo a cada torre
         if (!areaMovementSounds[area.position]) {
             areaMovementSounds[area.position] = new Audio("../../audio/movement.mp3");
             areaMovementSounds[area.position].volume = 1;
         }
         const movementSound = areaMovementSounds[area.position];
 
-        const enemyInArea = enemies.find(enemy => { 
+        const enemyInArea = enemies.find(enemy => {    // Detecta los enemigos como en el backend
             if (enemy.isDead) return false; 
 
             const flyingEnemies = ['oculom', 'hellBat'];
@@ -388,6 +388,7 @@ function checkAreasWithEnemies() {
         function playSound() {
             if (movementSound.paused) {
                 movementSound.currentTime = 0;
+                movementSound.volume = 1; 
                 movementSound.play();
             }
         }
@@ -398,14 +399,14 @@ function checkAreasWithEnemies() {
             }
         }
         
-        if (enemyInArea  && !area.animationInProgress) {
-            if (!area.hasActiveProjectile) {
+        if (enemyInArea  && !area.animationInProgress) {  // Si hay enemigos en el área y no hay una animación acabandose en curso
+            if (!area.hasActiveProjectile) {            // Si la torre no tiene un proyectil activo (esta disparando)
 
                 area.hasActiveProjectile = true;
                 const projectileType = area.towerNumber;
                 const duration = area.fireRate;
                 playSound();
- 
+                // Creamos la animación de disparo
                 if (!area.isMorter) {
                     [towerBack, towerFront, towerProjectile].forEach(el => restartAnimation(el, false, duration));
                     [towerBack, towerFront, towerProjectile].forEach(el => el.style.animationPlayState = 'running');
@@ -413,7 +414,7 @@ function checkAreasWithEnemies() {
                     [towerStick1, towerStick2, towerProjectile].forEach(el => restartAnimation(el, true, duration));
                     [towerStick1, towerStick2, towerProjectile].forEach(el => el.style.animationPlayState = 'running');
                 }
-
+                // Esperamos la mitad del tiempo de animación para ocultar el proyectil y crear el nuevo
                 setTimeout(() => {
                     towerProjectile.style.display = 'none';
                     towerProjectile.style.animationPlayState = 'running';
@@ -429,7 +430,7 @@ function checkAreasWithEnemies() {
             } else {
                 return;
             }
-        } else {
+        } else {   // No quedan enemigos en el área y la animación se tiene que terminar
             if (area.hasActiveProjectile) area.animationInProgress = true;
             area.hasActiveProjectile = false;
 
@@ -453,7 +454,6 @@ function checkAreasWithEnemies() {
                 }, { once: true });
                 
             }
-
         }
     });
 }
@@ -531,18 +531,15 @@ async function prepareNextHorde () {
         const error = await response.json();
         throw new Error(error.error || 'Failed to generate horde');
       }
-  
-      earnedGold = 0;
-      lostedLives = 0;
-      enemiesKilled = 0;
 
-      const data = await response.json();
-      console.log('Horde generated:', data);
+        earnedGold = 0;
+        lostedLives = 0;
+        enemiesKilled = 0;
 
-    const generateButton = document.getElementById('generateEnemyButton');
-    generateButton.disabled = false;
-    generateButton.style.display = 'flex';
-  
+        const data = await response.json();
+        console.log('Horde generated:', data);
+
+   
       const enemiesData = data.enemies;
   
       for (let index = 0; index < enemiesData.length; index++) {
@@ -583,12 +580,17 @@ async function prepareNextHorde () {
   
         newEnemy.spriteImages = loadEnemyImages(newEnemy.name, newEnemy.totalFrames);
         nexHorde = [];
-  
+
         await new Promise(resolve => {
             nextHorde.push(newEnemy);
             resolve();
         });
       }
+
+      
+        const generateButton = document.getElementById('generateEnemyButton');
+        generateButton.disabled = false;
+        generateButton.style.display = 'flex';
   
     } catch (err) {
       console.error('Error generating horde:', err.message);

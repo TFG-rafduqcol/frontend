@@ -190,6 +190,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const createUserCard = (user, targetId) => {
 
+    console.log("hola", user)
+
     const card = document.createElement("div");
     card.classList.add(targetId === "find-user" ? "user-card" : "friend-card");
 
@@ -218,8 +220,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     userInfo.appendChild(xpLevel);
-    userInfo.appendChild(username);
-
+    userInfo.appendChild(username);   
     const rangeInfo = document.createElement("div");
     rangeInfo.classList.add("range-info");
 
@@ -228,7 +229,7 @@ document.addEventListener("DOMContentLoaded", () => {
     range.textContent = `${user.range || "N/A"}`;
 
     const rangeIcon = document.createElement("img");
-    rangeIcon.src = "../../images/logo.png";
+    rangeIcon.src = user.range_url || "../../images/logo.png";
     rangeIcon.alt = user.range || "Default range";
     rangeIcon.classList.add("range-icon");
 
