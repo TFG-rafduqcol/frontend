@@ -233,21 +233,21 @@ function distance(p1, p2) {
   
 
 function moveEnemy(enemy, deltaTime) {
-    if (enemy.delay > 0 || enemy.isDead) {
+    if (enemy.delay > 0 || enemy.isDead) {  // Si el enemigo tiene un retraso o está muerto, no se mueve
         return;
     }
 
-    const currentTarget = path[enemy.currentPoint];
-    const nextTarget = path[enemy.currentPoint + 1];
+    const currentTarget = path[enemy.currentPoint];  // Punto actual al que se dirige el enemigo
+    const nextTarget = path[enemy.currentPoint + 1]; 
 
     if (!nextTarget) return;
 
     const dx = nextTarget.x - currentTarget.x;
     const dy = nextTarget.y - currentTarget.y;
-    const distance = Math.sqrt(dx * dx + dy * dy);
+    const distance = Math.sqrt(dx * dx + dy * dy);  // Distancia entre el punto actual y el siguiente
 
-    const directionX = dx / distance;
-    const directionY = dy / distance;
+    const directionX = dx / distance;       // Dirección en X normalizada 
+    const directionY = dy / distance;       // Dirección en Y normalizada
 
     const speed = enemy.speed * deltaTime; // Distancia recorrida por fotograma
 
@@ -255,17 +255,16 @@ function moveEnemy(enemy, deltaTime) {
     enemy.y += directionY * speed;
 
 
-    const progress = Math.sqrt(
+    const progress = Math.sqrt(                 // Progreso del enemigo hacia el siguiente punto 
         Math.pow(enemy.x - currentTarget.x, 2) +
-        Math.pow(enemy.y - currentTarget.y, 2)
-    );
+        Math.pow(enemy.y - currentTarget.y, 2));
 
-    if (progress >= distance) {
+    if (progress >= distance) {     
         enemy.currentPoint++;
         enemy.x = nextTarget.x;
         enemy.y = nextTarget.y;
 
-        if (enemy.currentPoint >= path.length - 1) {
+        if (enemy.currentPoint >= path.length - 1) {  // El enemigo ha llegado al final del camino, restamos vidas 
             const index = enemies.indexOf(enemy);
             console.log("Salud final del enemigo " +  enemy.name + " : " + enemy.health);
             if (index > -1) enemies.splice(index, 1);
@@ -275,28 +274,28 @@ function moveEnemy(enemy, deltaTime) {
             const gameCanvasContainer = document.getElementById('gameCanvasContainer');
             gameCanvasContainer.classList.add('red-border');
             
-            setTimeout(() => {
+            setTimeout(() => {                      // Animación de "muerte"
                 gameCanvasContainer.classList.remove('red-border');
             }, 300); 
         }
-        checkEnemiesAndEnableButtons();
+        checkEnemiesAndEnableButtons();   // Comprobamos si quedan enemigos y preparamos la siguiente horda
     }
 }
 
 
 function updateAnimation(enemy) {
-    if (enemy.isDead) {
+    if (enemy.isDead) {       // Si el enemigo está muerto, llamamos a la animación de muerte
         updateDeathAnimation(enemy); 
         return;  
     }
     enemy.frameTimer++;
-    if (enemy.frameTimer >= enemy.frameDelay) {
+    if (enemy.frameTimer >= enemy.frameDelay) {   // Si ha pasado el tiempo de espera, cambiamos el sprite
         enemy.spriteFrame = (enemy.spriteFrame + 1) % enemy.spriteImages.length;;
         enemy.frameTimer = 0;
     }
 }
 
-
+// Dibuja los enemigos en el canvas con sus respectivas posiciones y animaciones
 function drawEnemies(deltaTime) {
     enemyCtx.clearRect(0, 0, enemyCanvas.width, enemyCanvas.height);
 
@@ -305,12 +304,11 @@ function drawEnemies(deltaTime) {
         
         if (enemy.currentPoint < path.length) { 
             updateAnimation(enemy);  
-            drawSprite(enemy.x * scale + offsetX, enemy.y * scale + offsetY, enemy); 
+            drawSprite(enemy.x * scale + offsetX, enemy.y * scale + offsetY, enemy); // Dibuja el sprite del enemigo en la posición correcta
             drawHealthBar(enemy); 
         }
     });
 }
-
 
 function drawSprite(x, y, enemy) {
 
