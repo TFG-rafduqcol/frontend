@@ -51,8 +51,22 @@ const enemy_props = [
 ];
 
 
-async function generateHorde() {
+function showLoadingPopup() {
+    let popup = document.getElementById('loading-popup');
+    if (!popup) return; 
+    const lang = localStorage.getItem('language') || 'en';
+    let msg = 'Generating new horde...';
+    if (lang === 'es') msg = 'Generando nueva horda...';
+    popup.textContent = msg;
+    popup.style.display = 'block';
+}
 
+function hideLoadingPopup() {
+    const popup = document.getElementById('loading-popup');
+    if (popup) popup.style.display = 'none';
+}
+
+async function generateHorde() {
     let blockingOverlay = document.getElementById('blocking-overlay');
     if (!blockingOverlay) {
         blockingOverlay = document.createElement('div');
@@ -498,6 +512,7 @@ async function checkEnemiesAndEnableButtons() {
 let nextHorde = []; 
 let isHordePrepared = false;
 async function prepareNextHorde () {
+    showLoadingPopup();
     isHordePrepared = true;
 
     if (earnedGold > 0) {
@@ -523,7 +538,7 @@ async function prepareNextHorde () {
                 lostedLives: lostedLives,
                 enemiesKilled: enemiesKilled
             })
-    }); 
+        }); 
   
       if (!response.ok) {
         const error = await response.json();
@@ -584,14 +599,13 @@ async function prepareNextHorde () {
             resolve();
         });
       }
-
-      
         const generateButton = document.getElementById('generateEnemyButton');
         generateButton.disabled = false;
         generateButton.style.display = 'flex';
-  
+        hideLoadingPopup();
     } catch (err) {
-      console.error('Error generating horde:', err.message);
+        hideLoadingPopup();
+        console.error('Error generating horde:', err.message);
     }
 }
 

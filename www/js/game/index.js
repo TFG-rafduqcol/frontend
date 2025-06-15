@@ -10,7 +10,7 @@ let round = 1;
 document.addEventListener('DOMContentLoaded', function() {
     const bgMusic = document.getElementById('background-music');
     if (bgMusic) {
-        bgMusic.volume = 0.15;
+        bgMusic.volume = 0.10;
         document.body.addEventListener('click', () => {
             if (bgMusic.paused) bgMusic.play();
         }, { once: true });
