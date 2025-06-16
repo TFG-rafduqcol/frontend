@@ -208,16 +208,27 @@ async function generateHorde() {
         console.error('Error generating horde:', err.message);
         }
     } else { 
-        isHordePrepared = false;
-        console.log("Preparando siguiente horda...");
+        
+        if (!nextHorde || nextHorde.length === 0) {
+            console.warn('No hay horda preparada. Llamando a prepareNextHorde...');
+            isHordePrepared = false;
+            await prepareNextHorde();
+            return;
+        }
+        isHordePrepared = false; 
         console.log(nextHorde);
     
         for (let i = 0; i < nextHorde.length; i++) {
             const enemy = nextHorde[i];
             enemies.push(enemy);
             console.log(`Enemigo añadido: ${enemy.name}`, enemy);
-
             await new Promise(resolve => setTimeout(resolve, 1500));
+        }
+        nextHorde = []; 
+        const generateButton = document.getElementById('generateEnemyButton');
+        if (generateButton) {
+            generateButton.disabled = false;
+            generateButton.style.display = 'flex';
         }
     }
     round++;
@@ -473,7 +484,18 @@ function checkAreasWithEnemies() {
 let gameEnded = false;
 async function checkEnemiesAndEnableButtons() {
 
+    const generateButton = document.getElementById('generateEnemyButton');
     const remainingEnemies = enemies.filter(enemy => !enemy.isDead);
+
+    if (generateButton) {
+        if (remainingEnemies.length > 0) {
+            generateButton.style.display = 'none';
+            generateButton.disabled = true;
+        } else {
+            generateButton.style.display = 'flex';
+            generateButton.disabled = false;
+        }
+    }
 
     if (remainingEnemies.length === 0 && !gameEnded) {
 
