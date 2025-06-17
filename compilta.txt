@@ -1,0 +1,8 @@
+Para compilar y generar la apk hacen falta los siguientes comandos:
+
+
+1.	npm install: Instala las dependencias definidas en package.json.
+2.	npm run build: Compila el proyecto y genera los archivos web en la carpeta www.
+3.	npx cap sync android: Sincroniza los recursos web y plugins con el proyecto Android.
+4.	cd android
+5.	 ./gradlew assembleRelease ò .gradlew assembleDebug: Compila el proyecto Android y genera la APK en lista para pubricación o en modo debug.
