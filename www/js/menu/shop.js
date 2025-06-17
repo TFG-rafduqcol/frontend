@@ -199,7 +199,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
                 throw new Error(data.message || 'Error en la compra');
             }
-
+            const user = JSON.parse(localStorage.getItem('user'));
+            user.gems -= data.avatar.gems;
+            localStorage.setItem('user', JSON.stringify(user));
+            
             window.location.href = './index.html';
         })
         .catch(error => {

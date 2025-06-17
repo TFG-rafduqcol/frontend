@@ -524,7 +524,7 @@ body.no-scroll {
 .loading-popup {
     display: none;
     position: fixed;
-    top: 50%;
+    top: 10%;
     left: 50%;
     transform: translate(-50%, -50%);
     background: rgba(25, 117, 62, 0.7); 

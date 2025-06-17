@@ -45,7 +45,7 @@ const enemy_props = [
     { name: "devilOrc", width: 54, height: 54, speed: 12, maxHealth: 90, totalFrames: 20, offsetX: -15, offsetY: -45, healthBarHeight: 50, lifes: 1, gold: 15 }, // Débil ante el fuego (3), fuerte contra hierro (1) y piedra (2) 
     { name: "graySkull", width: 75, height: 75, speed: 8, maxHealth: 140, totalFrames: 20, offsetX: -22, offsetY: -70, healthBarHeight: 65, healthBarX: -2, lifes: 3, gold: 25 }, // Débil contra el mortero (4)
     { name: "carrionTropper", width: 45, height: 45, speed: 14, maxHealth: 90, totalFrames: 20, offsetX: -15, offsetY: -35, healthBarHeight: 45, lifes: 2, gold: 20 }, // Débil fuego (3), fuerte contra el resto (1,2,4)
-    { name: "hellBat", width: 60, height: 60, speed: 17, maxHealth: 90, totalFrames: 18, offsetX: -35, offsetY: -40, healthBarHeight: 47, lifes: 2, gold: 15 }, // Segundo enemigo volador, no le afecta el mortero (4)
+    { name: "hellBat", width: 60, height: 60, speed: 17, maxHealth: 80, totalFrames: 18, offsetX: -35, offsetY: -40, healthBarHeight: 47, lifes: 2, gold: 15 }, // Segundo enemigo volador, no le afecta el mortero (4)
     { name: "hexLord", width: 50, height: 50, speed: 17, maxHealth: 90, totalFrames: 20, offsetX: -15, offsetY: -40, healthBarHeight: 50, lifes: 4, gold: 20 }, // Neutro ante todo
     { name: "darkSeer", width: 70, height: 70, speed: 10, maxHealth: 140, totalFrames: 20, offsetX: -30, offsetY: -65, healthBarHeight: 65, healthBarX: -4, lifes: 5, gold: 30 } // Fuerte contra TODO (1,2,3,4)
 ];
@@ -92,7 +92,15 @@ async function generateHorde() {
         
         document.body.appendChild(blockingOverlay);
     }
-      blockingOverlay.style.display = 'block';
+
+    const generateButton = document.getElementById('generateEnemyButton');
+    
+    if (generateButton) {
+        generateButton.disabled = true;
+        generateButton.style.display = 'none';
+    }
+    
+    blockingOverlay.style.display = 'block';
     
     document.body.classList.add('no-scroll');
     
@@ -105,12 +113,7 @@ async function generateHorde() {
     canvas.removeEventListener("click", showTowerMenu);
     
     const roundElement = document.getElementById('round');
-        
-    const generateButton = document.getElementById('generateEnemyButton');
-    generateButton.disabled = true;
-    generateButton.style.display = 'none';
-
-
+    
     canvas.removeEventListener("click", showTowerMenu);
 
     const toweEditMenu = document.getElementById('towerEditMenu');
@@ -210,7 +213,6 @@ async function generateHorde() {
     } else { 
         
         if (!nextHorde || nextHorde.length === 0) {
-            console.warn('No hay horda preparada. Llamando a prepareNextHorde...');
             isHordePrepared = false;
             await prepareNextHorde();
             return;
@@ -225,11 +227,6 @@ async function generateHorde() {
             await new Promise(resolve => setTimeout(resolve, 1500));
         }
         nextHorde = []; 
-        const generateButton = document.getElementById('generateEnemyButton');
-        if (generateButton) {
-            generateButton.disabled = false;
-            generateButton.style.display = 'flex';
-        }
     }
     round++;
     if (roundElement) {
@@ -411,7 +408,6 @@ function checkAreasWithEnemies() {
         function playSound() {
             if (movementSound.paused) {
                 movementSound.currentTime = 0;
-                movementSound.volume = 1; 
                 movementSound.play();
             }
         }
@@ -484,18 +480,7 @@ function checkAreasWithEnemies() {
 let gameEnded = false;
 async function checkEnemiesAndEnableButtons() {
 
-    const generateButton = document.getElementById('generateEnemyButton');
     const remainingEnemies = enemies.filter(enemy => !enemy.isDead);
-
-    if (generateButton) {
-        if (remainingEnemies.length > 0) {
-            generateButton.style.display = 'none';
-            generateButton.disabled = true;
-        } else {
-            generateButton.style.display = 'flex';
-            generateButton.disabled = false;
-        }
-    }
 
     if (remainingEnemies.length === 0 && !gameEnded) {
 
@@ -621,10 +606,12 @@ async function prepareNextHorde () {
             resolve();
         });
       }
-        const generateButton = document.getElementById('generateEnemyButton');
-        generateButton.disabled = false;
-        generateButton.style.display = 'flex';
         hideLoadingPopup();
+        const generateButton = document.getElementById('generateEnemyButton');
+        if (generateButton) {
+            generateButton.disabled = false;
+            generateButton.style.display = 'flex';
+        }
     } catch (err) {
         hideLoadingPopup();
         console.error('Error generating horde:', err.message);

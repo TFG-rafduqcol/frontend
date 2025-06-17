@@ -602,7 +602,6 @@ async function updateGame(newRound, towerPrice, minusLives) {
         if (lives <= 0) {
             const user = JSON.parse(localStorage.getItem('user'));
             const userRange = user.range;
-            console.log("USERRANGE", userRange);
             
             if (typeof window.showEndgameModal === 'function') {
                 window.showEndgameModal(round, userRange);
