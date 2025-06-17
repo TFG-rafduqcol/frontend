@@ -1,1 +1,1 @@
-Una vez hemos compilado la apk la encontraremos en: android/app/build/outputs/apk/debug ò android/app/build/outputs/apk/debug
+Una vez hemos compilado la apk la encontraremos en: android/app/build/outputs/apk/debug/app-debug.apk ò android/app/build/outputs/apk/release/app-release-unsigned.apk
